@@ -356,9 +356,6 @@ const PartnersTitleSection = styled.div`
     font-weight: ${typography.fontWeight.bold};
     color: ${colors.text.primary};
     margin-bottom: 12px;
-    background: ${colors.primary.gradient};
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 
   p {
@@ -888,24 +885,24 @@ const CreditCards: React.FC = () => {
         producttype: 'Credit Cards',
         status: 'pending'
       };
-  
+
       console.log('Submitting payload:', payload);
-  
+
       const { data, error } = await supabase
         .from('applications')
         .insert([payload])
         .select();
-  
+
       if (error) {
         console.error('Supabase error:', error);
         throw error;
       }
-  
+
       notification.success({
         message: 'Application Submitted',
         description: 'Your credit card application has been successfully submitted. We will review it shortly.'
       });
-  
+
       form.resetFields();
     } catch (error: any) {
       console.error('Submission error:', error);
@@ -995,7 +992,7 @@ const CreditCards: React.FC = () => {
             <h2>Our Banking Partners</h2>
             <p>We collaborate with India's leading banks to bring you exclusive credit card offers with unmatched benefits</p>
           </PartnersTitleSection>
-          
+
           <MarqueeWrapper>
             <MarqueeContainer>
               {[...Array(2)].map((_, setIndex) => (
@@ -1039,162 +1036,162 @@ const CreditCards: React.FC = () => {
             </FormLeftSection>
 
             <FormContainer>
-            <StyledForm
-  form={form}
-  layout="vertical"
-  onFinish={handleSubmit}
-  requiredMark={false}
->
-  <div className="form-header">
-    <h3>Credit Card Application</h3>
-    <p>Fill in your details below</p>
-  </div>
+              <StyledForm
+                form={form}
+                layout="vertical"
+                onFinish={handleSubmit}
+                requiredMark={false}
+              >
+                <div className="form-header">
+                  <h3>Credit Card Application</h3>
+                  <p>Fill in your details below</p>
+                </div>
 
-  <div className="grid grid-cols-2 gap-4">
-    <motion.div variants={itemVariants}>
-      <Form.Item
-        name="firstName"
-        label="First Name"
-        rules={[{ required: true, message: 'First Name is required' }]}
-      >
-        <StyledInput prefix={<UserOutlined />} placeholder="Enter First Name" />
-      </Form.Item>
-    </motion.div>
+                <div className="grid grid-cols-2 gap-4">
+                  <motion.div variants={itemVariants}>
+                    <Form.Item
+                      name="firstName"
+                      label="First Name"
+                      rules={[{ required: true, message: 'First Name is required' }]}
+                    >
+                      <StyledInput prefix={<UserOutlined />} placeholder="Enter First Name" />
+                    </Form.Item>
+                  </motion.div>
 
-    <motion.div variants={itemVariants}>
-      <Form.Item
-        name="middleName"
-        label="Middle Name"
-      >
-        <StyledInput prefix={<UserOutlined />} placeholder="Enter Middle Name (Optional)" />
-      </Form.Item>
-    </motion.div>
-  </div>
+                  <motion.div variants={itemVariants}>
+                    <Form.Item
+                      name="middleName"
+                      label="Middle Name"
+                    >
+                      <StyledInput prefix={<UserOutlined />} placeholder="Enter Middle Name (Optional)" />
+                    </Form.Item>
+                  </motion.div>
+                </div>
 
-  <motion.div variants={itemVariants}>
-    <Form.Item
-      name="lastName"
-      label="Last Name"
-      rules={[{ required: true, message: 'Last Name is required' }]}
-    >
-      <StyledInput prefix={<UserOutlined />} placeholder="Enter Last Name" />
-    </Form.Item>
-  </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Form.Item
+                    name="lastName"
+                    label="Last Name"
+                    rules={[{ required: true, message: 'Last Name is required' }]}
+                  >
+                    <StyledInput prefix={<UserOutlined />} placeholder="Enter Last Name" />
+                  </Form.Item>
+                </motion.div>
 
-  <motion.div variants={itemVariants}>
-    <Form.Item
-      name="email"
-      label="Email"
-      rules={[
-        { required: true, message: 'Email is required' },
-        { type: 'email', message: 'Please enter a valid email' }
-      ]}
-    >
-      <StyledInput prefix={<MailOutlined />} placeholder="Enter Email Address" />
-    </Form.Item>
-  </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Form.Item
+                    name="email"
+                    label="Email"
+                    rules={[
+                      { required: true, message: 'Email is required' },
+                      { type: 'email', message: 'Please enter a valid email' }
+                    ]}
+                  >
+                    <StyledInput prefix={<MailOutlined />} placeholder="Enter Email Address" />
+                  </Form.Item>
+                </motion.div>
 
-  <motion.div variants={itemVariants}>
-    <Form.Item
-      name="mobileNumber"
-      label="Mobile Number"
-      rules={[
-        { required: true, message: 'Mobile Number is required' },
-        { pattern: /^[6-9]\d{9}$/, message: 'Please enter a valid 10-digit mobile number' }
-      ]}
-    >
-      <StyledInput 
-        prefix={<MobileOutlined />} 
-        placeholder="Enter Mobile Number" 
-        maxLength={10}
-      />
-    </Form.Item>
-  </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Form.Item
+                    name="mobileNumber"
+                    label="Mobile Number"
+                    rules={[
+                      { required: true, message: 'Mobile Number is required' },
+                      { pattern: /^[6-9]\d{9}$/, message: 'Please enter a valid 10-digit mobile number' }
+                    ]}
+                  >
+                    <StyledInput
+                      prefix={<MobileOutlined />}
+                      placeholder="Enter Mobile Number"
+                      maxLength={10}
+                    />
+                  </Form.Item>
+                </motion.div>
 
-  <motion.div variants={itemVariants}>
-    <Form.Item
-      name="currentCompany"
-      label="Current Company"
-      rules={[{ required: true, message: 'Current Company is required' }]}
-    >
-      <StyledInput prefix={<HomeOutlined />} placeholder="Enter Company Name" />
-    </Form.Item>
-  </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Form.Item
+                    name="currentCompany"
+                    label="Current Company"
+                    rules={[{ required: true, message: 'Current Company is required' }]}
+                  >
+                    <StyledInput prefix={<HomeOutlined />} placeholder="Enter Company Name" />
+                  </Form.Item>
+                </motion.div>
 
-  <motion.div variants={itemVariants}>
-    <Form.Item
-      name="location"
-      label="Location"
-      rules={[{ required: true, message: 'Location is required' }]}
-    >
-      <StyledInput 
-        prefix={<EnvironmentOutlined />} 
-        placeholder="Enter your city or state" 
-      />
-    </Form.Item>
-  </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Form.Item
+                    name="location"
+                    label="Location"
+                    rules={[{ required: true, message: 'Location is required' }]}
+                  >
+                    <StyledInput
+                      prefix={<EnvironmentOutlined />}
+                      placeholder="Enter your city or state"
+                    />
+                  </Form.Item>
+                </motion.div>
 
-  <div className="grid grid-cols-2 gap-4">
-    <motion.div variants={itemVariants}>
-      <Form.Item
-        name="monthlySalary"
-        label="Monthly Salary"
-        rules={[
-          { required: true, message: 'Monthly Salary is required' },
-          { pattern: /^\d+$/, message: 'Please enter a valid amount' }
-        ]}
-      >
-        <StyledInput 
-          prefix={<DollarOutlined />} 
-          placeholder="Enter Monthly Salary" 
-          type="number"
-        />
-      </Form.Item>
-    </motion.div>
+                <div className="grid grid-cols-2 gap-4">
+                  <motion.div variants={itemVariants}>
+                    <Form.Item
+                      name="monthlySalary"
+                      label="Monthly Salary"
+                      rules={[
+                        { required: true, message: 'Monthly Salary is required' },
+                        { pattern: /^\d+$/, message: 'Please enter a valid amount' }
+                      ]}
+                    >
+                      <StyledInput
+                        prefix={<DollarOutlined />}
+                        placeholder="Enter Monthly Salary"
+                        type="number"
+                      />
+                    </Form.Item>
+                  </motion.div>
 
-    <motion.div variants={itemVariants}>
-      <Form.Item
-        name="netTakeHome"
-        label="Net Take Home"
-        rules={[
-          { required: true, message: 'Net Take Home is required' },
-          { pattern: /^\d+$/, message: 'Please enter a valid amount' }
-        ]}
-      >
-        <StyledInput 
-          prefix={<DollarOutlined />} 
-          placeholder="Enter Net Take Home" 
-          type="number"
-        />
-      </Form.Item>
-    </motion.div>
-  </div>
+                  <motion.div variants={itemVariants}>
+                    <Form.Item
+                      name="netTakeHome"
+                      label="Net Take Home"
+                      rules={[
+                        { required: true, message: 'Net Take Home is required' },
+                        { pattern: /^\d+$/, message: 'Please enter a valid amount' }
+                      ]}
+                    >
+                      <StyledInput
+                        prefix={<DollarOutlined />}
+                        placeholder="Enter Net Take Home"
+                        type="number"
+                      />
+                    </Form.Item>
+                  </motion.div>
+                </div>
 
-  <motion.div variants={itemVariants}>
-    <Form.Item
-      name="bankingDetails"
-      label="Banking Details"
-      rules={[{ required: true, message: 'Banking Details are required' }]}
-    >
-      <StyledInput 
-        prefix={<BankOutlined />} 
-        placeholder="Enter Bank Name and Account Number" 
-      />
-    </Form.Item>
-  </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Form.Item
+                    name="bankingDetails"
+                    label="Banking Details"
+                    rules={[{ required: true, message: 'Banking Details are required' }]}
+                  >
+                    <StyledInput
+                      prefix={<BankOutlined />}
+                      placeholder="Enter Bank Name and Account Number"
+                    />
+                  </Form.Item>
+                </motion.div>
 
-  <motion.div variants={itemVariants}>
-    <Form.Item>
-      <SubmitButton
-        type="primary"
-        htmlType="submit"
-        loading={isSubmitting}
-      >
-        Submit Application
-      </SubmitButton>
-    </Form.Item>
-  </motion.div>
-</StyledForm>
+                <motion.div variants={itemVariants}>
+                  <Form.Item>
+                    <SubmitButton
+                      type="primary"
+                      htmlType="submit"
+                      loading={isSubmitting}
+                    >
+                      Submit Application
+                    </SubmitButton>
+                  </Form.Item>
+                </motion.div>
+              </StyledForm>
             </FormContainer>
           </ApplicationContainer>
         </ApplicationSection>
@@ -1211,8 +1208,8 @@ const CreditCards: React.FC = () => {
       </ContentSection>
       <Footer />
     </PageContainer>
-    
-    
+
+
   );
 };
 

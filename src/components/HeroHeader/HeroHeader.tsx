@@ -147,7 +147,7 @@ const AnimatedNumber = ({ end, duration = 1500 }: { end: number; duration?: numb
     const step = (timestamp: number) => {
       if (!startTimestamp) startTimestamp = timestamp;
       const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      
+
       if (progress < 1) {
         if (progress > (currentIndex + 1) / intermediateValues.length && currentIndex < intermediateValues.length - 1) {
           currentIndex++;
