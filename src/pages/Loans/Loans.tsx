@@ -24,6 +24,7 @@ import { useUser } from '../../contexts/UserContext';
 
 import { colors, typography, spacing, effects, breakpoints } from '../../styles/theme';
 import Footer from '../../components/Footer/Footer';
+import HeroSection from '../../components/Hero/HeroSection';
 import loanHeroImage from '../../assets/images/hero/loan-main-hero.png';
 import { supabase } from '@/supabaseClient';
 
@@ -33,262 +34,6 @@ const { Option } = Select;
 const PageContainer = styled.div`
   min-height: 100vh;
   background-color: #f5f7fa;
-`;
-
-const HeroSection = styled.section`
-  padding: 60px 5%;
-  background: linear-gradient(135deg, #0077b6 0%, #023e8a 100%);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 400px;
-  margin-top: 0;
-  padding-top: 100px;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    background-size: cover;
-    opacity: 0.1;
-    z-index: 0;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, #0077b6 0%, #023e8a 100%);
-    opacity: 0.85;
-    z-index: 1;
-  }
-  
-   /* Modern geometric shapes */
-  .shape-1, .shape-2, .shape-3, .shape-4 {
-    position: absolute;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-    backdrop-filter: blur(5px);
-    z-index: 2;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .shape-1 {
-    width: 300px;
-    height: 300px;
-    top: -100px;
-    right: -50px;
-    animation: float 15s ease-in-out infinite;
-  }
-
-  .shape-2 {
-    width: 200px;
-    height: 200px;
-    bottom: -50px;
-    left: -50px;
-    animation: float 20s ease-in-out infinite reverse;
-  }
-
-  .shape-3 {
-    width: 150px;
-    height: 150px;
-    top: 50%;
-    left: 15%;
-    animation: float 18s ease-in-out infinite 1s;
-  }
-
-  .shape-4 {
-    width: 100px;
-    height: 100px;
-    bottom: 20%;
-    right: 15%;
-    animation: float 12s ease-in-out infinite 0.5s;
-  }
-
-  /* Animated lines */
-  .line-1, .line-2 {
-    position: absolute;
-    width: 200px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    z-index: 2;
-    transform: rotate(-45deg);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  }
-
-  .line-1 {
-    top: 20%;
-    right: 10%;
-    animation: moveLine 8s linear infinite;
-  }
-
-  .line-2 {
-    bottom: 30%;
-    left: 5%;
-    animation: moveLine 12s linear infinite reverse;
-  }
-
-  /* Dot grid pattern */
-  .dot-pattern {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
-    background-size: 40px 40px;
-    z-index: 2;
-    opacity: 0.7;
-  }
-
-  .shape-1, .shape-2, .shape-3, .shape-4 {
-    position: absolute;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-    backdrop-filter: blur(5px);
-    z-index: 2;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  
-
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0) rotate(0deg);
-    }
-    50% {
-      transform: translateY(-20px) rotate(5deg);
-    }
-  }
-
-  @keyframes moveLine {
-    0% {
-      transform: translateX(-100%) rotate(-45deg);
-    }
-    100% {
-      transform: translateX(100%) rotate(-45deg);
-    }
-      @media (max-width: 1024px) {
-    flex-direction: column;
-    gap: 30px;
-    padding: 100px 5% 40px;
-  }
-`;
-
-const HeroContent = styled.div`
-  flex: 1;
-  max-width: 600px;
-  color: ${colors.text.white};
-  padding: 20px 40px;
-  position: relative;
-  z-index: 2;
-
-  h1 {
-    font-family: ${typography.fontFamily.heading};
-    font-size: ${typography.fontSize.hero.title};
-    font-weight: ${typography.fontWeight.bold};
-    line-height: ${typography.lineHeight.tight};
-    margin-bottom: 1rem;
-    color: white;
-  }
-
-  p {
-    font-family: ${typography.fontFamily.primary};
-    font-size: ${typography.fontSize.hero.subtitle};
-    line-height: ${typography.lineHeight.relaxed};
-    margin-bottom: 1.5rem;
-  }
-
-  .feature-tags {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-top: 1.5rem;
-  }
-`;
-
-const HeroImage = styled.div`
-  
-  flex: 1;
-  max-width: 500px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: floatAnimation 3s ease-in-out infinite;
-  opacity: 1;
-  z-index: 2;
-  position: relative;
-
-  @keyframes floatAnimation {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-15px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
-
-  img {
-    max-width: 90%;
-    height: auto;
-    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.2)) brightness(1.2) contrast(1.1);
-    transform: perspective(1000px) rotateY(-15deg);
-    transition: transform 0.3s ease;
-    opacity: 1;
-
-    &:hover {
-      transform: perspective(1000px) rotateY(-5deg) translateY(-10px);
-    }
-  }
-
-  @media (max-width: 1024px) {
-    max-width: 350px;
-    margin: 0 auto;
-    
-    img {
-      max-width: 85%;
-      transform: perspective(1000px) rotateY(0deg);
-      &:hover {
-        transform: perspective(1000px) rotateY(0deg) translateY(-10px);
-      }
-    }
-  }
-`;
-
-const FeatureTag = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-  }
-
-  .anticon {
-    font-size: 1rem;
-  }
 `;
 
 const QuoteSection = styled.section`
@@ -667,37 +412,16 @@ const Loans: React.FC = () => {
   return (
     
     <PageContainer>
-      <HeroSection>
-        <div className="shape-1" />
-        <div className="shape-2" />
-        <div className="shape-3" />
-        <div className="shape-4" />
-        <div className="line-1" />
-        <div className="line-2" />
-        <div className="dot-pattern" />
-        
-        <HeroContent>
-          <h1>Unlock Your Financial Potential with EBS Loans</h1>
-          <p>
-            Experience hassle-free borrowing with competitive interest rates and flexible repayment options. 
-            Our expert financial advisors are here to help you choose the right loan solution.
-          </p>
-          <div className="feature-tags">
-            <FeatureTag>
-              <DollarOutlined /> Quick Approval
-            </FeatureTag>
-            <FeatureTag>
-              <SafetyOutlined /> 100% Secure
-            </FeatureTag>
-            <FeatureTag>
-              <RiseOutlined /> Low Interest
-            </FeatureTag>
-          </div>
-        </HeroContent>
-        <HeroImage>
-          <img src={loanHeroImage} alt="Loan Services" />
-        </HeroImage>
-      </HeroSection>
+      <HeroSection
+        title="Unlock Your Financial Potential with EBS Loans"
+        description="Experience hassle-free borrowing with competitive interest rates and flexible repayment options. Our expert financial advisors are here to help you choose the right loan solution."
+        image={loanHeroImage}
+        featureTags={[
+          { icon: <DollarOutlined />, label: 'Quick Approval' },
+          { icon: <SafetyOutlined />, label: '100% Secure' },
+          { icon: <RiseOutlined />, label: 'Low Interest' }
+        ]}
+      />
 
       <ApplicationSection id="loan-application">
         <ApplicationContainer>
