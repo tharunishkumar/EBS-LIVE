@@ -8,7 +8,7 @@ import Footer from '../../components/Footer/Footer';
 
 // Bank logos from public directory
 const bankLogos = {
-  star : "/images/partners/star-insurance.png" ,
+  star: "/images/partners/star-insurance.png",
   comingSoon: "/images/placeholders/coming-soon-insurance.svg"
 };
 
@@ -61,7 +61,7 @@ const personalLoans: Loan[] = [
     id: 1,
     name: "Coming Soon...",
     bankName: "Partners Coming Soon",
-    bankLogo:  bankLogos.comingSoon, // You can add a placeholder logo if needed
+    bankLogo: bankLogos.comingSoon, // You can add a placeholder logo if needed
     interestRate: "TBD",
     processingFee: "TBD",
     maxAmount: "TBD",
@@ -317,7 +317,7 @@ const HeroVisual = styled(motion.div)`
   }
 `;
 
-const FloatingCard = styled(motion.div)<{ index: number }>`
+const FloatingCard = styled(motion.div) <{ index: number }>`
   position: absolute;
   width: 280px;
   height: 160px;
@@ -696,7 +696,7 @@ const BenefitList = styled.div`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -861,7 +861,7 @@ const GeneralInsurance: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Compare and choose from India's leading insurance providers. Get instant coverage, 
+            Compare and choose from India's leading insurance providers. Get instant coverage,
             lowest premiums, and hassle-free claims.
           </HeroSubtitle>
           <HeroButtons
@@ -985,12 +985,12 @@ const GeneralInsurance: React.FC = () => {
                     </Text>
                   </RatingContainer>
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
-                  <Button 
-  type="primary" 
-  onClick={() => navigate('/apply', { state: { productType: 'Loans' } })}
->
-  Apply
-</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => navigate('/apply', { state: { productType: 'Loans' } })}
+                  >
+                    Apply
+                  </Button>
                   <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                     On bank website
                   </Text>
@@ -998,7 +998,7 @@ const GeneralInsurance: React.FC = () => {
               </CardGrid>
             </motion.div>
           ))}
-            
+
           <AnimatePresence>
             {selectedLoans.length > 0 && (
               <CompareFloatingButton

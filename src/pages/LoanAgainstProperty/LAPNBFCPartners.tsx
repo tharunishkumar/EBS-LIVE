@@ -491,7 +491,7 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.90% - 12.75% p.a."
-},
+  },
   "InCred LAP": {
     features: [
       "100% digital process",
@@ -546,7 +546,7 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.85% - 12.50% p.a."
-},
+  },
   "Lendingkart LAP": {
     features: [
       "Quick digital approval",
@@ -715,7 +715,7 @@ const loanDetails: LoanDetailsMap = {
     tenure: "12 to 60 months",
     interestRate: "11.25% - 24% p.a."
   },
-  "Tata Capital LAP":{
+  "Tata Capital LAP": {
     features: [
       "Digital onboarding process",
       "Expert property valuation",
@@ -770,7 +770,7 @@ const loanDetails: LoanDetailsMap = {
     tenure: "Up to 18 years",
     interestRate: "8.80% - 12.25% p.a."
   },
-  "Manappuram Finance LAP":{
+  "Manappuram Finance LAP": {
     features: [
       "Quick loan processing",
       "Property valuation assistance",
@@ -824,8 +824,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹3,00,000",
     tenure: "Up to 12 years",
     interestRate: "9.50% - 13.50% p.a."
-},
-  "Ugro Capital LAP":{
+  },
+  "Ugro Capital LAP": {
     features: [
       "Digital application process",
       "Property valuation support",
@@ -879,8 +879,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 15 years",
     interestRate: "9.25% - 13.00% p.a."
-},
-  "Hero FinCorp LAP":{
+  },
+  "Hero FinCorp LAP": {
     features: [
       "Digital loan processing",
       "Professional property valuation",
@@ -934,8 +934,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.99% - 12.50% p.a."
-},
-  "IIFL LAP":{
+  },
+  "IIFL LAP": {
     features: [
       "Digital loan journey",
       "Expert property valuation",
@@ -989,8 +989,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.85% - 12.75% p.a."
-},
-  "Muthoot FinCorp LAP":{
+  },
+  "Muthoot FinCorp LAP": {
     features: [
       "Quick loan approval",
       "Professional property valuation",
@@ -1044,7 +1044,7 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹3,00,000",
     tenure: "Up to 10 years",
     interestRate: "9.75% - 14.00% p.a."
-},
+  },
   "PNB Housing LAP": {
     features: [
       "Transparent processing",
@@ -1103,7 +1103,7 @@ const loanDetails: LoanDetailsMap = {
     tenure: "12 to 60 months",
     interestRate: "10.75% - 22% p.a."
   },
-  "Indiabulls Housing LAP":{
+  "Indiabulls Housing LAP": {
     features: [
       "Digital loan journey",
       "Professional valuation service",
@@ -1157,8 +1157,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹10,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.75% - 12.00% p.a."
- },
-  "Bajaj Housing LAP":{
+  },
+  "Bajaj Housing LAP": {
     features: [
       "Digital application process",
       "Professional valuation service",
@@ -1212,8 +1212,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹7,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.75% - 12.00% p.a."
-},
-  "Bajaj Finance LAP":{
+  },
+  "Bajaj Finance LAP": {
     features: [
       "Digital application process",
       "Professional valuation service",
@@ -1267,7 +1267,7 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹7,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.75% - 12.00% p.a."
-},
+  },
   "TVS Credit LAP": {
     features: [
       "Quick loan processing",
@@ -1322,8 +1322,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 12 years",
     interestRate: "9.50% - 13.50% p.a."
-},
-  "Poonawalla Fincorp LAP":{
+  },
+  "Poonawalla Fincorp LAP": {
     features: [
       "Digital loan journey",
       "Expert property valuation",
@@ -1377,8 +1377,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 15 years",
     interestRate: "9.00% - 12.50% p.a."
-},
-  "NeoGrowth LAP":{
+  },
+  "NeoGrowth LAP": {
     features: [
       "Digital application process",
       "Property valuation support",
@@ -1432,8 +1432,8 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹5,00,000",
     tenure: "Up to 12 years",
     interestRate: "9.75% - 14.00% p.a."
-},
-  "Axis Finance LAP":{
+  },
+  "Axis Finance LAP": {
     features: [
       "Digital loan processing",
       "Professional valuation service",
@@ -1487,7 +1487,7 @@ const loanDetails: LoanDetailsMap = {
     minAmount: "₹10,00,000",
     tenure: "Up to 15 years",
     interestRate: "8.75% - 12.00% p.a."
-},
+  },
   "HDB Financial Services LAP": {
     features: [
       "Quick loan approval",
@@ -1716,7 +1716,7 @@ const HeroVisual = styled(motion.div)`
   justify-content: center;
 `;
 
-const FloatingCard = styled(motion.div)<{ index: number }>`
+const FloatingCard = styled(motion.div) <{ index: number }>`
   position: absolute;
   width: 280px;
   height: 160px;
@@ -1965,7 +1965,7 @@ const StyledModal = styled(Modal)`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -2157,7 +2157,7 @@ const PLNBFCPartners: React.FC = () => {
 
   const handleDownloadPDF = async (): Promise<void> => {
     if (!compareContentRef.current) return;
-    
+
     try {
       // Create canvas from the comparison content
       const canvas = await html2canvas(compareContentRef.current, {
@@ -2170,11 +2170,11 @@ const PLNBFCPartners: React.FC = () => {
       // Calculate dimensions
       const imgWidth = 210; // A4 width in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('loan-comparison.pdf');
     } catch (error) {
@@ -2198,7 +2198,7 @@ const PLNBFCPartners: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Compare and choose from India's leading banks. Get instant approvals, 
+            Compare and choose from India's leading banks. Get instant approvals,
             lowest interest rates, and zero prepayment charges.
           </HeroSubtitle>
           <HeroButtons
@@ -2209,10 +2209,10 @@ const PLNBFCPartners: React.FC = () => {
             <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
               Check Eligibility
             </StyledButton>
-            <StyledButton 
-              type="default" 
-              ghost 
-              size="large" 
+            <StyledButton
+              type="default"
+              ghost
+              size="large"
               onClick={handleCompare}
               disabled={selectedLoans.length < 2}
             >
@@ -2332,14 +2332,14 @@ const PLNBFCPartners: React.FC = () => {
                     </Text>
                   </RatingContainer>
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
-                  <Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Loans' } })
-  )}
->
-  Apply
-</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Loans' } })
+                    )}
+                  >
+                    Apply
+                  </Button>
                   <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                     On bank website
                   </Text>
@@ -2347,7 +2347,7 @@ const PLNBFCPartners: React.FC = () => {
               </CardGrid>
             </motion.div>
           ))}
-            
+
           <AnimatePresence>
             {selectedLoans.length > 0 && (
               <CompareFloatingButton
@@ -2514,10 +2514,10 @@ const PLNBFCPartners: React.FC = () => {
                 <td>Rating</td>
                 {selectedLoans.map(loanName => (
                   <td key={loanName}>
-                    <Rate 
-                      disabled 
-                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating} 
-                      style={{ fontSize: '16px' }} 
+                    <Rate
+                      disabled
+                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating}
+                      style={{ fontSize: '16px' }}
                     />
                   </td>
                 ))}

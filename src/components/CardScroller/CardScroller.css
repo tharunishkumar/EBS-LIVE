@@ -134,3 +134,50 @@
     background: #90e0ef;
     box-shadow: none;
 }
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+    .gallery {
+        height: 220px;
+        border-radius: 16px;
+        margin-bottom: 60px;
+    }
+
+    .cards {
+        height: 150px;
+    }
+
+    .cards li {
+        width: 220px;
+        height: 132px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery {
+        height: 180px;
+        border-radius: 12px;
+        margin-bottom: 52px;
+    }
+
+    .cards {
+        height: 120px;
+    }
+
+    .cards li {
+        width: 180px;
+        height: 108px;
+    }
+
+    .actions {
+        bottom: -48px;
+        gap: 12px;
+    }
+
+    .actions button {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+}

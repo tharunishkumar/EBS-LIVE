@@ -1726,7 +1726,7 @@ const HeroVisual = styled(motion.div)`
   justify-content: center;
 `;
 
-const FloatingCard = styled(motion.div)<{ index: number }>`
+const FloatingCard = styled(motion.div) <{ index: number }>`
   position: absolute;
   width: 280px;
   height: 160px;
@@ -1977,7 +1977,7 @@ const StyledModal = styled(Modal)`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -2170,7 +2170,7 @@ const PLNBFCPartners: React.FC = () => {
 
   const handleDownloadPDF = async (): Promise<void> => {
     if (!compareContentRef.current) return;
-    
+
     try {
       // Create canvas from the comparison content
       const canvas = await html2canvas(compareContentRef.current, {
@@ -2183,11 +2183,11 @@ const PLNBFCPartners: React.FC = () => {
       // Calculate dimensions
       const imgWidth = 210; // A4 width in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('loan-comparison.pdf');
     } catch (error) {
@@ -2211,7 +2211,7 @@ const PLNBFCPartners: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Compare and choose from India's leading banks. Get instant approvals, 
+            Compare and choose from India's leading banks. Get instant approvals,
             lowest interest rates, and zero prepayment charges.
           </HeroSubtitle>
           <HeroButtons
@@ -2222,10 +2222,10 @@ const PLNBFCPartners: React.FC = () => {
             <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
               Check Eligibility
             </StyledButton>
-            <StyledButton 
-              type="default" 
-              ghost 
-              size="large" 
+            <StyledButton
+              type="default"
+              ghost
+              size="large"
               onClick={handleCompare}
               disabled={selectedLoans.length < 2}
             >
@@ -2345,15 +2345,15 @@ const PLNBFCPartners: React.FC = () => {
                     </Text>
                   </RatingContainer>
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
-                  
-<Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Loans' } })
-  )}
->
-  Apply
-</Button>
+
+                  <Button
+                    type="primary"
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Loans' } })
+                    )}
+                  >
+                    Apply
+                  </Button>
                   <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                     On bank website
                   </Text>
@@ -2361,7 +2361,7 @@ const PLNBFCPartners: React.FC = () => {
               </CardGrid>
             </motion.div>
           ))}
-            
+
           <AnimatePresence>
             {selectedLoans.length > 0 && (
               <CompareFloatingButton
@@ -2528,10 +2528,10 @@ const PLNBFCPartners: React.FC = () => {
                 <td>Rating</td>
                 {selectedLoans.map(loanName => (
                   <td key={loanName}>
-                    <Rate 
-                      disabled 
-                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating} 
-                      style={{ fontSize: '16px' }} 
+                    <Rate
+                      disabled
+                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating}
+                      style={{ fontSize: '16px' }}
                     />
                   </td>
                 ))}

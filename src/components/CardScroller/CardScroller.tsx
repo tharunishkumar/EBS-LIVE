@@ -44,7 +44,7 @@ const CardScroller: React.FC<CardScrollerProps> = ({ images }) => {
 
     useEffect(() => {
         if (!cardsRef.current || images.length === 0) return;
-        
+
         const cards = gsap.utils.toArray<HTMLLIElement>('.cards li');
         gsap.set(cards, { xPercent: 400, opacity: 0, scale: 0.5, rotateY: 45, zIndex: -1 });
 
@@ -70,12 +70,12 @@ const CardScroller: React.FC<CardScrollerProps> = ({ images }) => {
 
         cards.forEach((card, i) => {
             const position = (i - index + images.length) % images.length;
-            
+
             if (position >= 0 && position <= 2) {
                 // Calculate rotation - symmetric for left and right cards
                 const rotation = position === 1 ? 0 : position === 0 ? -25 : 25;
                 const xOffset = position === 1 ? 0 : position === 0 ? -100 : 100;
-                
+
                 // Card is visible
                 timeline.to(card, {
                     xPercent: xOffset,
@@ -135,7 +135,7 @@ const CardScroller: React.FC<CardScrollerProps> = ({ images }) => {
     return (
         <div className="card-scroller-container">
             <Title>
-                <h2>Best Credit Cards of 2024</h2>
+                <h2>Best Credit Cards of 2026</h2>
                 <p>Compare and choose from our curated selection of premium credit cards with exclusive benefits</p>
             </Title>
             <div className="cards-wrapper">

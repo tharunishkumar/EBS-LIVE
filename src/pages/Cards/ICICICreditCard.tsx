@@ -888,7 +888,7 @@ const BenefitList = styled.div`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -1035,7 +1035,7 @@ const ICICICreditCard: React.FC = () => {
 
   const handleDownloadPDF = async (): Promise<void> => {
     if (!compareContentRef.current) return;
-    
+
     try {
       // Create canvas from the comparison content
       const canvas = await html2canvas(compareContentRef.current, {
@@ -1048,11 +1048,11 @@ const ICICICreditCard: React.FC = () => {
       // Calculate dimensions
       const imgWidth = 210; // A4 width in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('card-comparison.pdf');
     } catch (error) {
@@ -1084,22 +1084,22 @@ const ICICICreditCard: React.FC = () => {
                   ICICI Bank Credit Cards
                 </Title>
                 <Text style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '18px' }}>
-                  ICICI Bank Credit Cards offer a range of benefits tailored to different lifestyles. 
-                  From rewards on daily spends to exclusive lifestyle privileges, these cards are designed 
+                  ICICI Bank Credit Cards offer a range of benefits tailored to different lifestyles.
+                  From rewards on daily spends to exclusive lifestyle privileges, these cards are designed
                   to enhance your banking experience.
                 </Text>
                 <div>
-                <Button 
-    type="default" 
-    size="large" 
-    style={{ marginRight: '16px' }}
-    onClick={() => handleProtectedAction(() => 
-      navigate('/apply', { state: { productType: 'Credit Cards' } })
-    )}
-  
-  >
-    Apply Now
-  </Button>
+                  <Button
+                    type="default"
+                    size="large"
+                    style={{ marginRight: '16px' }}
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Credit Cards' } })
+                    )}
+
+                  >
+                    Apply Now
+                  </Button>
 
                   <Text type="secondary" style={{ fontSize: '14px' }}>
                     On ICICI Bank website
@@ -1167,14 +1167,14 @@ const ICICICreditCard: React.FC = () => {
                       </Text>
                     </RatingContainer>
                     <Button onClick={() => handleViewDetails(card.name)}>View Details</Button>
-                    <Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Credit Cards' } })
-  )}
->
-  Apply
-</Button>
+                    <Button
+                      type="primary"
+                      onClick={() => handleProtectedAction(() =>
+                        navigate('/apply', { state: { productType: 'Credit Cards' } })
+                      )}
+                    >
+                      Apply
+                    </Button>
                     <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                       On ICICI Bank Website
                     </Text>
@@ -1182,7 +1182,7 @@ const ICICICreditCard: React.FC = () => {
                 </CardGrid>
               </motion.div>
             ))}
-            
+
             <AnimatePresence>
               {selectedCards.length > 0 && (
                 <CompareFloatingButton
@@ -1205,8 +1205,8 @@ const ICICICreditCard: React.FC = () => {
                   title={
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: '140px' }}>
                       <span>Credit Card Comparison</span>
-                      <DownloadButton 
-                        type="primary" 
+                      <DownloadButton
+                        type="primary"
                         icon={<DownloadOutlined />}
                         onClick={handleDownloadPDF}
                       >
@@ -1234,8 +1234,8 @@ const ICICICreditCard: React.FC = () => {
                           >
                             <CompareSection>
                               <CompareCardImage>
-                                <motion.img 
-                                  src={card?.image} 
+                                <motion.img
+                                  src={card?.image}
                                   alt={cardName}
                                   whileHover={{ scale: 1.05 }}
                                   transition={{ type: "spring", stiffness: 300 }}
@@ -1278,8 +1278,8 @@ const ICICICreditCard: React.FC = () => {
                               <CompareSectionTitle>Key Benefits</CompareSectionTitle>
                               <BenefitList>
                                 {details?.features?.slice(0, 3).map((benefit, index) => (
-                                  <motion.div 
-                                    key={index} 
+                                  <motion.div
+                                    key={index}
                                     className="benefit-item"
                                     whileHover={{ x: 5 }}
                                     transition={{ type: "spring", stiffness: 300 }}

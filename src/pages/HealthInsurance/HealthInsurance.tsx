@@ -10,7 +10,7 @@ import { useProtectedAction } from '../../hooks/useProtectedAction';
 
 // Bank logos from public directory
 const bankLogos = {
-  star : "/images/partners/star-insurance.png"
+  star: "/images/partners/star-insurance.png"
 };
 
 interface Loan {
@@ -77,62 +77,62 @@ const personalLoans: Loan[] = [
 
 const loanDetails: LoanDetailsMap = {
   "Star Health Insurance": {
-  features: [
-    "Comprehensive coverage up to ₹1 Crore",
-    "No medical check-up required up to 45 years",
-    "15,000+ network hospitals for cashless treatment",
-    "Coverage for 30+ critical illnesses",
-    "Day care procedures covered",
-    "Alternative treatments (AYUSH) covered",
-    "Pre and post hospitalization expenses covered"
-  ],
-  benefits: [
-    "Lifetime renewability option",
-    "Tax benefits under Section 80D",
-    "No claim bonus up to 100% of sum insured",
-    "Free annual health check-up",
-    "Automatic recharge of sum insured",
-    "24/7 customer support",
-    "Mobile app for easy claim tracking"
-  ],
-  fees: {
-    processing: "No processing fee",
-    prepayment: "Not applicable",
-    latePenalty: "Grace period of 30 days for renewal"
-  },
-  eligibility: {
-    salaried: [
-      "Age: 18-65 years",
-      "No medical test up to 45 years",
-      "Valid ID and address proof"
+    features: [
+      "Comprehensive coverage up to ₹1 Crore",
+      "No medical check-up required up to 45 years",
+      "15,000+ network hospitals for cashless treatment",
+      "Coverage for 30+ critical illnesses",
+      "Day care procedures covered",
+      "Alternative treatments (AYUSH) covered",
+      "Pre and post hospitalization expenses covered"
     ],
-    selfEmployed: [
-      "Age: 18-65 years",
-      "No medical test up to 45 years",
-      "Valid ID and address proof"
-    ]
-  },
-  documents: {
-    salaried: [
-      "Age proof",
-      "Identity proof",
-      "Address proof",
-      "Passport size photographs",
-      "Previous policy documents (if any)"
+    benefits: [
+      "Lifetime renewability option",
+      "Tax benefits under Section 80D",
+      "No claim bonus up to 100% of sum insured",
+      "Free annual health check-up",
+      "Automatic recharge of sum insured",
+      "24/7 customer support",
+      "Mobile app for easy claim tracking"
     ],
-    selfEmployed: [
-      "Age proof",
-      "Identity proof",
-      "Address proof",
-      "Passport size photographs",
-      "Previous policy documents (if any)"
-    ]
-  },
-  maxAmount: "₹1 Crore",
-  minAmount: "₹2 Lakhs",
-  tenure: "1 Year",
-  interestRate: "₹599/month"
-} 
+    fees: {
+      processing: "No processing fee",
+      prepayment: "Not applicable",
+      latePenalty: "Grace period of 30 days for renewal"
+    },
+    eligibility: {
+      salaried: [
+        "Age: 18-65 years",
+        "No medical test up to 45 years",
+        "Valid ID and address proof"
+      ],
+      selfEmployed: [
+        "Age: 18-65 years",
+        "No medical test up to 45 years",
+        "Valid ID and address proof"
+      ]
+    },
+    documents: {
+      salaried: [
+        "Age proof",
+        "Identity proof",
+        "Address proof",
+        "Passport size photographs",
+        "Previous policy documents (if any)"
+      ],
+      selfEmployed: [
+        "Age proof",
+        "Identity proof",
+        "Address proof",
+        "Passport size photographs",
+        "Previous policy documents (if any)"
+      ]
+    },
+    maxAmount: "₹1 Crore",
+    minAmount: "₹2 Lakhs",
+    tenure: "1 Year",
+    interestRate: "₹599/month"
+  }
 };
 
 const PageContainer = styled.div`
@@ -338,7 +338,7 @@ const HeroVisual = styled(motion.div)`
   }
 `;
 
-const FloatingCard = styled(motion.div)<{ index: number }>`
+const FloatingCard = styled(motion.div) <{ index: number }>`
   position: absolute;
   width: 280px;
   height: 160px;
@@ -717,7 +717,7 @@ const BenefitList = styled.div`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -883,7 +883,7 @@ const HealthInsurance: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Compare and choose from India's leading insurance providers. Get instant coverage, 
+            Compare and choose from India's leading insurance providers. Get instant coverage,
             lowest premiums, and hassle-free claims.
           </HeroSubtitle>
           <HeroButtons
@@ -1007,15 +1007,15 @@ const HealthInsurance: React.FC = () => {
                     </Text>
                   </RatingContainer>
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
-                  <Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Insurance' } })
-  )}
->
-  Apply
-</Button>
-                 
+                  <Button
+                    type="primary"
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Insurance' } })
+                    )}
+                  >
+                    Apply
+                  </Button>
+
                   <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                     On bank website
                   </Text>
@@ -1023,7 +1023,7 @@ const HealthInsurance: React.FC = () => {
               </CardGrid>
             </motion.div>
           ))}
-            
+
           <AnimatePresence>
             {selectedLoans.length > 0 && (
               <CompareFloatingButton

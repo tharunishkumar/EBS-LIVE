@@ -1,437 +1,169 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Form, Input, Select, Button, Tag, Typography, notification } from 'antd';
-import { CreditCardOutlined, CheckCircleFilled, StarFilled, UserOutlined, MailOutlined, MobileOutlined, BankOutlined, DollarOutlined, HomeOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
+import { CreditCardOutlined, CheckCircleFilled, StarFilled } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+
 import creditCardImg from '../../assets/images/services/credit-card.jpg';
 import creditCardHeroImg from '../../assets/images/hero/creditcard.png';
-import { supabase } from '@/supabaseClient';
-import { AuthGuard } from '../../components/AuthGuard/AuthGuard';
-import { useUser } from '../../contexts/UserContext';
+
+import Footer from '../../components/Footer/Footer';
+import HeroSection from '../../components/Hero/HeroSection';
+import BankGridComponent from '../../components/ui/BankGrid';
+import ApplicationForm from '../../components/ui/ApplicationForm';
+import CardScroller from '../../components/CardScroller/CardScroller';
 
 import axisCard from '../../assets/images/cards/AXIS.png';
 import hdfcCard from '../../assets/images/cards/HDFC.png';
 import iciciCard from '../../assets/images/cards/ICICI.png';
 import idfcCard from '../../assets/images/cards/IDFC.png';
 import yesbankCard from '../../assets/images/cards/YESBANK.png';
-import { typography, colors, effects, spacing, breakpoints } from '../../styles/theme';
-import CardScroller from '../../components/CardScroller/CardScroller';
-import Footer from '../../components/Footer/Footer';
-import HeroSection from '../../components/Hero/HeroSection';
 
-const { Title, Text } = Typography;
-const { Option } = Select;
+/* ─── Animations ─── */
+
+const marqueeScroll = keyframes`
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+`;
+
+
+/* ─── Page ─── */
 
 const PageContainer = styled.div`
   min-height: 100vh;
   background-color: #f5f7fa;
 `;
 
-const ContentSection = styled.section`
-  padding: 60px 5%;
-  max-width: 1400px;
-  margin: 0 auto;
-`;
 
-const PartnersSection = styled.section`
-  width: 100vw;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  background: ${colors.background.primary};
-  padding: 40px 0;
+
+/* ─── Banking Partners Marquee ─── */
+
+const PartnersWrapper = styled.section`
+  background: #f8fafc;
+  padding: 56px 0;
   overflow: hidden;
+  border-top: 1px solid #e8f0fb;
+  border-bottom: 1px solid #e8f0fb;
   position: relative;
-`;
 
-const PartnersTitleSection = styled.div`
-  text-align: center;
-  margin-bottom: 40px;
-  padding: 0 20px;
-
-  h2 {
-    font-family: ${typography.fontFamily.heading};
-    font-size: ${typography.fontSize.h2.desktop};
-    font-weight: ${typography.fontWeight.bold};
-    color: ${colors.text.primary};
-    margin-bottom: 12px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 160px; height: 100%;
+    background: linear-gradient(to right, #f8fafc, transparent);
+    z-index: 2; pointer-events: none;
   }
-
-  p {
-    font-family: ${typography.fontFamily.primary};
-    font-size: ${typography.fontSize.body.large};
-    color: ${colors.text.secondary};
-    line-height: ${typography.lineHeight.relaxed};
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: ${breakpoints.tablet}) {
-    h2 {
-      font-size: ${typography.fontSize.h2.tablet};
-    }
-    p {
-      font-size: ${typography.fontSize.body.regular};
-    }
-  }
-`;
-
-const MarqueeWrapper = styled.div`
-  position: relative;
-  
-  &::before,
   &::after {
     content: '';
     position: absolute;
-    top: 0;
-    width: 200px;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
+    top: 0; right: 0;
+    width: 160px; height: 100%;
+    background: linear-gradient(to left, #f8fafc, transparent);
+    z-index: 2; pointer-events: none;
   }
 
-  &::before {
-    left: 0;
-    background: linear-gradient(to right, ${colors.background.primary}, transparent);
+  @media (max-width: 768px) {
+    padding: 36px 0;
+    &::before, &::after { width: 60px; }
   }
 
-  &::after {
-    right: 0;
-    background: linear-gradient(to left, ${colors.background.primary}, transparent);
+  @media (max-width: 480px) {
+    padding: 28px 0;
+    &::before, &::after { width: 40px; }
   }
 `;
 
-const MarqueeContainer = styled.div`
+const PartnersHeader = styled.div`
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 0 5%;
+
+  h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 8px;
+  }
+  p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
+    h3 { font-size: 1.25rem; }
+    p  { font-size: 0.85rem; }
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 18px;
+    h3 { font-size: 1.1rem; }
+    p  { font-size: 0.8rem; }
+  }
+`;
+
+const MarqueeTrack = styled.div`
   display: flex;
-  gap: 60px;
-  animation: scroll 35s linear infinite;
-  padding: 30px 0;
+  gap: 16px;
+  animation: ${marqueeScroll} 24s linear infinite;
+  width: max-content;
 
-  @keyframes scroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
-  &:hover {
-    animation-play-state: paused;
-  }
+  &:hover { animation-play-state: paused; }
 `;
 
 const BankLogo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 200px;
+  min-width: 180px;
   height: 80px;
-  background: ${colors.background.white};
+  background: #fff;
   border-radius: 16px;
-  padding: 16px 32px;
+  padding: 14px 28px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  cursor: default;
+  flex-shrink: 0;
 
   img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 48px;
     object-fit: contain;
+    filter: grayscale(20%);
+    transition: filter 0.3s ease, transform 0.3s ease;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const ApplicationSection = styled.section`
-  width: 100vw;
-  margin-left: 50%;
-  transform: translateX(-50%);
-  background: ${colors.background.primary};
-  padding: 80px 0;
-  display: flex;
-  justify-content: center;
-  
-`;
-
-const ApplicationContainer = styled.div`
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 40px;
-  display: flex;
-  position: relative;
-  background: ${colors.background.white};
-  border-radius: 24px;
-  overflow: hidden;
-  
-
-  @media (max-width: ${breakpoints.tablet}) {
-    flex-direction: column;
-    margin: 0 20px;
-  }
-`;
-
-const FormLeftSection = styled.div`
-  width: 45%;
-  background: linear-gradient(135deg, #0077b6 0%, #023e8a 100%);
-  color: ${colors.text.white};
-  padding: 50px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -30%;
-    right: -30%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-    border-radius: 50%;
+    border-color: rgba(0,71,255,0.2);
+    box-shadow: 0 6px 24px rgba(0,71,255,0.1);
+    transform: translateY(-3px);
+    img { filter: grayscale(0%); }
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -20%;
-    left: -20%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 70%);
-    border-radius: 50%;
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  h3 {
-    font-family: ${typography.fontFamily.heading};
-    font-size: ${typography.fontSize.h3.desktop};
-    font-weight: ${typography.fontWeight.bold};
-    line-height: ${typography.lineHeight.tight};
-    margin-bottom: 1.2rem;
-  }
-
-  p {
-    font-family: ${typography.fontFamily.primary};
-    font-size: ${typography.fontSize.body.regular};
-    line-height: ${typography.lineHeight.relaxed};
-    margin-bottom: 1.5rem;
-    opacity: 0.9;
-  }
-
-  .benefits {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 0.8rem;
-      font-size: ${typography.fontSize.body.small};
-      line-height: ${typography.lineHeight.normal};
-
-      .anticon {
-        font-size: 1rem;
-        color: #6dd5ed;
-      }
-    }
-  }
-
-  @media (max-width: ${breakpoints.tablet}) {
-    width: 100%;
-    padding: 40px;
-    
-    h3 {
-      font-size: ${typography.fontSize.h3.tablet};
-    }
-  }
-`;
-
-const FormContainer = styled.div`
-  width: 55%;
-  padding: 50px;
-  position: relative;
-  overflow: hidden;
-  background: ${colors.background.white};
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 100%;
-    height: 100%;
-    background: ${colors.primary.gradient};
-    opacity: 0.03;
-    border-radius: 50%;
-    transform: rotate(-15deg);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -50%;
-    left: -50%;
-    width: 100%;
-    height: 100%;
-    background: ${colors.primary.gradient};
-    opacity: 0.03;
-    border-radius: 50%;
-    transform: rotate(15deg);
-  }
-
-  @media (max-width: ${breakpoints.tablet}) {
-    width: 100%;
-    padding: 40px;
-  }
-`;
-
-const StyledForm = styled(Form)`
-  .form-header {
-    text-align: center;
-    margin-bottom: 30px;
-
-    h3 {
-      font-family: ${typography.fontFamily.heading};
-      font-size: ${typography.fontSize.h4.desktop};
-      font-weight: ${typography.fontWeight.bold};
-      color: ${colors.text.primary};
-      margin-bottom: 8px;
-    }
-
-    p {
-      font-family: ${typography.fontFamily.primary};
-      font-size: ${typography.fontSize.body.small};
-      color: ${colors.text.secondary};
-      line-height: ${typography.lineHeight.relaxed};
-    }
-  }
-
-  .ant-form-item {
-    margin-bottom: 20px;
-  }
-
-  .ant-btn {
-    height: 45px;
+  @media (max-width: 768px) {
+    min-width: 130px;
+    height: 60px;
+    padding: 10px 18px;
     border-radius: 12px;
-    font-size: ${typography.fontSize.body.regular};
+    img { max-height: 36px; }
   }
 
-  .ant-form-item-label {
-    padding-bottom: 4px;
-    
-    label {
-      font-size: ${typography.fontSize.body.small};
-      height: auto;
-    }
-  }
-`;
-
-const StyledInput = styled(Input)`
-  height: 42px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  border: 2px solid rgba(0, 119, 182, 0.1);
-  background: white;
-
-  .ant-input-prefix {
-    margin-right: 10px;
-    color: #0077b6;
-  }
-
-  &:hover, &:focus {
-    border-color: #0077b6;
-    box-shadow: 0 2px 8px rgba(0, 119, 182, 0.1);
+  @media (max-width: 480px) {
+    min-width: 110px;
+    height: 52px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    img { max-height: 28px; }
   }
 `;
 
-const SubmitButton = styled(Button)`
-  width: 100%;
-  height: 50px;
-  font-size: 18px;
-  font-weight: 600;
-  background: linear-gradient(135deg, #0077b6 0%, #023e8a 100%);
-  border: none;
-  margin-top: 20px;
-
-  &:hover {
-    background: linear-gradient(135deg, #023e8a 0%, #0077b6 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 119, 182, 0.3);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
+const Section = styled.section`
+  margin-bottom: 20px;
 `;
-
-const creditCards = [
-  {
-    id: 1,
-    name: 'IRCTC RuPay Credit Card',
-    image: '/images/cards/irctc.png',
-    rating: 4.0,
-    reviews: 1250,
-    joiningFee: '₹500 + GST',
-    features: [
-      'Travel rewards on IRCTC bookings',
-      'Complimentary lounge access',
-      'Fuel surcharge waiver'
-    ],
-    categories: ['top', 'travel', 'rewards']
-  },
-  {
-    id: 2,
-    name: 'IDFC FIRST SWYP Credit Card',
-    image: '/images/cards/idfc.png',
-    rating: 5.0,
-    reviews: 850,
-    joiningFee: '₹499 + GST',
-    features: [
-      '1000 Reward Points on 1st EMI conversion',
-      'Zero forex markup',
-      'Movie ticket discounts'
-    ],
-    categories: ['top', 'movie', 'dining', 'shopping']
-  },
-  {
-    id: 3,
-    name: 'Axis Bank ACE Credit Card',
-    image: '/images/cards/ace.png',
-    rating: 4.5,
-    reviews: 2100,
-    joiningFee: 'NIL',
-    features: [
-      '5% cashback on bill payments',
-      'Welcome bonus 2000 points',
-      'Movie ticket BOGO offers'
-    ],
-    categories: ['top', 'movie', 'rewards', 'shopping']
-  },
-  {
-    id: 4,
-    name: 'HDFC Diners Club Black',
-    image: '/images/cards/diners.png',
-    rating: 4.8,
-    reviews: 3200,
-    joiningFee: '₹10000 + GST',
-    features: [
-      'Unlimited airport lounge access',
-      'Golf privileges',
-      '10X rewards on dining'
-    ],
-    categories: ['top', 'travel', 'dining', 'lounge']
-  }
-];
 
 const bankLogos = [
   { src: '/images/partners/hdfc.jpg', name: 'HDFC Bank' },
@@ -441,429 +173,73 @@ const bankLogos = [
   { src: '/images/partners/idfc.jpg', name: 'IDFC Bank' },
   { src: '/images/partners/yes.png', name: 'Yes Bank' },
   { src: '/images/partners/au.jpg', name: 'AU Bank' },
-  { src: '/images/partners/federal.png', name: 'Federal Bank' }
+  { src: '/images/partners/federal.png', name: 'Federal Bank' },
 ];
 
-const SectionTitle = styled.div`
-  text-align: center;
-  margin-bottom: ${spacing.xxl};
-  padding-top: ${spacing.xxl};
+const CreditCards: React.FC = () => (
+  <PageContainer>
+    <HeroSection
+      title="Transform Your Spending with Premium Credit Cards"
+      description="Discover exclusive rewards, cashback, and privileges. Apply now and elevate your financial journey with EBS Groups."
+      image={creditCardHeroImg}
+      backgroundImage={creditCardImg}
+      featureTags={[
+        { icon: <StarFilled />, label: 'Instant Approval' },
+        { icon: <CheckCircleFilled />, label: 'Zero Annual Fee*' },
+        { icon: <CreditCardOutlined />, label: '5% Cashback' },
+        { icon: <StarFilled />, label: 'Lounge Access' },
+      ]}
+    />
 
-  h2 {
-    font-family: ${typography.fontFamily.heading};
-    font-size: ${typography.fontSize.h2.desktop};
-    font-weight: ${typography.fontWeight.bold};
-    line-height: 1.2;
-    background: linear-gradient(135deg, #2193b0, #6dd5ed);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: ${spacing.md};
+    <BankGridComponent />
 
-    @media (max-width: ${breakpoints.tablet}) {
-      font-size: ${typography.fontSize.h2.tablet};
-    }
+    <PartnersWrapper>
+      <PartnersHeader>
+        <h3>Our Banking Partners</h3>
+        <p>We collaborate with India's leading banks to bring you exclusive credit card offers with unmatched benefits.</p>
+      </PartnersHeader>
+      <MarqueeTrack>
+        {[...bankLogos, ...bankLogos].map((logo, i) => (
+          <BankLogo key={i}>
+            <img src={logo.src} alt={logo.name} />
+          </BankLogo>
+        ))}
+      </MarqueeTrack>
+    </PartnersWrapper>
 
-    @media (max-width: ${breakpoints.mobile}) {
-      font-size: ${typography.fontSize.h2.mobile};
-    }
-  }
-
-  p {
-    font-family: ${typography.fontFamily.primary};
-    font-size: ${typography.fontSize.body.large};
-    color: ${colors.text.secondary};
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: ${typography.lineHeight.relaxed};
-
-    @media (max-width: ${breakpoints.mobile}) {
-      font-size: ${typography.fontSize.body.regular};
-    }
-  }
-`;
-
-const CreditCards: React.FC = () => {
-  const [form] = Form.useForm();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('top');
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const { user } = useUser();
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15
-      }
-    }
-  };
-
-  interface FormValues {
-    firstName: string;
-    middleName?: string;
-    lastName: string;
-    email: string;
-    mobileNumber: string;
-    currentCompany: string;
-    monthlySalary: number;
-    netTakeHome: number;
-    bankingDetails: string;
-    location: string;
-  }
-
-  const handleSubmit = async (values: FormValues) => {
-    setIsSubmitting(true);
-    try {
-      if (!user) {
-        throw new Error('Please log in to submit an application.');
-      }
-
-      // Get the customer_id for the current user
-      const { data: customerData, error: customerError } = await supabase
-        .from('customers')
-        .select('customer_id')
-        .eq('id', user.id)
-        .single();
-
-      if (customerError || !customerData?.customer_id) {
-        throw new Error('Could not retrieve customer information. Please ensure you are logged in.');
-      }
-
-      const payload = {
-        customer_id: customerData.customer_id,
-        firstname: values.firstName,
-        middlename: values.middleName || null,
-        lastname: values.lastName,
-        email: values.email,
-        mobilenumber: values.mobileNumber,
-        currentcompany: values.currentCompany,
-        monthlysalary: Number(values.monthlySalary),
-        nettakehome: Number(values.netTakeHome),
-        bankingdetails: values.bankingDetails,
-        location: values.location,
-        producttype: 'Credit Cards',
-        status: 'pending'
-      };
-
-      console.log('Submitting payload:', payload);
-
-      const { data, error } = await supabase
-        .from('applications')
-        .insert([payload])
-        .select();
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      notification.success({
-        message: 'Application Submitted',
-        description: 'Your credit card application has been successfully submitted. We will review it shortly.'
-      });
-
-      form.resetFields();
-    } catch (error: any) {
-      console.error('Submission error:', error);
-      notification.error({
-        message: 'Submission Failed',
-        description: error.message || 'There was an error submitting your application. Please try again.'
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const cards = [
-
-    { src: axisCard, alt: "Axis Bank Credit Card" },
-    { src: hdfcCard, alt: "HDFC Bank Credit Card" },
-    { src: iciciCard, alt: "ICICI Bank Credit Card" },
-    { src: idfcCard, alt: "IDFC Bank Credit Card" },
-    { src: yesbankCard, alt: "Yes Bank Credit Card" },
-  ];
-
-  const filters = [
-    { id: 'top', label: 'Top Cards' },
-    { id: 'travel', label: 'Travel' },
-    { id: 'shopping', label: 'Shopping' },
-    { id: 'fuel', label: 'Fuel' },
-    { id: 'movie', label: 'Movie' },
-    { id: 'dining', label: 'Dining' },
-    { id: 'lounge', label: 'Lounge Access' },
-    { id: 'rewards', label: 'Rewards' }
-  ];
-
-  const handlePrev = () => {
-    setCurrentIndex(prev => (prev === 0 ? cards.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setCurrentIndex(prev => (prev === cards.length - 1 ? 0 : prev + 1));
-  };
-
-  const getVisibleCards = () => {
-    const visibleCards = [];
-    for (let i = 0; i < 3; i++) {
-      const index = (currentIndex + i) % cards.length;
-      visibleCards.push(cards[index]);
-    }
-    return visibleCards;
-  };
-
-  return (
-    <PageContainer>
-      <HeroSection
-        title="Transform Your Spending with Premium Credit Cards"
-        description="Discover exclusive rewards, cashback, and privileges. Apply now and elevate your financial journey with EBS Groups."
-        image={creditCardHeroImg}
-        backgroundImage={creditCardImg}
-        featureTags={[
-          { icon: <StarFilled />, label: 'Instant Approval' },
-          { icon: <CheckCircleFilled />, label: 'Zero Annual Fee*' },
-          { icon: <CreditCardOutlined />, label: '5% Cashback' }
-        ]}
+    <div id="apply">
+      <ApplicationForm
+        formTitle="Credit Card Application"
+        formSubtitle="Fill in your details and our team will reach out to you within 24 hours."
+        productType="Credit Cards"
+        recipientEmail="info@ebsgroup.co.in"
+        leftPanel={{
+          heading: 'Why Choose Our Credit Cards?',
+          subtext: 'Experience a world of exclusive benefits and rewards with our premium credit card offerings.',
+          benefits: [
+            'Instant approval with minimal documentation',
+            'Up to 5% cashback on all purchases',
+            'Complimentary airport lounge access',
+            'Zero annual fee for the first year',
+            '24/7 concierge services',
+            'Comprehensive fraud protection',
+          ],
+        }}
       />
+    </div>
 
-      <ContentSection>
-        <PartnersSection>
-          <PartnersTitleSection>
-            <h2>Our Banking Partners</h2>
-            <p>We collaborate with India's leading banks to bring you exclusive credit card offers with unmatched benefits</p>
-          </PartnersTitleSection>
+    <Section>
+      <CardScroller images={[
+        axisCard,
+        hdfcCard,
+        iciciCard,
+        idfcCard,
+        yesbankCard
+      ]} />
+    </Section>
 
-          <MarqueeWrapper>
-            <MarqueeContainer>
-              {[...Array(2)].map((_, setIndex) => (
-                <React.Fragment key={setIndex}>
-                  {bankLogos.map((logo, index) => (
-                    <BankLogo key={`${setIndex}-${index}`}>
-                      <img src={logo.src} alt={logo.name} />
-                    </BankLogo>
-                  ))}
-                </React.Fragment>
-              ))}
-            </MarqueeContainer>
-          </MarqueeWrapper>
-        </PartnersSection>
-
-        <ApplicationSection>
-          <ApplicationContainer>
-            <FormLeftSection>
-              <h3>Why Choose Our Credit Cards?</h3>
-              <p>Experience a world of exclusive benefits and rewards with our premium credit card offerings.</p>
-              <ul className="benefits">
-                <li>
-                  <CheckCircleFilled /> Instant approval with minimal documentation
-                </li>
-                <li>
-                  <CheckCircleFilled /> Up to 5% cashback on all your purchases
-                </li>
-                <li>
-                  <CheckCircleFilled /> Complimentary airport lounge access
-                </li>
-                <li>
-                  <CheckCircleFilled /> Zero annual fee for the first year
-                </li>
-                <li>
-                  <CheckCircleFilled /> 24/7 concierge services
-                </li>
-                <li>
-                  <CheckCircleFilled /> Comprehensive fraud protection
-                </li>
-              </ul>
-            </FormLeftSection>
-
-            <FormContainer>
-              <StyledForm
-                form={form}
-                layout="vertical"
-                onFinish={handleSubmit}
-                requiredMark={false}
-              >
-                <div className="form-header">
-                  <h3>Credit Card Application</h3>
-                  <p>Fill in your details below</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <motion.div variants={itemVariants}>
-                    <Form.Item
-                      name="firstName"
-                      label="First Name"
-                      rules={[{ required: true, message: 'First Name is required' }]}
-                    >
-                      <StyledInput prefix={<UserOutlined />} placeholder="Enter First Name" />
-                    </Form.Item>
-                  </motion.div>
-
-                  <motion.div variants={itemVariants}>
-                    <Form.Item
-                      name="middleName"
-                      label="Middle Name"
-                    >
-                      <StyledInput prefix={<UserOutlined />} placeholder="Enter Middle Name (Optional)" />
-                    </Form.Item>
-                  </motion.div>
-                </div>
-
-                <motion.div variants={itemVariants}>
-                  <Form.Item
-                    name="lastName"
-                    label="Last Name"
-                    rules={[{ required: true, message: 'Last Name is required' }]}
-                  >
-                    <StyledInput prefix={<UserOutlined />} placeholder="Enter Last Name" />
-                  </Form.Item>
-                </motion.div>
-
-                <motion.div variants={itemVariants}>
-                  <Form.Item
-                    name="email"
-                    label="Email"
-                    rules={[
-                      { required: true, message: 'Email is required' },
-                      { type: 'email', message: 'Please enter a valid email' }
-                    ]}
-                  >
-                    <StyledInput prefix={<MailOutlined />} placeholder="Enter Email Address" />
-                  </Form.Item>
-                </motion.div>
-
-                <motion.div variants={itemVariants}>
-                  <Form.Item
-                    name="mobileNumber"
-                    label="Mobile Number"
-                    rules={[
-                      { required: true, message: 'Mobile Number is required' },
-                      { pattern: /^[6-9]\d{9}$/, message: 'Please enter a valid 10-digit mobile number' }
-                    ]}
-                  >
-                    <StyledInput
-                      prefix={<MobileOutlined />}
-                      placeholder="Enter Mobile Number"
-                      maxLength={10}
-                    />
-                  </Form.Item>
-                </motion.div>
-
-                <motion.div variants={itemVariants}>
-                  <Form.Item
-                    name="currentCompany"
-                    label="Current Company"
-                    rules={[{ required: true, message: 'Current Company is required' }]}
-                  >
-                    <StyledInput prefix={<HomeOutlined />} placeholder="Enter Company Name" />
-                  </Form.Item>
-                </motion.div>
-
-                <motion.div variants={itemVariants}>
-                  <Form.Item
-                    name="location"
-                    label="Location"
-                    rules={[{ required: true, message: 'Location is required' }]}
-                  >
-                    <StyledInput
-                      prefix={<EnvironmentOutlined />}
-                      placeholder="Enter your city or state"
-                    />
-                  </Form.Item>
-                </motion.div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <motion.div variants={itemVariants}>
-                    <Form.Item
-                      name="monthlySalary"
-                      label="Monthly Salary"
-                      rules={[
-                        { required: true, message: 'Monthly Salary is required' },
-                        { pattern: /^\d+$/, message: 'Please enter a valid amount' }
-                      ]}
-                    >
-                      <StyledInput
-                        prefix={<DollarOutlined />}
-                        placeholder="Enter Monthly Salary"
-                        type="number"
-                      />
-                    </Form.Item>
-                  </motion.div>
-
-                  <motion.div variants={itemVariants}>
-                    <Form.Item
-                      name="netTakeHome"
-                      label="Net Take Home"
-                      rules={[
-                        { required: true, message: 'Net Take Home is required' },
-                        { pattern: /^\d+$/, message: 'Please enter a valid amount' }
-                      ]}
-                    >
-                      <StyledInput
-                        prefix={<DollarOutlined />}
-                        placeholder="Enter Net Take Home"
-                        type="number"
-                      />
-                    </Form.Item>
-                  </motion.div>
-                </div>
-
-                <motion.div variants={itemVariants}>
-                  <Form.Item
-                    name="bankingDetails"
-                    label="Banking Details"
-                    rules={[{ required: true, message: 'Banking Details are required' }]}
-                  >
-                    <StyledInput
-                      prefix={<BankOutlined />}
-                      placeholder="Enter Bank Name and Account Number"
-                    />
-                  </Form.Item>
-                </motion.div>
-
-                <motion.div variants={itemVariants}>
-                  <Form.Item>
-                    <SubmitButton
-                      type="primary"
-                      htmlType="submit"
-                      loading={isSubmitting}
-                    >
-                      Submit Application
-                    </SubmitButton>
-                  </Form.Item>
-                </motion.div>
-              </StyledForm>
-            </FormContainer>
-          </ApplicationContainer>
-        </ApplicationSection>
-
-        <section>
-          <CardScroller images={[
-            axisCard,
-            hdfcCard,
-            iciciCard,
-            idfcCard,
-            yesbankCard
-          ]} />
-        </section>
-      </ContentSection>
-      <Footer />
-    </PageContainer>
-
-
-  );
-};
+    <Footer />
+  </PageContainer>
+);
 
 export default CreditCards;

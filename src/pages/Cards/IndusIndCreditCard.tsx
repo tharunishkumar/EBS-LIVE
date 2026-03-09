@@ -60,330 +60,330 @@ interface CardDetailsMap {
 const { Title, Text } = Typography;
 
 const creditCards: Card[] = [
-    {
-      id: 1,
-      name: "Platinum RuPay Credit Card",
-      image: platinumRupayImg,
-      joiningFee: "₹1,000 + GST",
-      rating: 4.5,
-      suitedFor: ["Lifestyle", "Rewards"],
-      benefit: "2X rewards on everyday spends",
-      benefitIcon: StarFilled,
-      creditLimit: "₹50,000 - ₹5,00,000",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 2,
-      name: "EazyDiner Credit Card",
-      image: eazyDinerImg,
-      joiningFee: "₹2,500 + GST",
-      rating: 4.7,
-      suitedFor: ["Dining", "Lifestyle"],
-      benefit: "Up to 25% savings at partner restaurants",
-      benefitIcon: PercentageOutlined,
-      creditLimit: "₹1,00,000 - ₹7,00,000",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 3,
-      name: "Nexxt Credit Card",
-      image: nexxtImg,
-      joiningFee: "₹3,500 + GST",
-      rating: 4.8,
-      suitedFor: ["Premium", "Lifestyle"],
-      benefit: "5X rewards on chosen category",
-      benefitIcon: StarFilled,
-      creditLimit: "₹2,00,000 - ₹10,00,000",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 4,
-      name: "Samman Credit Card",
-      image: sammanImg,
-      joiningFee: "NIL",
-      rating: 4.3,
-      suitedFor: ["Government Employees", "Basic"],
-      benefit: "Zero joining and annual fee",
-      benefitIcon: SafetyCertificateOutlined,
-      creditLimit: "₹50,000 - ₹3,00,000",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 5,
-      name: "EazyDiner Platinum Credit Card",
-      image: eazyDinerPlatinumImg,
-      joiningFee: "₹5,000 + GST",
-      rating: 4.8,
-      suitedFor: ["Premium Dining", "Lifestyle"],
-      benefit: "15X reward points on dining",
-      benefitIcon: GiftOutlined,
-      creditLimit: "₹3,00,000 - ₹15,00,000",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 6,
-      name: "Legend Credit Card",
-      image: legendImg,
-      joiningFee: "₹25,000 + GST",
-      rating: 4.9,
-      suitedFor: ["Super Premium", "Luxury"],
-      benefit: "Unlimited airport lounge access worldwide",
-      benefitIcon: StarFilled,
-      creditLimit: "₹10,00,000+",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 7,
-      name: "Pinnacle Credit Card",
-      image: pinnacleImg,
-      joiningFee: "By invitation only",
-      rating: 5.0,
-      suitedFor: ["Ultra Premium", "Exclusive"],
-      benefit: "Customized luxury privileges",
-      benefitIcon: StarFilled,
-      creditLimit: "No preset limit",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 8,
-      name: "Tiger Credit Card",
-      image: tigerImg,
-      joiningFee: "₹500 + GST",
-      rating: 4.2,
-      suitedFor: ["Basic", "Rewards"],
-      benefit: "1 reward point per ₹100 spent",
-      benefitIcon: GiftOutlined,
-      creditLimit: "₹25,000 - ₹2,00,000",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 9,
-      name: "Platinum Aura Edge Credit Card",
-      image: platinumAuraImg,
-      joiningFee: "₹3,000 + GST",
-      rating: 4.6,
-      suitedFor: ["Lifestyle", "Entertainment"],
-      benefit: "5X rewards on weekend spends",
-      benefitIcon: PercentageOutlined,
-      creditLimit: "₹1,50,000 - ₹8,00,000",
-      interestRate: "3.49% per month"
-    },
-    {
-      id: 10,
-      name: "Avios Visa Infinite Credit Card",
-      image: aviosInfiniteImg,
-      joiningFee: "₹10,000 + GST",
-      rating: 4.8,
-      suitedFor: ["Premium Travel", "Luxury"],
-      benefit: "4 Avios points per ₹100 spent",
-      benefitIcon: StarFilled,
-      creditLimit: "₹5,00,000 - ₹20,00,000",
-      interestRate: "3.49% per month"
-    }
-  ];
+  {
+    id: 1,
+    name: "Platinum RuPay Credit Card",
+    image: platinumRupayImg,
+    joiningFee: "₹1,000 + GST",
+    rating: 4.5,
+    suitedFor: ["Lifestyle", "Rewards"],
+    benefit: "2X rewards on everyday spends",
+    benefitIcon: StarFilled,
+    creditLimit: "₹50,000 - ₹5,00,000",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 2,
+    name: "EazyDiner Credit Card",
+    image: eazyDinerImg,
+    joiningFee: "₹2,500 + GST",
+    rating: 4.7,
+    suitedFor: ["Dining", "Lifestyle"],
+    benefit: "Up to 25% savings at partner restaurants",
+    benefitIcon: PercentageOutlined,
+    creditLimit: "₹1,00,000 - ₹7,00,000",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 3,
+    name: "Nexxt Credit Card",
+    image: nexxtImg,
+    joiningFee: "₹3,500 + GST",
+    rating: 4.8,
+    suitedFor: ["Premium", "Lifestyle"],
+    benefit: "5X rewards on chosen category",
+    benefitIcon: StarFilled,
+    creditLimit: "₹2,00,000 - ₹10,00,000",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 4,
+    name: "Samman Credit Card",
+    image: sammanImg,
+    joiningFee: "NIL",
+    rating: 4.3,
+    suitedFor: ["Government Employees", "Basic"],
+    benefit: "Zero joining and annual fee",
+    benefitIcon: SafetyCertificateOutlined,
+    creditLimit: "₹50,000 - ₹3,00,000",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 5,
+    name: "EazyDiner Platinum Credit Card",
+    image: eazyDinerPlatinumImg,
+    joiningFee: "₹5,000 + GST",
+    rating: 4.8,
+    suitedFor: ["Premium Dining", "Lifestyle"],
+    benefit: "15X reward points on dining",
+    benefitIcon: GiftOutlined,
+    creditLimit: "₹3,00,000 - ₹15,00,000",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 6,
+    name: "Legend Credit Card",
+    image: legendImg,
+    joiningFee: "₹25,000 + GST",
+    rating: 4.9,
+    suitedFor: ["Super Premium", "Luxury"],
+    benefit: "Unlimited airport lounge access worldwide",
+    benefitIcon: StarFilled,
+    creditLimit: "₹10,00,000+",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 7,
+    name: "Pinnacle Credit Card",
+    image: pinnacleImg,
+    joiningFee: "By invitation only",
+    rating: 5.0,
+    suitedFor: ["Ultra Premium", "Exclusive"],
+    benefit: "Customized luxury privileges",
+    benefitIcon: StarFilled,
+    creditLimit: "No preset limit",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 8,
+    name: "Tiger Credit Card",
+    image: tigerImg,
+    joiningFee: "₹500 + GST",
+    rating: 4.2,
+    suitedFor: ["Basic", "Rewards"],
+    benefit: "1 reward point per ₹100 spent",
+    benefitIcon: GiftOutlined,
+    creditLimit: "₹25,000 - ₹2,00,000",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 9,
+    name: "Platinum Aura Edge Credit Card",
+    image: platinumAuraImg,
+    joiningFee: "₹3,000 + GST",
+    rating: 4.6,
+    suitedFor: ["Lifestyle", "Entertainment"],
+    benefit: "5X rewards on weekend spends",
+    benefitIcon: PercentageOutlined,
+    creditLimit: "₹1,50,000 - ₹8,00,000",
+    interestRate: "3.49% per month"
+  },
+  {
+    id: 10,
+    name: "Avios Visa Infinite Credit Card",
+    image: aviosInfiniteImg,
+    joiningFee: "₹10,000 + GST",
+    rating: 4.8,
+    suitedFor: ["Premium Travel", "Luxury"],
+    benefit: "4 Avios points per ₹100 spent",
+    benefitIcon: StarFilled,
+    creditLimit: "₹5,00,000 - ₹20,00,000",
+    interestRate: "3.49% per month"
+  }
+];
 
-  const cardDetailsMap: CardDetailsMap = {
-    "Platinum RuPay Credit Card": {
-      features: [
-        "Complimentary airport lounge access",
-        "Fuel surcharge waiver up to ₹250 per month",
-        "Zero liability protection",
-        "Personal accident insurance cover"
-      ],
-      rewards: [
-        "Welcome bonus of 2,000 reward points",
-        "2 reward points per ₹100 spent",
-        "2X rewards on weekend dining"
-      ],
-      fees: {
-        joining: "₹1,000 + GST",
-        annual: "₹1,000 + GST",
-        renewal: "₹1,000 + GST"
-      },
-      creditLimit: "₹50,000 - ₹5,00,000",
-      interestRate: "3.49% per month"
+const cardDetailsMap: CardDetailsMap = {
+  "Platinum RuPay Credit Card": {
+    features: [
+      "Complimentary airport lounge access",
+      "Fuel surcharge waiver up to ₹250 per month",
+      "Zero liability protection",
+      "Personal accident insurance cover"
+    ],
+    rewards: [
+      "Welcome bonus of 2,000 reward points",
+      "2 reward points per ₹100 spent",
+      "2X rewards on weekend dining"
+    ],
+    fees: {
+      joining: "₹1,000 + GST",
+      annual: "₹1,000 + GST",
+      renewal: "₹1,000 + GST"
     },
-    "EazyDiner Credit Card": {
-      features: [
-        "Up to 25% savings at partner restaurants",
-        "Complimentary EazyDiner Prime membership",
-        "No convenience fee on movie tickets",
-        "24/7 concierge services"
-      ],
-      rewards: [
-        "10X reward points on dining",
-        "Welcome dining vouchers worth ₹2,000",
-        "Birthday bonus points"
-      ],
-      fees: {
-        joining: "₹2,500 + GST",
-        annual: "₹2,500 + GST",
-        renewal: "₹2,500 + GST"
-      },
-      creditLimit: "₹1,00,000 - ₹7,00,000",
-      interestRate: "3.49% per month"
+    creditLimit: "₹50,000 - ₹5,00,000",
+    interestRate: "3.49% per month"
+  },
+  "EazyDiner Credit Card": {
+    features: [
+      "Up to 25% savings at partner restaurants",
+      "Complimentary EazyDiner Prime membership",
+      "No convenience fee on movie tickets",
+      "24/7 concierge services"
+    ],
+    rewards: [
+      "10X reward points on dining",
+      "Welcome dining vouchers worth ₹2,000",
+      "Birthday bonus points"
+    ],
+    fees: {
+      joining: "₹2,500 + GST",
+      annual: "₹2,500 + GST",
+      renewal: "₹2,500 + GST"
     },
-    "Nexxt Credit Card": {
-      features: [
-        "Customizable reward categories",
-        "Movie ticket BOGO offers",
-        "Complimentary golf sessions",
-        "Travel insurance coverage"
-      ],
-      rewards: [
-        "5X rewards on your chosen category",
-        "Welcome bonus points",
-        "Milestone bonus rewards"
-      ],
-      fees: {
-        joining: "₹3,500 + GST",
-        annual: "₹3,500 + GST",
-        renewal: "₹3,500 + GST"
-      },
-      creditLimit: "₹2,00,000 - ₹10,00,000",
-      interestRate: "3.49% per month"
+    creditLimit: "₹1,00,000 - ₹7,00,000",
+    interestRate: "3.49% per month"
+  },
+  "Nexxt Credit Card": {
+    features: [
+      "Customizable reward categories",
+      "Movie ticket BOGO offers",
+      "Complimentary golf sessions",
+      "Travel insurance coverage"
+    ],
+    rewards: [
+      "5X rewards on your chosen category",
+      "Welcome bonus points",
+      "Milestone bonus rewards"
+    ],
+    fees: {
+      joining: "₹3,500 + GST",
+      annual: "₹3,500 + GST",
+      renewal: "₹3,500 + GST"
     },
-    "Samman Credit Card": {
-      features: [
-        "Special interest rates",
-        "Complimentary personal accident insurance",
-        "Emergency card replacement service",
-        "Zero fraud liability"
-      ],
-      rewards: [
-        "2X rewards on utility bills",
-        "Special government employee benefits",
-        "Fuel surcharge waiver"
-      ],
-      fees: {
-        joining: "NIL",
-        annual: "NIL",
-        renewal: "NIL"
-      },
-      creditLimit: "₹50,000 - ₹3,00,000",
-      interestRate: "3.49% per month"
+    creditLimit: "₹2,00,000 - ₹10,00,000",
+    interestRate: "3.49% per month"
+  },
+  "Samman Credit Card": {
+    features: [
+      "Special interest rates",
+      "Complimentary personal accident insurance",
+      "Emergency card replacement service",
+      "Zero fraud liability"
+    ],
+    rewards: [
+      "2X rewards on utility bills",
+      "Special government employee benefits",
+      "Fuel surcharge waiver"
+    ],
+    fees: {
+      joining: "NIL",
+      annual: "NIL",
+      renewal: "NIL"
     },
-    "EazyDiner Platinum Credit Card": {
-      features: [
-        "Up to 40% savings at luxury restaurants",
-        "Premium EazyDiner Prime membership",
-        "Concierge services",
-        "Priority restaurant reservations"
-      ],
-      rewards: [
-        "15X reward points on dining",
-        "Quarterly dining vouchers worth ₹5,000",
-        "Anniversary bonus points"
-      ],
-      fees: {
-        joining: "₹5,000 + GST",
-        annual: "₹5,000 + GST",
-        renewal: "₹5,000 + GST"
-      },
-      creditLimit: "₹3,00,000 - ₹15,00,000",
-      interestRate: "3.49% per month"
+    creditLimit: "₹50,000 - ₹3,00,000",
+    interestRate: "3.49% per month"
+  },
+  "EazyDiner Platinum Credit Card": {
+    features: [
+      "Up to 40% savings at luxury restaurants",
+      "Premium EazyDiner Prime membership",
+      "Concierge services",
+      "Priority restaurant reservations"
+    ],
+    rewards: [
+      "15X reward points on dining",
+      "Quarterly dining vouchers worth ₹5,000",
+      "Anniversary bonus points"
+    ],
+    fees: {
+      joining: "₹5,000 + GST",
+      annual: "₹5,000 + GST",
+      renewal: "₹5,000 + GST"
     },
-    "Legend Credit Card": {
-      features: [
-        "Unlimited airport lounge access worldwide",
-        "Personal relationship manager",
-        "Complimentary hotel night stays",
-        "Premium golf access worldwide"
-      ],
-      rewards: [
-        "20X reward points on luxury shopping",
-        "Unlimited reward points",
-        "Special luxury brand privileges"
-      ],
-      fees: {
-        joining: "₹25,000 + GST",
-        annual: "₹25,000 + GST",
-        renewal: "₹25,000 + GST"
-      },
-      creditLimit: "₹10,00,000+",
-      interestRate: "3.49% per month"
+    creditLimit: "₹3,00,000 - ₹15,00,000",
+    interestRate: "3.49% per month"
+  },
+  "Legend Credit Card": {
+    features: [
+      "Unlimited airport lounge access worldwide",
+      "Personal relationship manager",
+      "Complimentary hotel night stays",
+      "Premium golf access worldwide"
+    ],
+    rewards: [
+      "20X reward points on luxury shopping",
+      "Unlimited reward points",
+      "Special luxury brand privileges"
+    ],
+    fees: {
+      joining: "₹25,000 + GST",
+      annual: "₹25,000 + GST",
+      renewal: "₹25,000 + GST"
     },
-    "Pinnacle Credit Card": {
-      features: [
-        "Private jet booking services",
-        "Luxury hotel upgrades",
-        "Dedicated concierge service",
-        "Exclusive event access"
-      ],
-      rewards: [
-        "Unlimited reward points",
-        "Special luxury experiences",
-        "Customized rewards program"
-      ],
-      fees: {
-        joining: "By invitation only",
-        annual: "By invitation only",
-        renewal: "By invitation only"
-      },
-      creditLimit: "No preset limit",
-      interestRate: "3.49% per month"
+    creditLimit: "₹10,00,000+",
+    interestRate: "3.49% per month"
+  },
+  "Pinnacle Credit Card": {
+    features: [
+      "Private jet booking services",
+      "Luxury hotel upgrades",
+      "Dedicated concierge service",
+      "Exclusive event access"
+    ],
+    rewards: [
+      "Unlimited reward points",
+      "Special luxury experiences",
+      "Customized rewards program"
+    ],
+    fees: {
+      joining: "By invitation only",
+      annual: "By invitation only",
+      renewal: "By invitation only"
     },
-    "Tiger Credit Card": {
-      features: [
-        "Fuel surcharge waiver",
-        "Movie ticket discounts",
-        "EMI conversion facility",
-        "Zero liability protection"
-      ],
-      rewards: [
-        "Welcome bonus of 1,000 reward points",
-        "1 reward point per ₹100 spent",
-        "Special first purchase offers"
-      ],
-      fees: {
-        joining: "₹500 + GST",
-        annual: "₹500 + GST",
-        renewal: "₹500 + GST"
-      },
-      creditLimit: "₹25,000 - ₹2,00,000",
-      interestRate: "3.49% per month"
+    creditLimit: "No preset limit",
+    interestRate: "3.49% per month"
+  },
+  "Tiger Credit Card": {
+    features: [
+      "Fuel surcharge waiver",
+      "Movie ticket discounts",
+      "EMI conversion facility",
+      "Zero liability protection"
+    ],
+    rewards: [
+      "Welcome bonus of 1,000 reward points",
+      "1 reward point per ₹100 spent",
+      "Special first purchase offers"
+    ],
+    fees: {
+      joining: "₹500 + GST",
+      annual: "₹500 + GST",
+      renewal: "₹500 + GST"
     },
-    "Platinum Aura Edge Credit Card": {
-      features: [
-        "Monthly movie ticket BOGO",
-        "Dining privileges at select restaurants",
-        "Complimentary airport transfers",
-        "Shopping protection insurance"
-      ],
-      rewards: [
-        "5X rewards on weekend spends",
-        "Special shopping season bonuses",
-        "Entertainment reward points"
-      ],
-      fees: {
-        joining: "₹3,000 + GST",
-        annual: "₹3,000 + GST",
-        renewal: "₹3,000 + GST"
-      },
-      creditLimit: "₹1,50,000 - ₹8,00,000",
-      interestRate: "3.49% per month"
+    creditLimit: "₹25,000 - ₹2,00,000",
+    interestRate: "3.49% per month"
+  },
+  "Platinum Aura Edge Credit Card": {
+    features: [
+      "Monthly movie ticket BOGO",
+      "Dining privileges at select restaurants",
+      "Complimentary airport transfers",
+      "Shopping protection insurance"
+    ],
+    rewards: [
+      "5X rewards on weekend spends",
+      "Special shopping season bonuses",
+      "Entertainment reward points"
+    ],
+    fees: {
+      joining: "₹3,000 + GST",
+      annual: "₹3,000 + GST",
+      renewal: "₹3,000 + GST"
     },
-    "Avios Visa Infinite Credit Card": {
-      features: [
-        "Complimentary British Airways Silver status",
-        "Travel insurance coverage up to ₹1 crore",
-        "Priority Pass membership",
-        "Global airport lounge access"
-      ],
-      rewards: [
-        "Welcome bonus of 10,000 Avios points",
-        "4 Avios points per ₹100 spent",
-        "Travel milestone bonuses"
-      ],
-      fees: {
-        joining: "₹10,000 + GST",
-        annual: "₹10,000 + GST",
-        renewal: "₹10,000 + GST"
-      },
-      creditLimit: "₹5,00,000 - ₹20,00,000",
-      interestRate: "3.49% per month"
-    }
-  };
+    creditLimit: "₹1,50,000 - ₹8,00,000",
+    interestRate: "3.49% per month"
+  },
+  "Avios Visa Infinite Credit Card": {
+    features: [
+      "Complimentary British Airways Silver status",
+      "Travel insurance coverage up to ₹1 crore",
+      "Priority Pass membership",
+      "Global airport lounge access"
+    ],
+    rewards: [
+      "Welcome bonus of 10,000 Avios points",
+      "4 Avios points per ₹100 spent",
+      "Travel milestone bonuses"
+    ],
+    fees: {
+      joining: "₹10,000 + GST",
+      annual: "₹10,000 + GST",
+      renewal: "₹10,000 + GST"
+    },
+    creditLimit: "₹5,00,000 - ₹20,00,000",
+    interestRate: "3.49% per month"
+  }
+};
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -879,7 +879,7 @@ const BenefitList = styled.div`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -1035,7 +1035,7 @@ const IDFCCreditCard: React.FC = () => {
 
   const handleDownloadPDF = async (): Promise<void> => {
     if (!compareContentRef.current) return;
-    
+
     try {
       // Create canvas from the comparison content
       const canvas = await html2canvas(compareContentRef.current, {
@@ -1048,11 +1048,11 @@ const IDFCCreditCard: React.FC = () => {
       // Calculate dimensions
       const imgWidth = 210; // A4 width in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('card-comparison.pdf');
     } catch (error) {
@@ -1084,22 +1084,22 @@ const IDFCCreditCard: React.FC = () => {
                   IndusInd Bank Credit Cards
                 </Title>
                 <Text style={{ color: 'rgba(255, 255, 255, 0.9)', fontSize: '18px' }}>
-                IndusInd Bank Credit Cards offer a range of benefits tailored to different lifestyles. 
-                  From rewards on daily spends to exclusive lifestyle privileges, these cards are designed 
+                  IndusInd Bank Credit Cards offer a range of benefits tailored to different lifestyles.
+                  From rewards on daily spends to exclusive lifestyle privileges, these cards are designed
                   to enhance your banking experience.
                 </Text>
                 <div>
-                <Button 
-    type="default" 
-    size="large" 
-    style={{ marginRight: '16px' }}
-    onClick={() => handleProtectedAction(() => 
-      navigate('/apply', { state: { productType: 'Credit Cards' } })
-    )}
-  
-  >
-    Apply Now
-  </Button>
+                  <Button
+                    type="default"
+                    size="large"
+                    style={{ marginRight: '16px' }}
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Credit Cards' } })
+                    )}
+
+                  >
+                    Apply Now
+                  </Button>
                   <Text type="secondary" style={{ fontSize: '14px' }}>
                     On IndusInd Bank website
                   </Text>
@@ -1166,14 +1166,14 @@ const IDFCCreditCard: React.FC = () => {
                       </Text>
                     </RatingContainer>
                     <Button onClick={() => handleViewDetails(card.name)}>View Details</Button>
-                    <Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Credit Cards' } })
-  )}
->
-  Apply
-</Button>
+                    <Button
+                      type="primary"
+                      onClick={() => handleProtectedAction(() =>
+                        navigate('/apply', { state: { productType: 'Credit Cards' } })
+                      )}
+                    >
+                      Apply
+                    </Button>
                     <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                       On IndusInd Bank Website
                     </Text>
@@ -1181,7 +1181,7 @@ const IDFCCreditCard: React.FC = () => {
                 </CardGrid>
               </motion.div>
             ))}
-            
+
             <AnimatePresence>
               {selectedCards.length > 0 && (
                 <CompareFloatingButton
@@ -1204,8 +1204,8 @@ const IDFCCreditCard: React.FC = () => {
                   title={
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: '140px' }}>
                       <span>Credit Card Comparison</span>
-                      <DownloadButton 
-                        type="primary" 
+                      <DownloadButton
+                        type="primary"
                         icon={<DownloadOutlined />}
                         onClick={handleDownloadPDF}
                       >
@@ -1233,8 +1233,8 @@ const IDFCCreditCard: React.FC = () => {
                           >
                             <CompareSection>
                               <CompareCardImage>
-                                <motion.img 
-                                  src={card?.image} 
+                                <motion.img
+                                  src={card?.image}
                                   alt={cardName}
                                   whileHover={{ scale: 1.05 }}
                                   transition={{ type: "spring", stiffness: 300 }}
@@ -1277,8 +1277,8 @@ const IDFCCreditCard: React.FC = () => {
                               <CompareSectionTitle>Key Benefits</CompareSectionTitle>
                               <BenefitList>
                                 {details?.features?.slice(0, 3).map((benefit, index) => (
-                                  <motion.div 
-                                    key={index} 
+                                  <motion.div
+                                    key={index}
                                     className="benefit-item"
                                     whileHover={{ x: 5 }}
                                     transition={{ type: "spring", stiffness: 300 }}

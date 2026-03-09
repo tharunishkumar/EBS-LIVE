@@ -1,12 +1,54 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ebsLogo from '../Navbar/EBS logo.png';
 import { colors } from '../../styles/theme';
 
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
+`;
+
+const pulseAnimation = keyframes`
+  0% { transform: scale(1) translate(0, 0); opacity: 0.12; }
+  33% { transform: scale(1.05) translate(20px, -20px); opacity: 0.18; }
+  66% { transform: scale(0.95) translate(-20px, 20px); opacity: 0.1; }
+  100% { transform: scale(1) translate(0, 0); opacity: 0.12; }
+`;
+
+const GlowOrb = styled.div<{ $top?: string; $left?: string; $right?: string; $bottom?: string; $color?: string; $size?: string; $delay?: string }>`
+  position: absolute;
+  top: ${props => props.$top || 'auto'};
+  left: ${props => props.$left || 'auto'};
+  right: ${props => props.$right || 'auto'};
+  bottom: ${props => props.$bottom || 'auto'};
+  width: ${props => props.$size || '300px'};
+  height: ${props => props.$size || '300px'};
+  background: ${props => props.$color || colors.accent.blueMid};
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+  animation: ${pulseAnimation} 15s infinite ease-in-out;
+  animation-delay: ${props => props.$delay || '0s'};
+`;
+
+const BackgroundPattern = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(${colors.border.separatorAlt} 1px, transparent 1px),
+    linear-gradient(90deg, ${colors.border.separatorAlt} 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+  z-index: 0;
+  pointer-events: none;
 `;
 
 const FooterContainer = styled.footer`
@@ -30,6 +72,8 @@ const FooterContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(16px, 4vw, 40px);
+  position: relative;
+  z-index: 1;
 `;
 
 const FooterTop = styled.div`
@@ -143,37 +187,6 @@ const CTAButton = styled(Link)`
   }
 `;
 
-const SecondaryButton = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 28px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: ${colors.accent.blueMid};
-  background: ${colors.accent.blueFaint};
-  border: 1.5px solid ${colors.accent.blueBorderLight};
-  text-decoration: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-
-  &:hover {
-    background: ${colors.accent.blueHoverBg};
-    border-color: ${colors.accent.blueBorderMid};
-    transform: translateY(-2px);
-    color: ${colors.accent.blueDark};
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  @media (max-width: 480px) {
-    width: 100%;
-    justify-content: center;
-  }
-`;
 
 const Separator = styled.div`
   height: 1px;
@@ -182,17 +195,21 @@ const Separator = styled.div`
 
 const FooterGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(24px, 3vw, 40px);
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(20px, 2.5vw, 36px);
   padding: clamp(32px, 4vw, 48px) 0;
 
-  @media (max-width: 968px) {
-    grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 680px) {
     grid-template-columns: 1fr 1fr;
     gap: 24px;
+  }
+
+  @media (max-width: 420px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -355,6 +372,11 @@ const BottomLinks = styled.div`
 const Footer = (): React.ReactElement => {
   return (
     <FooterContainer>
+      <BackgroundPattern />
+      <GlowOrb $top="-150px" $left="-100px" $size="500px" $color={colors.accent.blueMid} $delay="0s" />
+      <GlowOrb $bottom="0px" $right="-150px" $size="600px" $color="rgba(37, 99, 235, 0.4)" $delay="-5s" />
+      <GlowOrb $top="20%" $left="40%" $size="400px" $color="rgba(59, 130, 246, 0.3)" $delay="-10s" />
+
       <FooterContent>
         {/* Top: Logo + CTA */}
         <FooterTop>
@@ -404,10 +426,20 @@ const Footer = (): React.ReactElement => {
           </FooterSection>
 
           <FooterSection>
+            <h4>Credit Cards</h4>
+            <ul>
+              <li><Link to="/cards/axis-bank">Axis Bank Cards</Link></li>
+              <li><Link to="/cards/hdfc-bank">HDFC Bank Cards</Link></li>
+              <li><Link to="/cards/icici-bank">ICICI Bank Cards</Link></li>
+              <li><Link to="/cards/idfc-bank">IDFC First Cards</Link></li>
+              <li><Link to="/cards/indusind-bank">IndusInd Cards</Link></li>
+            </ul>
+          </FooterSection>
+
+          <FooterSection>
             <h4>Quick Links</h4>
             <ul>
               <li><Link to="/about">About Us</Link></li>
-              <li><Link to="/credit-cards">Credit Cards</Link></li>
               <li><Link to="/apply">Apply Now</Link></li>
             </ul>
           </FooterSection>

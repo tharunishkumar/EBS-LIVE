@@ -9,7 +9,7 @@ import { useProtectedAction } from '../../hooks/useProtectedAction';
 
 // Bank logos from public directory
 const bankLogos = {
-  shriram : "/images/partners/sri.png"
+  shriram: "/images/partners/sri.png"
 };
 
 interface Loan {
@@ -75,67 +75,67 @@ const personalLoans: Loan[] = [
 ];
 
 const loanDetails: LoanDetailsMap = {
-  
+
   "Shriram Life Insurance": {
-  features: [
-    "Coverage up to ₹75 Lakhs",
-    "Flexible premium payment options",
-    "No medical tests up to 40 years",
-    "Double accident death benefit",
-    "Terminal illness benefit included",
-    "Loan facility against policy",
-    "Premium waiver on disability"
-  ],
-  benefits: [
-    "Tax benefits under Section 80C & 10(10D)",
-    "Loyalty additions on long-term policies",
-    "Return of premiums option available",
-    "Family income benefit rider",
-    "Critical illness coverage option",
-    "Easy policy revival",
-    "24x7 customer support"
-  ],
-  fees: {
-    processing: "No processing fee",
-    prepayment: "Not applicable",
-    latePenalty: "Grace period of 30 days for premium payment"
-  },
-  eligibility: {
-    salaried: [
-      "Age: 18-65 years",
-      "No medical test up to 40 years",
-      "Valid ID and address proof"
+    features: [
+      "Coverage up to ₹75 Lakhs",
+      "Flexible premium payment options",
+      "No medical tests up to 40 years",
+      "Double accident death benefit",
+      "Terminal illness benefit included",
+      "Loan facility against policy",
+      "Premium waiver on disability"
     ],
-    selfEmployed: [
-      "Age: 18-65 years",
-      "No medical test up to 40 years",
-      "Valid ID and address proof"
-    ]
-  },
-  documents: {
-    salaried: [
-      "Age proof",
-      "Identity proof",
-      "Address proof",
-      "Income proof",
-      "Passport size photographs",
-      "Medical reports (if applicable)"
+    benefits: [
+      "Tax benefits under Section 80C & 10(10D)",
+      "Loyalty additions on long-term policies",
+      "Return of premiums option available",
+      "Family income benefit rider",
+      "Critical illness coverage option",
+      "Easy policy revival",
+      "24x7 customer support"
     ],
-    selfEmployed: [
-      "Age proof",
-      "Identity proof",
-      "Address proof",
-      "Business proof",
-      "Income proof",
-      "Medical reports (if applicable)"
-    ]
-  },
-  maxAmount: "₹75 Lakhs",
-  minAmount: "₹1 Lakh",
-  tenure: "1 Year",
-  interestRate: "₹499/month"
-}
-  
+    fees: {
+      processing: "No processing fee",
+      prepayment: "Not applicable",
+      latePenalty: "Grace period of 30 days for premium payment"
+    },
+    eligibility: {
+      salaried: [
+        "Age: 18-65 years",
+        "No medical test up to 40 years",
+        "Valid ID and address proof"
+      ],
+      selfEmployed: [
+        "Age: 18-65 years",
+        "No medical test up to 40 years",
+        "Valid ID and address proof"
+      ]
+    },
+    documents: {
+      salaried: [
+        "Age proof",
+        "Identity proof",
+        "Address proof",
+        "Income proof",
+        "Passport size photographs",
+        "Medical reports (if applicable)"
+      ],
+      selfEmployed: [
+        "Age proof",
+        "Identity proof",
+        "Address proof",
+        "Business proof",
+        "Income proof",
+        "Medical reports (if applicable)"
+      ]
+    },
+    maxAmount: "₹75 Lakhs",
+    minAmount: "₹1 Lakh",
+    tenure: "1 Year",
+    interestRate: "₹499/month"
+  }
+
 };
 
 const PageContainer = styled.div`
@@ -341,7 +341,7 @@ const HeroVisual = styled(motion.div)`
   }
 `;
 
-const FloatingCard = styled(motion.div)<{ index: number }>`
+const FloatingCard = styled(motion.div) <{ index: number }>`
   position: absolute;
   width: 280px;
   height: 160px;
@@ -720,7 +720,7 @@ const BenefitList = styled.div`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -886,7 +886,7 @@ const LifeInsurance: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Compare and choose from India's leading insurance providers. Get instant coverage, 
+            Compare and choose from India's leading insurance providers. Get instant coverage,
             lowest premiums, and hassle-free claims.
           </HeroSubtitle>
           <HeroButtons
@@ -1010,14 +1010,14 @@ const LifeInsurance: React.FC = () => {
                     </Text>
                   </RatingContainer>
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
-                  <Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Insurance' } })
-  )}
->
-  Apply
-</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Insurance' } })
+                    )}
+                  >
+                    Apply
+                  </Button>
                   <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                     On bank website
                   </Text>
@@ -1025,7 +1025,7 @@ const LifeInsurance: React.FC = () => {
               </CardGrid>
             </motion.div>
           ))}
-            
+
           <AnimatePresence>
             {selectedLoans.length > 0 && (
               <CompareFloatingButton
