@@ -114,7 +114,7 @@ const loanCategories = [
     icon: <GoldLoanIcon />,
     title: 'Gold Loan',
     description: 'Get instant funds against your gold ornaments. Minimal paperwork, quick disbursal, and competitive rates.',
-    interestRate: '9%',
+    interestRate: '7.5%',
     exploreLink: '/gold-loan',
     gradientFrom: '#d97706',
     gradientTo: '#b45309',

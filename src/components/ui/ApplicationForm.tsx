@@ -40,20 +40,21 @@ interface FormValues {
 
 /* ─── Animations ─── */
 
-const shimmer = keyframes`
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-`;
-
-const float = keyframes`
+const floatY = keyframes`
   0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(3deg); }
+  50%       { transform: translateY(-18px) rotate(4deg); }
 `;
 
-const ripple = keyframes`
-  0% { transform: scale(0.8); opacity: 1; }
-  100% { transform: scale(2.4); opacity: 0; }
+const shimmerLine = keyframes`
+  0%   { transform: translateX(-120%) rotate(-40deg); }
+  100% { transform: translateX(120%) rotate(-40deg); }
 `;
+
+const pulseRing = keyframes`
+  0%, 100% { opacity: 0.18; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(1.12); }
+`;
+
 
 const fadeSlideIn = keyframes`
   0% { opacity: 0; transform: translateY(16px); }
@@ -121,34 +122,66 @@ const LeftPanel = styled.div<{ gradient?: string }>`
   position: relative;
   overflow: hidden;
 
-  /* Decorative blobs */
-  &::before {
-    content: '';
+  /* ── decorative orbs ── */
+  .orb-1, .orb-2, .orb-3 {
     position: absolute;
-    top: -20%;
-    right: -25%;
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
     border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -15%;
-    left: -20%;
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
-    border-radius: 50%;
+  .orb-1 {
+    width: 320px; height: 320px;
+    top: -100px; right: -80px;
+    background: radial-gradient(circle, rgba(100,180,255,0.18) 0%, transparent 70%);
+    animation: ${pulseRing} 6s ease-in-out infinite;
   }
+
+  .orb-2 {
+    width: 220px; height: 220px;
+    bottom: -60px; left: -40px;
+    background: radial-gradient(circle, rgba(0,200,255,0.12) 0%, transparent 70%);
+    animation: ${pulseRing} 8s ease-in-out infinite 1s;
+  }
+
+  .orb-3 {
+    width: 140px; height: 140px;
+    top: 30%; left: 20%;
+    background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
+    animation: ${pulseRing} 10s ease-in-out infinite 2s;
+  }
+
+  /* ── shimmer lines ── */
+  .sl-1, .sl-2 {
+    position: absolute;
+    height: 1.5px;
+    width: 180px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .sl-1 { top: 22%; right: 8%; animation: ${shimmerLine} 7s linear infinite; }
+  .sl-2 { bottom: 28%; left: 4%; animation: ${shimmerLine} 11s linear infinite reverse; }
+
+  /* ── floating glass circles ── */
+  .gc-1, .gc-2, .gc-3 {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.14);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .gc-1 { width: 100px; height: 100px; top: 12%; left: 12%; animation: ${floatY} 14s ease-in-out infinite; }
+  .gc-2 { width: 70px;  height: 70px;  bottom: 18%; right: 18%; animation: ${floatY} 18s ease-in-out infinite reverse; }
+  .gc-3 { width: 45px;  height: 45px;  top: 60%; left: 22%; animation: ${floatY} 11s ease-in-out infinite 1.5s; }
 
   @media (max-width: 768px) {
     width: 100%;
     padding: 36px 28px;
-    /* Show as banner on mobile */
-    &::before, &::after { display: none; }
+    /* Hide some heavy effects on mobile */
+    .orb-3, .sl-1, .sl-2, .gc-1, .gc-2, .gc-3 { display: none; }
   }
 `;
 
@@ -183,7 +216,11 @@ const PanelHeading = styled.h3`
   font-family: 'Poppins', sans-serif;
   font-size: 1.65rem;
   font-weight: 700;
-  color: #ffffff;
+  color: transparent;
+  background: linear-gradient(135deg, #ffffff 0%, #b8d8ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1.25;
   margin-bottom: 14px;
 
@@ -239,7 +276,7 @@ const BenefitItem = styled.li`
     justify-content: center;
     margin-top: 1px;
     font-size: 10px;
-    color: #6dd5ed;
+    color: #fff;
   }
 
   @media (max-width: 768px) {
@@ -267,7 +304,7 @@ const TrustBadge = styled.div`
 
   .trust-icon {
     font-size: 20px;
-    color: #6dd5ed;
+    color: #fff;
     flex-shrink: 0;
   }
 
@@ -413,7 +450,7 @@ const ErrorMsg = styled.p`
   margin-bottom: 0;
 `;
 
-const SubmitBtn = styled(Button)`
+const SubmitBtn = styled(Button) <{ $gradient?: string }>`
   && {
     width: 100%;
     height: 52px;
@@ -421,7 +458,7 @@ const SubmitBtn = styled(Button)`
     font-size: 1rem;
     font-weight: 600;
     color: #ffffff;
-    background: linear-gradient(135deg, #0077b6 0%, #0047ff 100%);
+    background: ${({ $gradient }) => $gradient || 'linear-gradient(135deg, #0077b6 0%, #0047ff 100%)'};
     background-size: 200% auto;
     border: none;
     border-radius: 14px;
@@ -436,16 +473,20 @@ const SubmitBtn = styled(Button)`
 
     &:hover:not(:disabled) {
       background-position: right center;
-      background: linear-gradient(135deg, #0047ff 0%, #0077b6 100%);
+      background: ${({ $gradient }) => $gradient || 'linear-gradient(135deg, #0047ff 0%, #0077b6 100%)'} !important;
+      filter: ${({ $gradient }) => $gradient ? 'brightness(1.1)' : 'none'};
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 71, 255, 0.35);
-      color: #ffffff;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+      color: #ffffff !important;
+      border: none !important;
     }
 
     &:active { transform: translateY(0px); }
 
     &[disabled] {
-      background: #94a3b8;
+      background: #94a3b8 !important;
+      color: #ffffff !important;
+      border: none !important;
       cursor: not-allowed;
     }
 
@@ -626,7 +667,7 @@ const ApplicationForm: React.FC<ApplicationFormConfig> = ({
   };
 
   return (
-    <SectionWrapper id="application-form">
+    <SectionWrapper>
       <FormCard
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -635,6 +676,14 @@ const ApplicationForm: React.FC<ApplicationFormConfig> = ({
       >
         {/* ─── Left Panel ─── */}
         <LeftPanel gradient={accentGradient}>
+          <div className="orb-1" />
+          <div className="orb-2" />
+          <div className="orb-3" />
+          <div className="sl-1" />
+          <div className="sl-2" />
+          <div className="gc-1" />
+          <div className="gc-2" />
+          <div className="gc-3" />
           <LeftPanelInner>
             <FloatingIcon
               animate={{ y: [0, -6, 0], rotate: [0, 4, 0] }}
@@ -744,6 +793,7 @@ const ApplicationForm: React.FC<ApplicationFormConfig> = ({
               loading={isSubmitting}
               disabled={isSubmitting}
               icon={<SendOutlined />}
+              $gradient={accentGradient}
             >
               {isSubmitting ? 'Submitting…' : 'Submit Application'}
             </SubmitBtn>

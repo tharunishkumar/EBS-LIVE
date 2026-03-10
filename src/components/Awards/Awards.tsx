@@ -45,8 +45,10 @@ const AwardsSection = styled.section`
     right: 0;
     bottom: 0;
     background: 
+      url('/images/draw/springles.svg') center/cover fixed,
       ${colors.awards.sectionRadialA},
       ${colors.awards.sectionRadialB};
+    background-blend-mode: soft-light;
     pointer-events: none;
   }
 

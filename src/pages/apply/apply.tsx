@@ -82,7 +82,7 @@ const FormCard = styled(motion.div)`
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 560px;
+  max-width: 800px;
   background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px);
   border-radius: 24px;
@@ -241,7 +241,7 @@ const SubmitBtn = styled(motion.button)`
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 20px;
   display: flex; align-items: center; justify-content: center; gap: 10px;
   transition: box-shadow 0.3s ease;
   letter-spacing: 0.02em;
@@ -279,7 +279,7 @@ const RightInner = styled.div`
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 460px;
+  max-width: 560px;
 `;
 
 const SectionLabel = styled.p`

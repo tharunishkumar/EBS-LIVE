@@ -273,29 +273,16 @@ const PrimaryBtn = styled(Button)`
   }
 `;
 
-const SecondaryBtn = styled(Button)`
-  && {
-    height: 52px;
-    padding: 0 36px;
-    border-radius: 14px;
-    font-size: 1rem;
-    font-weight: 600;
-    border: 2px solid ${colors.accent.blueBorder};
-    color: ${colors.accent.blueMid};
-    background: ${colors.accent.blueFaint};
-    backdrop-filter: blur(4px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    &:hover {
-      border-color: ${colors.accent.blue};
-      background: ${colors.accent.blueLight};
-      color: ${colors.accent.blueDark};
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
+const CurledArrowSVG = styled.div`
+  width: 90px;
+  height: 80px;
+  background: url('/images/draw/arrow.svg') no-repeat center/contain;
+  
+  /* Rotate the arrow */
+  transform: rotate(250deg); /* Adjust angle as needed */
+  
+  @media (max-width: 768px) {
+    display: none; /* Hide on mobile */
   }
 `;
 
@@ -708,9 +695,10 @@ const Hero: React.FC = () => {
           </HeroText>
 
           <ButtonGroup>
-            <PrimaryBtn type="primary" size="large" href="/about-us">
+            <PrimaryBtn type="primary" size="large" href="/apply">
               Get Started
             </PrimaryBtn>
+            <CurledArrowSVG />
           </ButtonGroup>
 
           <StatsRow ref={ref}>

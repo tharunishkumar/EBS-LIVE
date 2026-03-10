@@ -79,7 +79,7 @@ const Title = styled(motion.h2)`
   font-weight: 700;
   line-height: 1.2;
   
-  span {
+  .underline-svg {
     color: ${colors.accent.teal};
     position: relative;
     display: inline-block;
@@ -87,13 +87,34 @@ const Title = styled(motion.h2)`
     &::after {
       content: '';
       position: absolute;
-      bottom: 5px;
-      left: 0;
+      left: -2px;
       width: 100%;
-      height: 8px;
-      background: ${colors.accent.tealLight};
+      background: url('/images/draw/underline.svg') no-repeat bottom/contain;
       z-index: -1;
+      
+      bottom: -15px;
+      height: 20px;
+      
+      @media (min-width: 481px) and (max-width: 767px) {
+        bottom: -15px;
+        height: 25px;
+      }
+      
+      @media (min-width: 768px) and (max-width: 1023px) {
+        bottom: -25px;
+        height: 32px;
+      }
+      
+      @media (min-width: 1024px) {
+        bottom: -40px;
+        height: 45px;
+      }
     }
+  }
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+    line-height: 1.3;
   }
 `;
 
@@ -393,7 +414,7 @@ const Services: React.FC = () => {
             Our Features & Services
           </SectionBadge>
           <Title>
-            Financial Solutions <span>Tailored</span> For You
+            Financial Solutions <span className="underline-svg">Tailored</span> For You
           </Title>
           <Description>
             Discover a world of financial possibilities with our comprehensive range

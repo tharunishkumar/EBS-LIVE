@@ -10,14 +10,14 @@ import idfcCard from "../../assets/images/cards/IDFC.png";
 import yesbankCard from "../../assets/images/cards/YESBANK.png";
 
 const colors = {
-    primary: "#0F172A",
-    secondary: "#475569",
-    accent: "#2563EB",
-    accent2: "#06B6D4",
-    background: "#F8FAFC",
-    border: "#E2E8F0",
-    cardBg: "#FFFFFF",
-    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  primary: "#0F172A",
+  secondary: "#475569",
+  accent: "#2563EB",
+  accent2: "#06B6D4",
+  background: "#F8FAFC",
+  border: "#E2E8F0",
+  cardBg: "#FFFFFF",
+  gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
 };
 
 const Section = styled.section`
@@ -346,96 +346,96 @@ const Badge = styled.div`
 `;
 
 interface BankCardProps {
-    logo: string;
-    name: string;
-    cardCount: number;
-    link: string;
-    popular?: boolean;
-    onMouseMove?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  logo: string;
+  name: string;
+  cardCount: number;
+  link: string;
+  popular?: boolean;
+  onMouseMove?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const BankCard: React.FC<BankCardProps> = ({
-    logo,
-    name,
-    cardCount,
-    link,
-    popular = false,
-    onMouseMove
+  logo,
+  name,
+  cardCount,
+  link,
+  popular = false,
+  onMouseMove
 }) => (
-    <Card onMouseMove={onMouseMove}>
-        {popular && (
-            <Badge>
-                <Sparkles size={12} />
-                Popular
-            </Badge>
-        )}
-        <LogoWrapper>
-            <img src={logo} alt={name} loading="lazy" />
-        </LogoWrapper>
+  <Card onMouseMove={onMouseMove}>
+    {popular && (
+      <Badge>
+        <Sparkles size={12} />
+        Popular
+      </Badge>
+    )}
+    <LogoWrapper>
+      <img src={logo} alt={name} loading="lazy" />
+    </LogoWrapper>
 
-        <BankName>{name}</BankName>
+    <BankName>{name}</BankName>
 
-        <CardCount>
-            <CreditCard size={16} />
-            <span>{cardCount} Cards</span>
-        </CardCount>
+    <CardCount>
+      <CreditCard size={16} />
+      <span>{cardCount} Cards</span>
+    </CardCount>
 
-        <ExploreButton to={link}>
-            Explore Cards
-            <ArrowRight />
-        </ExploreButton>
-    </Card>
+    <ExploreButton to={link}>
+      Explore Cards
+      <ArrowRight />
+    </ExploreButton>
+  </Card>
 );
 
 const BankGridComponent: React.FC = () => {
-    const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        e.currentTarget.style.setProperty('--x', `${x}%`);
-        e.currentTarget.style.setProperty('--y', `${y}%`);
-    };
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    e.currentTarget.style.setProperty('--x', `${x}%`);
+    e.currentTarget.style.setProperty('--y', `${y}%`);
+  };
 
-    const bankPartners = [
-        { logo: axisCard, name: "Axis Bank", cardCount: 10, link: "/cards/axis-bank", popular: true },
-        { logo: hdfcCard, name: "HDFC Bank", cardCount: 8, link: "/cards/hdfc-bank" },
-        { logo: iciciCard, name: "ICICI Bank", cardCount: 9, link: "/cards/icici-bank", popular: true },
-        { logo: idfcCard, name: "IDFC First Bank", cardCount: 6, link: "/cards/idfc-bank" },
-        { logo: yesbankCard, name: "IndusInd Bank", cardCount: 5, link: "/cards/indusind-bank" },
-    ];
+  const bankPartners = [
+    { logo: axisCard, name: "Axis Bank", cardCount: 10, link: "/cards/axis-bank", popular: true },
+    { logo: hdfcCard, name: "HDFC Bank", cardCount: 8, link: "/cards/hdfc-bank" },
+    { logo: iciciCard, name: "ICICI Bank", cardCount: 9, link: "/cards/icici-bank", popular: true },
+    { logo: idfcCard, name: "IDFC First Bank", cardCount: 6, link: "/cards/idfc-bank" },
+    { logo: yesbankCard, name: "IndusInd Bank", cardCount: 5, link: "/cards/indusind-bank" },
+  ];
 
-    return (
-        <Section>
-            <Container>
-                <Header>
-                    <TitleWrapper>
-                        <Title>Compare Credit Cards from Top Banks</Title>
-                        <Underline />
-                    </TitleWrapper>
-                    <Subtitle>
-                        Discover the best credit cards with rewards, cashback, and travel benefits
-                        tailored just for you.
-                    </Subtitle>
-                </Header>
+  return (
+    <Section>
+      <Container>
+        <Header>
+          <TitleWrapper>
+            <Title>Compare Credit Cards from Top Banks</Title>
+            <Underline />
+          </TitleWrapper>
+          <Subtitle>
+            Discover the best credit cards with rewards, cashback, and travel benefits
+            tailored just for you.
+          </Subtitle>
+        </Header>
 
-                <BankGrid>
-                    {bankPartners.map((bank) => (
-                        <BankCard
-                            key={bank.name}
-                            logo={bank.logo}
-                            name={bank.name}
-                            cardCount={bank.cardCount}
-                            link={bank.link}
-                            popular={bank.popular}
-                            onMouseMove={handleMouseMove}
-                        />
-                    ))}
-                </BankGrid>
-            </Container>
-        </Section>
-    );
+        <BankGrid>
+          {bankPartners.map((bank) => (
+            <BankCard
+              key={bank.name}
+              logo={bank.logo}
+              name={bank.name}
+              cardCount={bank.cardCount}
+              link={bank.link}
+              popular={bank.popular}
+              onMouseMove={handleMouseMove}
+            />
+          ))}
+        </BankGrid>
+      </Container>
+    </Section>
+  );
 };
 
 export default BankGridComponent;

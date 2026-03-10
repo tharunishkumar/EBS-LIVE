@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircleFilled, ArrowLeftOutlined } from '@ant-design/icons';
-import { ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import Footer from '../Footer/Footer';
 import ApplicationForm from '../ui/ApplicationForm';
 
@@ -199,7 +199,7 @@ const RateDisplay = styled.div<{ $gradient: string }>`
   .pa { font-size: 0.9rem; color: #94a3b8; align-self: flex-end; padding-bottom: 6px; }
 `;
 
-const ApplyNowBtn = styled(Link) <{ $gradient: string }>`
+const ApplyNowBtn = styled.button<{ $gradient: string }>`
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -207,6 +207,9 @@ const ApplyNowBtn = styled(Link) <{ $gradient: string }>`
   padding: 0 28px;
   background: ${p => p.$gradient};
   color: #fff;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
   border-radius: 14px;
   font-size: 0.925rem;
   font-weight: 700;
@@ -434,7 +437,7 @@ const ProcessStep = styled(motion.div) <{ $color: string; $index: number }>`
 
   &:hover .step-number {
     background: ${p => p.$color};
-    color: #fff;
+    color: #ffffffff;
     box-shadow: 0 4px 16px ${p => p.$color}50;
   }
 
@@ -548,7 +551,7 @@ const CTASub = styled.p`
   margin-bottom: 32px;
 `;
 
-const CTABtn = styled(Link)`
+const CTABtn = styled.a`
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -556,6 +559,8 @@ const CTABtn = styled(Link)`
   padding: 0 36px;
   background: #fff;
   color : #000;
+  cursor: pointer;
+  border: none;
   border-radius: 16px;
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;
@@ -612,6 +617,11 @@ const LoanDetailPage: React.FC<LoanDetailConfig> = (config) => {
     keyFeatures, processSteps, faqs, formConfig,
   } = config;
 
+  const scrollToForm = () => {
+    const el = document.getElementById("application-form");
+    el?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <Page>
       {/* Hero */}
@@ -651,8 +661,9 @@ const LoanDetailPage: React.FC<LoanDetailConfig> = (config) => {
           <span className="rate">{rateValue}</span>
           <span className="pa">p.a.*</span>
         </RateDisplay>
-        <ApplyNowBtn to="#application-form" $gradient={accentGradient}>
-          Apply Now →
+        <ApplyNowBtn onClick={scrollToForm} $gradient={accentGradient}>
+          Apply Now
+          <ArrowRight size={20} />
         </ApplyNowBtn>
       </RateBanner>
 
@@ -734,20 +745,22 @@ const LoanDetailPage: React.FC<LoanDetailConfig> = (config) => {
       </FAQSection>
 
       {/* Application Form */}
-      <ApplicationForm
-        formTitle={formConfig.formTitle}
-        formSubtitle="Fill in your details and our specialists will contact you within 24 hours."
-        productType={formConfig.productType}
-        recipientEmail="info@ebsgroup.co.in"
-        accentGradient={accentGradient}
-        leftPanel={formConfig.leftPanel}
-      />
+      <div id="application-form">
+        <ApplicationForm
+          formTitle={formConfig.formTitle}
+          formSubtitle="Fill in your details and our specialists will contact you within 24 hours."
+          productType={formConfig.productType}
+          recipientEmail="info@ebsgroup.co.in"
+          accentGradient={accentGradient}
+          leftPanel={formConfig.leftPanel}
+        />
+      </div>
 
       {/* CTA */}
       <CTASec $gradient={accentGradient}>
         <CTATitle>Ready to take the next step?</CTATitle>
         <CTASub>Our loan specialists are available Mon–Sat, 9 AM – 6 PM</CTASub>
-        <CTABtn to="#application-form">Get Started Today</CTABtn>
+        <CTABtn href="#application-form">Get Started Today</CTABtn>
       </CTASec>
 
       <Footer />
