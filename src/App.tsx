@@ -31,6 +31,8 @@ import EmployeeInsurance from './pages/EmployeeDashboard/EmployeeInsurance';
 import EmployeeCreditCards from './pages/EmployeeDashboard/EmployeeCreditCards';
 import EmployeeDM from './pages/EmployeeDashboard/EmployeeDM';
 import Profile from './pages/Profile/Profile';
+import Privacy from './pages/Privacy/Privacy';
+import Terms from './pages/Terms/Terms';
 
 // Card Pages
 import AxisCreditCard from './pages/Cards/AxisCreditCard';
@@ -136,6 +138,8 @@ const App: React.FC = () => {
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/login" element={<Login />} />
               <Route path="/apply" element={<Apply />} />
+              <Route path="/privacy-policy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="/profile" element={<Profile />} />
 
               {/* Employee Dashboard Routes */}

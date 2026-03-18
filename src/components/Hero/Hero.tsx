@@ -553,7 +553,7 @@ const StatItem = styled.div`
   position: relative;
 
   .stat-value {
-    font-size: clamp(20px, 3vw, 30px);
+    font-size: clamp(18px, 2.6vw, 26px); /* reduced slightly */
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.01em;
@@ -576,7 +576,7 @@ const StatItem = styled.div`
     }
 
     .stat-suffix {
-      font-size: 0.55em;
+      font-size: 0.5em; /* slightly smaller */
       font-weight: 600;
       color: ${colors.text.mutedLight};
       margin-left: 2px;
@@ -586,10 +586,10 @@ const StatItem = styled.div`
   }
 
   .stat-label {
-    font-size: clamp(0.65rem, 0.9vw, 0.8rem);
+    font-size: clamp(0.6rem, 0.8vw, 0.75rem); /* slightly reduced */
     font-weight: 500;
     letter-spacing: 0.01em;
-    margin-top: 5px;
+    margin-top: 4px;
     display: inline-block;
     color: ${colors.text.muted};
   }
@@ -602,13 +602,13 @@ const StatItem = styled.div`
 
   @media (max-width: 480px) {
     .stat-value {
-      font-size: clamp(14px, 4.5vw, 16px);
+      font-size: clamp(13px, 4vw, 15px); /* small tweak */
       gap: 1px;
     }
 
     .stat-label {
-      font-size: clamp(0.6rem, 2.3vw, 0.7rem);
-      margin-top: 4px;
+      font-size: clamp(0.55rem, 2.1vw, 0.65rem);
+      margin-top: 3px;
     }
   }
 `;

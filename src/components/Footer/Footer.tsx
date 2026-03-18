@@ -346,10 +346,42 @@ const BottomBar = styled.div`
   }
 `;
 
-const Copyright = styled.p`
-  font-size: 0.8rem;
+const Copyright = styled.div`
+  font-size: 0.85rem;
   color: ${colors.text.mutedLight};
-  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+`;
+
+const Divider = styled.span`
+  color: ${colors.border.separatorAlt};
+  
+  @media (max-width: 576px) {
+    display: none;
+  }
+`;
+
+const DeveloperCredit = styled.span`
+  color: ${colors.text.mutedLight};
+
+  a {
+    color: ${colors.text.muted};
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: ${colors.text.darkAlt};
+    }
+  }
 `;
 
 const BottomLinks = styled.div`
@@ -500,7 +532,11 @@ const Footer = (): React.ReactElement => {
         {/* Bottom Bar */}
         <BottomBar>
           <Copyright>
-            © {new Date().getFullYear()} EBS Group. All rights reserved.
+            <span>© {new Date().getFullYear()} EBS Group. All rights reserved.</span>
+            <Divider>|</Divider>
+            <DeveloperCredit>
+              Website by <a href="https://ticktix.com" target="_blank" rel="noopener noreferrer">Ticktix Pvt Ltd</a>
+            </DeveloperCredit>
           </Copyright>
           <BottomLinks>
             <Link to="/privacy-policy">Privacy Policy</Link>

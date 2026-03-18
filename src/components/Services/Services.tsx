@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import loansBackground from '/images/Free_Vector___Collection_of_Financial_investment_Bank_deposit_profit_finance_Manage_money_in_cartoon_style_for_graphic_designer_vector_illustration.jpg';
 import creditCardBackground from '/images/Credit_cards.jpg';
 import insuranceBackground from '/Premium_Vector___Health_medical_report.jpg';
-import { CreditCard, HandHeart, Landmark, ShieldCheck } from 'lucide-react';
+import { CreditCard, HandHeart, Landmark, ShieldCheck, ChevronUp } from 'lucide-react';
 import { colors } from '../../styles/theme';
 
 const ServicesSection = styled(motion.section)`
@@ -148,57 +148,73 @@ const CardsContainer = styled(motion.div)`
 `;
 
 const ServiceCard = styled(motion.div)`
-  background: ${colors.background.white};
   border-radius: 24px;
   text-align: left;
   box-shadow: 0 20px 40px ${colors.shadow.cardSoft};
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   cursor: pointer;
   position: relative;
   border: 1px solid ${colors.border.cardBorder};
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    transform: scaleX(0);
-    transition: transform 0.4s ease;
-    transform-origin: left;
-    z-index: 2;
-  }
+  height: 420px;
+  /* Force GPU compositing layer — prevents corner clipping artifact during animation */
+  transform: translateZ(0);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
 
   &:hover {
-    transform: translateY(-10px);
     box-shadow: 0 40px 60px ${colors.shadow.cardHover};
     border-color: transparent;
 
-    &::before {
-      transform: scaleX(1);
+    .card-sheet {
+      transform: translateY(0) translateZ(0);
+    }
+
+    .card-image {
+      transform: scale(1.07);
+    }
+
+    .card-sticky-title {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    /* Hint chevron fades out when sheet is open */
+    .hover-hint {
+      opacity: 0;
     }
   }
 
   @media (max-width: 768px) {
+    height: auto;
+    transform: none;
+
     &:hover {
-      transform: translateY(-5px);
+      box-shadow: 0 20px 40px ${colors.shadow.cardSoft};
+      border-color: ${colors.border.cardBorder};
+
+      .card-sheet { transform: translateY(0); }
+      .card-image { transform: scale(1); }
+      .card-sticky-title { opacity: 1; transform: translateY(0); }
+      .hover-hint { opacity: 0; }
     }
   }
 `;
 
 const ImageWrapper = styled.div<{ image: string }>`
   width: 100%;
-  height: 280px;
-  background-image: url(${props => props.image});
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  transition: transform 0.6s ease;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
 
-  ${ServiceCard}:hover & {
-    transform: scale(1.05);
+  .card-image {
+    width: 100%;
+    height: 100%;
+    background-image: url(${props => props.image});
+    background-size: cover;
+    background-position: center;
+    /* Slower, smoother zoom so it doesn't feel jarring */
+    transition: transform 1s ease;
   }
 
   &::after {
@@ -210,49 +226,148 @@ const ImageWrapper = styled.div<{ image: string }>`
     bottom: 0;
     background: linear-gradient(
       to bottom,
-      transparent 0%,
-      rgba(11, 59, 58, 0.2) 100%
+      transparent 30%,
+      rgba(5, 35, 35, 0.65) 100%
     );
+    z-index: 1;
   }
 
+  /* Mobile: static relative positioning */
   @media (max-width: 768px) {
-    height: 240px;
+    position: relative;
+    height: 220px;
+  }
+`;
+
+/* Title pinned at bottom of image (visible by default on desktop) */
+const CardStickyTitle = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 24px 28px 20px;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  /* On mobile: hide this overlay title, use CardContent title instead */
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+/* Bottom sheet that slides up on hover */
+const CardSheet = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(calc(100% - 76px)) translateZ(0);
+  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 3;
+  /* GPU layer so the browser clips it against the parent border-radius without artifacts */
+  will-change: transform;
+  backface-visibility: hidden;
+
+  @media (max-width: 768px) {
+    position: relative;
+    transform: none !important;
+    transition: none;
+    will-change: auto;
   }
 `;
 
 const CardContent = styled.div`
-  padding: 30px;
+  padding: 0;
   background: ${colors.background.white};
   position: relative;
+  /* Thin teal accent line at the top of the revealed sheet */
+  border-top: 3px solid ${colors.accent.teal};
+  /* No border-radius — parent overflow:hidden clips corners, avoiding flicker */
+`;
+
+/* Animated chevron hint — tells users to hover */
+const HoverHint = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: ${colors.accent.teal};
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+
+  svg {
+    animation: bounceUp 1.6s ease-in-out infinite;
+  }
+
+  @keyframes bounceUp {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  /* Hide on mobile — no hover concept */
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+/* The always-visible peek strip — icon + title row */
+const CardHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 24px;
+  min-height: 73px;
+  border-bottom: 1px solid ${colors.border.cardBorder};
+`;
+
+/* Body area shown only when sheet is fully open */
+const CardBody = styled.div`
+  padding: 20px 24px 24px;
 `;
 
 const CardIcon = styled.div<{ index: number }>`
-  width: 50px;
-  height: 50px;
+  /* Fixed size, no margin — lives inside CardHeader flex row */
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
   background: ${props => props.index % 2 === 0 ? colors.accent.tealLight : colors.background.card};
-  border-radius: 16px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: ${props => props.index % 2 === 0 ? colors.accent.teal : colors.accent.blue};
 `;
 
 const CardTitle = styled.h3`
-  font-size: 1.5rem;
+  /* Inside the flex header row — no bottom margin, no standalone spacing */
+  font-size: 1.15rem;
   color: ${colors.text.dark};
-  margin-bottom: 12px;
+  margin: 0;
   font-weight: 700;
   line-height: 1.3;
+  letter-spacing: -0.01em;
 `;
 
 const CardDescription = styled.p`
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: ${colors.text.gray};
   line-height: 1.6;
-  margin-bottom: 25px;
+  margin: 0 0 18px 0;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -262,10 +377,10 @@ const CardDescription = styled.p`
 const FeatureList = styled.ul`
   list-style: none;
   padding: 0;
-  margin: 0 0 25px 0;
+  margin: 0 0 18px 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
 `;
 
 const FeatureItem = styled.li`
@@ -431,40 +546,60 @@ const Services: React.FC = () => {
             <ServiceCard
               key={index}
               variants={cardVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
               onClick={() => navigate(service.route)}
             >
-              <ImageWrapper image={service.image} />
-              <CardContent>
-                <CardIcon index={index}>
-                  <service.icon />
-                </CardIcon>
-                <CardTitle>{service.title}</CardTitle>
-                <CardDescription>{service.description}</CardDescription>
+              {/* Full-bleed background image */}
+              <ImageWrapper image={service.image}>
+                <div className="card-image" />
+              </ImageWrapper>
 
-                <FeatureList>
-                  {service.features.map((feature, idx) => (
-                    <FeatureItem key={idx}>{feature}</FeatureItem>
-                  ))}
-                </FeatureList>
+              {/* Title overlay visible at rest (desktop only) */}
+              <CardStickyTitle className="card-sticky-title">
+                <h3>{service.title}</h3>
+              </CardStickyTitle>
 
-                <CardFooter>
-                  <LearnMore
-                    whileHover={{ x: 5 }}
-                    whileTap={{ x: 0 }}
-                  >
-                    Learn More
-                  </LearnMore>
+              {/* Sheet that slides up on hover to reveal full content */}
+              <CardSheet className="card-sheet">
+                <CardContent>
+                  {/* Always-visible header peek: icon + title in one clean row */}
+                  <CardHeader>
+                    <CardIcon index={index}>
+                      <service.icon />
+                    </CardIcon>
+                    <CardTitle>{service.title}</CardTitle>
+                    <HoverHint className="hover-hint">
+                      <ChevronUp size={16} />
+                    </HoverHint>
+                  </CardHeader>
 
-                  <Stats>
-                    <Stat>
-                      <StatValue>{service.stats.value}</StatValue>
-                      <StatLabel>{service.stats.label}</StatLabel>
-                    </Stat>
-                  </Stats>
-                </CardFooter>
-              </CardContent>
+                  {/* Revealed on hover */}
+                  <CardBody>
+                    <CardDescription>{service.description}</CardDescription>
+
+                    <FeatureList>
+                      {service.features.map((feature, idx) => (
+                        <FeatureItem key={idx}>{feature}</FeatureItem>
+                      ))}
+                    </FeatureList>
+
+                    <CardFooter>
+                      <LearnMore
+                        whileHover={{ x: 5 }}
+                        whileTap={{ x: 0 }}
+                      >
+                        Learn More
+                      </LearnMore>
+
+                      <Stats>
+                        <Stat>
+                          <StatValue>{service.stats.value}</StatValue>
+                          <StatLabel>{service.stats.label}</StatLabel>
+                        </Stat>
+                      </Stats>
+                    </CardFooter>
+                  </CardBody>
+                </CardContent>
+              </CardSheet>
             </ServiceCard>
           ))}
         </CardsContainer>
