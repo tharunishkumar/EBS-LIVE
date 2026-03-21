@@ -20,6 +20,7 @@ import adaniPlatinumCard from '../../assets/images/cards/icici-bank/icici-adani-
 import manchesterCard from '../../assets/images/cards/icici-bank/icici-bank-machester-united-removebg-preview.png';
 import expressionsCard from '../../assets/images/cards/icici-bank/icici-bank-expressions.jpg';
 import { useProtectedAction } from '../../hooks/useProtectedAction';
+import ComparisonModal from '../../components/CreditCardComparisonModal/ComparisionModel';
 
 interface Card {
   id: number;
@@ -751,141 +752,6 @@ const StyledModal = styled(Modal)`
   }
 `;
 
-const CompareGrid = styled.div<{ cards: number }>`
-  display: grid;
-  grid-template-columns: repeat(${props => props.cards}, 1fr);
-  gap: 24px;
-  padding: 24px;
-  background: #fff;
-  border-radius: 12px;
-  width: 100%;
-  margin: 0 auto;
-`;
-
-const CompareCard = styled(motion.div)`
-  background: #fff;
-  padding: 16px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  overflow: hidden;
-  position: relative;
-  text-align: center;
-
-  &:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 5%;
-    height: 90%;
-    width: 1px;
-    background: #f0f0f0;
-  }
-`;
-
-const CompareSection = styled.div`
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  padding: 0 16px;
-  min-height: fit-content;
-`;
-
-const CompareCardImage = styled.div`
-  width: 180px;
-  height: 113px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 0 auto 16px;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-`;
-
-const CompareCardTitle = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  color: #262626;
-  text-align: center;
-  margin-bottom: 8px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const CompareSectionTitle = styled.div`
-  font-size: 13px;
-  font-weight: 600;
-  color: #8c8c8c;
-  margin-bottom: 8px;
-  text-align: center;
-  width: 100%;
-  min-height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-`;
-
-const CompareValue = styled.div`
-  font-size: 14px;
-  color: #262626;
-  font-weight: 500;
-  margin-bottom: 4px;
-  text-align: center;
-  width: 100%;
-  min-height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const BenefitList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-
-  .benefit-item {
-    width: 100%;
-    text-align: center;
-    min-height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .anticon {
-    color: #52c41a;
-    margin-right: 8px;
-    font-size: 12px;
-  }
-`;
-
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
   bottom: 100px;
@@ -981,27 +847,6 @@ const CompareText = styled(Text)`
   &:hover {
     color: #1890ff;
   }
-`;
-
-const FeatureTag = styled.div`
-  margin: 4px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  border: none;
-  line-height: 1.2;
-  background-color: rgba(0, 102, 204, 0.08);
-  color: #0066cc;
-  font-weight: 500;
-`;
-
-const DownloadButton = styled(Button)`
-  position: absolute;
-  top: -45px;
-  right: 48px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 `;
 
 const ICICICreditCard: React.FC = () => {
@@ -1169,9 +1014,7 @@ const ICICICreditCard: React.FC = () => {
                     <Button onClick={() => handleViewDetails(card.name)}>View Details</Button>
                     <Button
                       type="primary"
-                      onClick={() => handleProtectedAction(() =>
-                        navigate('/apply', { state: { productType: 'Credit Cards' } })
-                      )}
+                      onClick={() => navigate('/apply', { state: { productType: 'Credit Cards' } })}
                     >
                       Apply
                     </Button>
@@ -1201,115 +1044,19 @@ const ICICICreditCard: React.FC = () => {
                 </CompareFloatingButton>
               )}
               {isCompareModalVisible && (
-                <StyledModal
-                  title={
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight: '140px' }}>
-                      <span>Credit Card Comparison</span>
-                      <DownloadButton
-                        type="primary"
-                        icon={<DownloadOutlined />}
-                        onClick={handleDownloadPDF}
-                      >
-                        Download PDF
-                      </DownloadButton>
-                    </div>
-                  }
-                  open={isCompareModalVisible}
-                  onCancel={() => setIsCompareModalVisible(false)}
-                  footer={null}
-                  width={900}
-                  centered
-                >
-                  <div ref={compareContentRef}>
-                    <CompareGrid cards={selectedCards.length}>
-                      {selectedCards.map((cardName, index) => {
-                        const card = creditCards.find(c => c.name === cardName);
-                        const details = cardDetailsMap[cardName];
-                        return (
-                          <CompareCard
-                            key={cardName}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3, delay: index * 0.1 }}
-                          >
-                            <CompareSection>
-                              <CompareCardImage>
-                                <motion.img
-                                  src={card?.image}
-                                  alt={cardName}
-                                  whileHover={{ scale: 1.05 }}
-                                  transition={{ type: "spring", stiffness: 300 }}
-                                />
-                              </CompareCardImage>
-                              <CompareCardTitle>{cardName}</CompareCardTitle>
-                              <Rate disabled defaultValue={card?.rating || 0} style={{ fontSize: '12px', display: 'flex', justifyContent: 'center', marginBottom: '8px' }} />
-                              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '4px', maxWidth: '80%', margin: '0 auto' }}>
-                                {card?.suitedFor?.slice(0, 3).map(feature => (
-                                  <motion.div
-                                    key={feature}
-                                    whileHover={{ scale: 1.05 }}
-                                    transition={{ type: "spring", stiffness: 400 }}
-                                  >
-                                    <FeatureTag>{feature}</FeatureTag>
-                                  </motion.div>
-                                ))}
-                              </div>
-                            </CompareSection>
-
-                            <CompareSection>
-                              <CompareSectionTitle>Card Fees</CompareSectionTitle>
-                              <CompareValue>Joining Fee: {details?.fees?.joining || 'N/A'}</CompareValue>
-                              <CompareValue>Annual Fee: {details?.fees?.annual || 'N/A'}</CompareValue>
-                            </CompareSection>
-
-                            <CompareSection>
-                              <CompareSectionTitle>Rewards</CompareSectionTitle>
-                              {details?.rewards?.slice(0, 2).map((reward, index) => (
-                                <CompareValue key={index}>{reward}</CompareValue>
-                              ))}
-                            </CompareSection>
-
-                            <CompareSection>
-                              <CompareSectionTitle>Credit Limit</CompareSectionTitle>
-                              <CompareValue>{details?.creditLimit || 'N/A'}</CompareValue>
-                            </CompareSection>
-
-                            <CompareSection>
-                              <CompareSectionTitle>Key Benefits</CompareSectionTitle>
-                              <BenefitList>
-                                {details?.features?.slice(0, 3).map((benefit, index) => (
-                                  <motion.div
-                                    key={index}
-                                    className="benefit-item"
-                                    whileHover={{ x: 5 }}
-                                    transition={{ type: "spring", stiffness: 300 }}
-                                  >
-                                    <CheckCircleFilled /> {benefit}
-                                  </motion.div>
-                                ))}
-                              </BenefitList>
-                            </CompareSection>
-
-                            <CompareSection>
-                              <CompareSectionTitle>Interest Rate</CompareSectionTitle>
-                              <CompareValue>{details?.interestRate || 'N/A'}</CompareValue>
-                            </CompareSection>
-
-                            <motion.div
-                              style={{ marginTop: 'auto', width: '100%', padding: '0 16px' }}
-                              whileHover={{ scale: 1.02 }}
-                              transition={{ type: "spring", stiffness: 300 }}
-                            >
-                              <Button type="primary" block>
-                                Apply Now
-                              </Button>
-                            </motion.div>
-                          </CompareCard>
-                        );
-                      })}
-                    </CompareGrid>
-                  </div>
-                </StyledModal>
+                <ComparisonModal
+                  isVisible={isCompareModalVisible}
+                  onClose={() => setIsCompareModalVisible(false)}
+                  selectedCards={selectedCards}
+                  creditCards={creditCards}
+                  cardDetailsMap={cardDetailsMap}
+                  onDownloadPDF={handleDownloadPDF}
+                  compareContentRef={compareContentRef}
+                  title="ICICI Bank Credit Cards"
+                  maxFeatures={4}
+                  maxBenefits={4}
+                  maxRewards={3}
+                />
               )}
             </AnimatePresence>
           </CardsSection>

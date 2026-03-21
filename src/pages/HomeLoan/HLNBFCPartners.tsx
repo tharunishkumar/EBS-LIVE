@@ -22,6 +22,7 @@ import Footer from '../../components/Footer/Footer';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useProtectedAction } from '../../hooks/useProtectedAction';
+import LoanComparisonModal from '../../components/LoanComparisionModel/LoandComparisionModel';
 
 // Bank logos from public directory
 const bankLogos = {
@@ -1263,108 +1264,15 @@ const HLNBFCPartners: React.FC = () => {
           ]} />
         </StyledModal>
       )}
-      <StyledModal
-        open={isCompareModalVisible}
-        onCancel={handleCloseCompareModal}
-        footer={null}
-        width={1000}
-        title="Compare Personal Loans"
-        closeIcon={<CloseOutlined />}
-      >
-        <DownloadButton type="primary" onClick={handleDownloadPDF} icon={<DownloadOutlined />}>
-          Download Comparison
-        </DownloadButton>
-        <div ref={compareContentRef}>
-          <CompareTable>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left' }}>Features</th>
-                {selectedLoans.map(loanName => {
-                  const loan = personalLoans.find(loan => loan.name === loanName);
-                  return (
-                    <th key={loanName}>
-                      <BankHeader>
-                        <BankLogo src={loan?.bankLogo} alt={loan?.bankName} />
-                        {loan?.bankName}
-                      </BankHeader>
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Interest Rate</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.interestRate}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Processing Fee</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.processingFee}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Maximum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.maxAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Minimum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.minAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Tenure</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.tenure}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Rating</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    <Rate
-                      disabled
-                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating}
-                      style={{ fontSize: '16px' }}
-                    />
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Key Benefit</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.benefit}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Suited For</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.suitedFor.join(", ")}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </CompareTable>
-        </div>
-      </StyledModal>
+      <LoanComparisonModal
+        isVisible={isCompareModalVisible}
+        onClose={() => setIsCompareModalVisible(false)}
+        selectedLoans={selectedLoans}
+        loans={personalLoans}
+        onDownloadPDF={handleDownloadPDF}
+        compareContentRef={compareContentRef}
+        title="Compare Home Loan - NBFC Partners"
+      />
       <Footer />
     </PageContainer>
   );

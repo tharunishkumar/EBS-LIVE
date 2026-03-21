@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Select, notification } from 'antd';
+import { Select, notification, Modal } from 'antd';
 import {
   UserOutlined, MailOutlined, MobileOutlined, BankOutlined,
   DollarOutlined, HomeOutlined, AppstoreOutlined, EnvironmentOutlined,
@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
 import loginBg from '../../assets/login-bg.jpg';
+import { submitLead } from '../../services/leadService';
 
 /* ─── Animations ─── */
 
@@ -420,6 +421,8 @@ const PRODUCT_OPTIONS = ['Personal Loan', 'Business Loan', 'Home Loan', 'Gold Lo
 
 const Apply: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [submittedProduct, setSubmittedProduct] = useState('');
   const [fields, setFields] = useState<Record<string, string>>({
     firstName: '', middleName: '', lastName: '', email: '',
     mobileNumber: '', currentCompany: '', monthlySalary: '',
@@ -452,40 +455,38 @@ const Apply: React.FC = () => {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
 
-    const subject = encodeURIComponent(`${fields.productType} Application – ${fields.firstName} ${fields.lastName}`);
-    const body = encodeURIComponent([
-      `Product Type: ${fields.productType}`,
-      ``,
-      `── Personal Details ──`,
-      `Name: ${fields.firstName}${fields.middleName ? ' ' + fields.middleName : ''} ${fields.lastName}`,
-      `Email: ${fields.email}`,
-      `Mobile: ${fields.mobileNumber}`,
-      `Location: ${fields.location}`,
-      ``,
-      `── Financial Details ──`,
-      `Current Company: ${fields.currentCompany}`,
-      `Monthly Salary: ₹${fields.monthlySalary}`,
-      `Net Take Home: ₹${fields.netTakeHome}`,
-      `Banking Details: ${fields.bankingDetails}`,
-      ``,
-      `Please process this application.`,
-    ].join('\n'));
+    try {
+      await submitLead({
+        first_name: fields.firstName.trim(),
+        middle_name: fields.middleName?.trim() || undefined,
+        last_name: fields.lastName.trim(),
+        email_id: fields.email.trim(),
+        mobile_no: fields.mobileNumber.trim(),
+        company_name: fields.currentCompany.trim(),
+        custom_location: fields.location.trim(),
+        custom_monthly_salary: fields.monthlySalary.trim(),
+        custom_net_take_home: fields.netTakeHome.trim(),
+        custom_bank_details: fields.bankingDetails.trim(),
+        custom_product_type: fields.productType,
+      });
 
-    window.open(`mailto:info@ebsgroup.co.in?subject=${subject}&body=${body}`, '_blank');
-
-    notification.success({
-      message: 'Opening your mail client…',
-      description: 'Your details are pre-filled. Just hit Send to submit your application!',
-      duration: 6,
-    });
-
-    setFields({ firstName: '', middleName: '', lastName: '', email: '', mobileNumber: '', currentCompany: '', monthlySalary: '', netTakeHome: '', bankingDetails: '', location: '', productType: '' });
-    setIsSubmitting(false);
+      setSubmittedProduct(fields.productType);
+      setFields({ firstName: '', middleName: '', lastName: '', email: '', mobileNumber: '', currentCompany: '', monthlySalary: '', netTakeHome: '', bankingDetails: '', location: '', productType: '' });
+      setShowSuccess(true);
+    } catch {
+      notification.error({
+        message: 'Submission Failed',
+        description: 'Something went wrong while submitting your application. Please try again or contact us directly.',
+        duration: 8,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   /* random particles seeded so no re-render jitter */
@@ -497,159 +498,219 @@ const Apply: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
-      {/* ── Left: Form ── */}
-      <LeftSection initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        {/* decorative orbs */}
-        <GlowOrb $size={320} $top="-10%" $left="-15%" $delay="0s" />
-        <GlowOrb $size={260} $top="55%" $left="60%" $delay="1.5s" />
+    <>
+      <PageContainer>
+        {/* ── Left: Form ── */}
+        <LeftSection initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+          {/* decorative orbs */}
+          <GlowOrb $size={320} $top="-10%" $left="-15%" $delay="0s" />
+          <GlowOrb $size={260} $top="55%" $left="60%" $delay="1.5s" />
 
-        {/* floating particles */}
-        {particles.map((p, i) => (
-          <Particle
-            key={i}
-            style={{ width: p.w, height: p.h, top: p.top, left: p.left }}
-            animate={{ y: [0, -18, 0], opacity: [0.25, 0.7, 0.25] }}
-            transition={{ duration: 3 + i * 0.4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
-          />
-        ))}
+          {/* floating particles */}
+          {particles.map((p, i) => (
+            <Particle
+              key={i}
+              style={{ width: p.w, height: p.h, top: p.top, left: p.left }}
+              animate={{ y: [0, -18, 0], opacity: [0.25, 0.7, 0.25] }}
+              transition={{ duration: 3 + i * 0.4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.3 }}
+            />
+          ))}
 
-        <FormCard
-          initial={{ y: 28, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.55, ease: 'easeOut' }}
-        >
-          <FormTitle>Apply Now</FormTitle>
-          <FormSub>Fill in your details to get started with your application</FormSub>
-          <ProgressBar><span /><span /><span /></ProgressBar>
+          <FormCard
+            initial={{ y: 28, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.55, ease: 'easeOut' }}
+          >
+            <FormTitle>Apply Now</FormTitle>
+            <FormSub>Fill in your details to get started with your application</FormSub>
+            <ProgressBar><span /><span /><span /></ProgressBar>
 
-          <form onSubmit={handleSubmit} noValidate>
-            <FieldGrid $cols={2}>
-              <Field id="firstName" label="First Name" icon={<UserOutlined />} placeholder="First name"
-                value={fields.firstName} onChange={update('firstName')} error={errors.firstName} />
-              <Field id="middleName" label="Middle Name" icon={<UserOutlined />} placeholder="Middle name (optional)" optional
-                value={fields.middleName} onChange={update('middleName')} />
-            </FieldGrid>
+            <form onSubmit={handleSubmit} noValidate>
+              <FieldGrid $cols={2}>
+                <Field id="firstName" label="First Name" icon={<UserOutlined />} placeholder="First name"
+                  value={fields.firstName} onChange={update('firstName')} error={errors.firstName} />
+                <Field id="middleName" label="Middle Name" icon={<UserOutlined />} placeholder="Middle name (optional)" optional
+                  value={fields.middleName} onChange={update('middleName')} />
+              </FieldGrid>
 
-            <Field id="lastName" label="Last Name" icon={<UserOutlined />} placeholder="Last name"
-              value={fields.lastName} onChange={update('lastName')} error={errors.lastName} />
+              <Field id="lastName" label="Last Name" icon={<UserOutlined />} placeholder="Last name"
+                value={fields.lastName} onChange={update('lastName')} error={errors.lastName} />
 
-            <FieldGrid $cols={2}>
-              <Field id="email" label="Email" icon={<MailOutlined />} placeholder="email@example.com" type="email"
-                value={fields.email} onChange={update('email')} error={errors.email} />
-              <Field id="mobileNumber" label="Mobile Number" icon={<MobileOutlined />} placeholder="10-digit number" maxLength={10}
-                value={fields.mobileNumber} onChange={update('mobileNumber')} error={errors.mobileNumber} />
-            </FieldGrid>
+              <FieldGrid $cols={2}>
+                <Field id="email" label="Email" icon={<MailOutlined />} placeholder="email@example.com" type="email"
+                  value={fields.email} onChange={update('email')} error={errors.email} />
+                <Field id="mobileNumber" label="Mobile Number" icon={<MobileOutlined />} placeholder="10-digit number" maxLength={10}
+                  value={fields.mobileNumber} onChange={update('mobileNumber')} error={errors.mobileNumber} />
+              </FieldGrid>
 
-            <FieldGrid $cols={2}>
-              <Field id="currentCompany" label="Current Company" icon={<HomeOutlined />} placeholder="Company name"
-                value={fields.currentCompany} onChange={update('currentCompany')} error={errors.currentCompany} />
-              <Field id="location" label="Location" icon={<EnvironmentOutlined />} placeholder="City / State"
-                value={fields.location} onChange={update('location')} error={errors.location} />
-            </FieldGrid>
+              <FieldGrid $cols={2}>
+                <Field id="currentCompany" label="Current Company" icon={<HomeOutlined />} placeholder="Company name"
+                  value={fields.currentCompany} onChange={update('currentCompany')} error={errors.currentCompany} />
+                <Field id="location" label="Location" icon={<EnvironmentOutlined />} placeholder="City / State"
+                  value={fields.location} onChange={update('location')} error={errors.location} />
+              </FieldGrid>
 
-            <Divider />
+              <Divider />
 
-            <FieldGrid $cols={2}>
-              <Field id="monthlySalary" label="Monthly Salary (₹)" icon={<DollarOutlined />} placeholder="e.g. 50000" type="number"
-                value={fields.monthlySalary} onChange={update('monthlySalary')} error={errors.monthlySalary} />
-              <Field id="netTakeHome" label="Net Take Home (₹)" icon={<DollarOutlined />} placeholder="e.g. 42000" type="number"
-                value={fields.netTakeHome} onChange={update('netTakeHome')} error={errors.netTakeHome} />
-            </FieldGrid>
+              <FieldGrid $cols={2}>
+                <Field id="monthlySalary" label="Monthly Salary (₹)" icon={<DollarOutlined />} placeholder="e.g. 50000" type="number"
+                  value={fields.monthlySalary} onChange={update('monthlySalary')} error={errors.monthlySalary} />
+                <Field id="netTakeHome" label="Net Take Home (₹)" icon={<DollarOutlined />} placeholder="e.g. 42000" type="number"
+                  value={fields.netTakeHome} onChange={update('netTakeHome')} error={errors.netTakeHome} />
+              </FieldGrid>
 
-            <Field id="bankingDetails" label="Banking Details" icon={<BankOutlined />} placeholder="Bank name and account number"
-              value={fields.bankingDetails} onChange={update('bankingDetails')} error={errors.bankingDetails} />
+              <Field id="bankingDetails" label="Banking Details" icon={<BankOutlined />} placeholder="Bank name and account number"
+                value={fields.bankingDetails} onChange={update('bankingDetails')} error={errors.bankingDetails} />
 
-            {/* Product Type */}
-            <FieldWrap>
-              <Label htmlFor="productType">Product Type</Label>
-              <InputWrap>
-                <span className="field-icon"><AppstoreOutlined /></span>
-                <Select
-                  id="productType"
-                  placeholder="Select a product type"
-                  value={fields.productType || undefined}
-                  onChange={(val: string) => { setFields(f => ({ ...f, productType: val })); setErrors(e => ({ ...e, productType: '' })); }}
-                  style={{ width: '100%' }}
-                  className="product-select"
-                >
-                  {PRODUCT_OPTIONS.map(opt => (
-                    <Select.Option key={opt} value={opt}>{opt}</Select.Option>
-                  ))}
-                </Select>
-              </InputWrap>
-              {errors.productType && <ErrMsg>{errors.productType}</ErrMsg>}
-            </FieldWrap>
+              {/* Product Type */}
+              <FieldWrap>
+                <Label htmlFor="productType">Product Type</Label>
+                <InputWrap>
+                  <span className="field-icon"><AppstoreOutlined /></span>
+                  <Select
+                    id="productType"
+                    placeholder="Select a product type"
+                    value={fields.productType || undefined}
+                    onChange={(val: string) => { setFields(f => ({ ...f, productType: val })); setErrors(e => ({ ...e, productType: '' })); }}
+                    style={{ width: '100%' }}
+                    className="product-select"
+                  >
+                    {PRODUCT_OPTIONS.map(opt => (
+                      <Select.Option key={opt} value={opt}>{opt}</Select.Option>
+                    ))}
+                  </Select>
+                </InputWrap>
+                {errors.productType && <ErrMsg>{errors.productType}</ErrMsg>}
+              </FieldWrap>
 
-            <SubmitBtn
-              type="submit"
-              disabled={isSubmitting}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <SendOutlined />
-              {isSubmitting ? 'Submitting…' : 'Submit Application'}
-            </SubmitBtn>
-          </form>
-        </FormCard>
-      </LeftSection>
-
-      {/* ── Right: Info ── */}
-      <RightSection
-        initial={{ x: 60, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.55, delay: 0.15 }}
-      >
-        <RightInner>
-          <SectionLabel>Why EBS Finance</SectionLabel>
-          <SectionTitle>Your Trusted Financial Partner</SectionTitle>
-          <SectionSub>
-            Discover the advantages of our comprehensive financial solutions — from loans and insurance to credit cards, we've got you covered.
-          </SectionSub>
-
-          <FeatureList>
-            {[
-              { icon: <ThunderboltOutlined />, title: 'Instant Processing', desc: 'Fast approvals with minimal documentation and paperless process.' },
-              { icon: <TeamOutlined />, title: 'Expert Advisors', desc: 'Dedicated relationship managers to guide you every step of the way.' },
-              { icon: <StarOutlined />, title: 'Best Rates', desc: 'Access competitive interest rates from 15+ trusted partner banks.' },
-              { icon: <RocketOutlined />, title: 'Quick Disbursal', desc: 'Money in your account within 24-48 hours of approval.' },
-            ].map((item, i) => (
-              <FeatureItem
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.1, duration: 0.45 }}
+              <SubmitBtn
+                type="submit"
+                disabled={isSubmitting}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
               >
-                <div className="fi-icon">{item.icon}</div>
-                <h4>{item.title}</h4>
-                <p>{item.desc}</p>
-              </FeatureItem>
-            ))}
-          </FeatureList>
+                <SendOutlined />
+                {isSubmitting ? 'Submitting…' : 'Submit Application'}
+              </SubmitBtn>
+            </form>
+          </FormCard>
+        </LeftSection>
 
-          <InfoBadge>
-            <h4>
-              <SafetyCertificateOutlined className="badge-icon" />
-              What you'll need to apply
-            </h4>
-            <ul>
+        {/* ── Right: Info ── */}
+        <RightSection
+          initial={{ x: 60, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.55, delay: 0.15 }}
+        >
+          <RightInner>
+            <SectionLabel>Why EBS Finance</SectionLabel>
+            <SectionTitle>Your Trusted Financial Partner</SectionTitle>
+            <SectionSub>
+              Discover the advantages of our comprehensive financial solutions — from loans and insurance to credit cards, we've got you covered.
+            </SectionSub>
+
+            <FeatureList>
               {[
-                'PAN Card & Aadhaar Card',
-                'Last 3 months salary slips',
-                'Last 6 months bank statements',
-                'Current company details & location',
-                'Basic banking & account information',
+                { icon: <ThunderboltOutlined />, title: 'Instant Processing', desc: 'Fast approvals with minimal documentation and paperless process.' },
+                { icon: <TeamOutlined />, title: 'Expert Advisors', desc: 'Dedicated relationship managers to guide you every step of the way.' },
+                { icon: <StarOutlined />, title: 'Best Rates', desc: 'Access competitive interest rates from 15+ trusted partner banks.' },
+                { icon: <RocketOutlined />, title: 'Quick Disbursal', desc: 'Money in your account within 24-48 hours of approval.' },
               ].map((item, i) => (
-                <li key={i}>
-                  <CheckCircleFilled className="check" />
-                  {item}
-                </li>
+                <FeatureItem
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + i * 0.1, duration: 0.45 }}
+                >
+                  <div className="fi-icon">{item.icon}</div>
+                  <h4>{item.title}</h4>
+                  <p>{item.desc}</p>
+                </FeatureItem>
               ))}
-            </ul>
-          </InfoBadge>
-        </RightInner>
-      </RightSection>
-    </PageContainer>
+            </FeatureList>
+
+            <InfoBadge>
+              <h4>
+                <SafetyCertificateOutlined className="badge-icon" />
+                What you'll need to apply
+              </h4>
+              <ul>
+                {[
+                  'PAN Card & Aadhaar Card',
+                  'Last 3 months salary slips',
+                  'Last 6 months bank statements',
+                  'Current company details & location',
+                  'Basic banking & account information',
+                ].map((item, i) => (
+                  <li key={i}>
+                    <CheckCircleFilled className="check" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </InfoBadge>
+          </RightInner>
+        </RightSection>
+      </PageContainer>
+
+      {/* ── Success Modal ── */}
+      <Modal
+        open={showSuccess}
+        onCancel={() => setShowSuccess(false)}
+        footer={null}
+        centered
+        width={480}
+        styles={{ body: { padding: '40px 36px', textAlign: 'center' } }}
+      >
+        <div style={{ marginBottom: 24 }}>
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="40" fill="#e8f5e9" />
+            <circle cx="40" cy="40" r="30" fill="#c8e6c9" />
+            <path d="M25 40l11 11 19-19" stroke="#2e7d32" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <h2 style={{
+          fontFamily: 'Poppins, sans-serif',
+          fontSize: '1.5rem',
+          fontWeight: 800,
+          color: '#0f172a',
+          marginBottom: 10,
+        }}>
+          Application Submitted!
+        </h2>
+        <p style={{
+          fontFamily: 'Inter, sans-serif',
+          fontSize: '0.95rem',
+          color: '#475569',
+          lineHeight: 1.65,
+          marginBottom: 28,
+        }}>
+          Thank you for applying. Our team will review your{' '}
+          <strong>{submittedProduct || 'application'}</strong> request and get in touch with you within{' '}
+          <strong>24 hours</strong>.
+        </p>
+        <button
+          onClick={() => setShowSuccess(false)}
+          style={{
+            padding: '12px 40px',
+            background: 'linear-gradient(135deg, #003494 0%, #0077ff 100%)',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 12,
+            fontFamily: 'Poppins, sans-serif',
+            fontSize: '0.95rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: '0 6px 20px rgba(0,71,255,0.3)',
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'; }}
+        >
+          Got it, thanks!
+        </button>
+      </Modal>
+    </>
   );
 };
 

@@ -6,6 +6,9 @@ import { StarFilled, PercentageOutlined, SwapOutlined, CloseOutlined, SafetyCert
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../../components/Footer/Footer';
 import { useProtectedAction } from '../../hooks/useProtectedAction';
+import LoanComparisonModal from '../../components/LoanComparisionModel/LoandComparisionModel';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 
 // Bank logos from public directory
@@ -849,6 +852,33 @@ const HealthInsurance: React.FC = () => {
     setSelectedLoan(null);
   };
 
+  const handleDownloadPDF = async (): Promise<void> => {
+    if (!compareContentRef.current) return;
+
+    try {
+      // Create canvas from the comparison content
+      const canvas = await html2canvas(compareContentRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      // Calculate dimensions
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Create PDF
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgData = canvas.toDataURL('image/png');
+
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save('loan-comparison.pdf');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+
   const toggleLoanSelection = (loanName: string) => {
     console.log('Toggle loan selection:', loanName);
     setSelectedLoans(prev => {
@@ -1116,6 +1146,16 @@ const HealthInsurance: React.FC = () => {
           ]} />
         </StyledModal>
       )}
+
+      <LoanComparisonModal
+        isVisible={isCompareModalVisible}
+        onClose={() => setIsCompareModalVisible(false)}
+        selectedLoans={selectedLoans}
+        loans={personalLoans}
+        onDownloadPDF={handleDownloadPDF}
+        compareContentRef={compareContentRef}
+        title="Compare Gold Loans - Banking Partners"
+      />
       <Footer />
     </PageContainer>
   );

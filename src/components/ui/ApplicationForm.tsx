@@ -7,6 +7,7 @@ import {
   CheckCircleFilled, SafetyCertificateOutlined
 } from '@ant-design/icons';
 import { motion } from 'framer-motion';
+import { submitLead } from '../../services/leadService';
 
 /* ─── Types ─── */
 
@@ -25,18 +26,8 @@ export interface ApplicationFormConfig {
   accentGradient?: string;
 }
 
-interface FormValues {
-  firstName: string;
-  middleName?: string;
-  lastName: string;
-  email: string;
-  mobileNumber: string;
-  currentCompany: string;
-  monthlySalary: number;
-  netTakeHome: number;
-  bankingDetails: string;
-  location: string;
-}
+
+
 
 /* ─── Animations ─── */
 
@@ -510,26 +501,6 @@ const fieldVariant = {
   })
 };
 
-function buildMailtoBody(values: FormValues, productType: string): string {
-  const lines = [
-    `Product Type: ${productType}`,
-    ``,
-    `─── Personal Details ───`,
-    `Name: ${values.firstName}${values.middleName ? ' ' + values.middleName : ''} ${values.lastName}`,
-    `Email: ${values.email}`,
-    `Mobile: ${values.mobileNumber}`,
-    `Location: ${values.location}`,
-    ``,
-    `─── Financial Details ───`,
-    `Current Company: ${values.currentCompany}`,
-    `Monthly Salary: ₹${values.monthlySalary}`,
-    `Net Take Home: ₹${values.netTakeHome}`,
-    `Banking Details: ${values.bankingDetails}`,
-    ``,
-    `Please process my application at the earliest. Thank you.`,
-  ];
-  return lines.join('\n');
-}
 
 /* ─── Field Component ─── */
 
@@ -581,7 +552,6 @@ const ApplicationForm: React.FC<ApplicationFormConfig> = ({
   formTitle,
   formSubtitle = "Fill in your details and we'll get back to you shortly.",
   productType,
-  recipientEmail = 'info@ebsgroup.co.in',
   leftPanel,
   accentGradient
 }) => {
@@ -618,52 +588,55 @@ const ApplicationForm: React.FC<ApplicationFormConfig> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
+    try {
+      await submitLead({
+        first_name: fields.firstName.trim(),
+        middle_name: fields.middleName?.trim() || undefined,
+        last_name: fields.lastName.trim(),
+        email_id: fields.email.trim(),
+        mobile_no: fields.mobileNumber.trim(),
+        company_name: fields.currentCompany.trim(),
+        custom_location: fields.location.trim(),
+        custom_monthly_salary: fields.monthlySalary.trim(),
+        custom_net_take_home: fields.netTakeHome.trim(),
+        custom_bank_details: fields.bankingDetails.trim(),
+        custom_product_type: productType,
+      });
 
-    const subject = encodeURIComponent(
-      `${productType} Application – ${fields.firstName} ${fields.lastName}`
-    );
+      notification.success({
+        message: 'Application Submitted!',
+        description:
+          `Thank you! Your ${productType} application has been received. Our team will contact you within 24 hours.`,
+        duration: 8,
+      });
 
-    const body = encodeURIComponent(buildMailtoBody(fields as any, productType));
-
-    const mailtoUrl = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
-
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipientEmail}&su=${subject}&body=${body}`;
-
-    const outlookUrl = `https://outlook.live.com/mail/0/deeplink/compose?to=${recipientEmail}&subject=${subject}&body=${body}`;
-
-    // Try opening default mail client
-    window.location.href = mailtoUrl;
-
-    notification.success({
-      message: "Opening your mail client…",
-      description:
-        "If your email app didn't open, you can also send using Gmail or Outlook.",
-      duration: 6,
-    });
-
-    // Optional: show fallback options
-    console.log("Gmail:", gmailUrl);
-    console.log("Outlook:", outlookUrl);
-
-    setFields({
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      email: "",
-      mobileNumber: "",
-      currentCompany: "",
-      monthlySalary: "",
-      netTakeHome: "",
-      bankingDetails: "",
-      location: "",
-    });
-
-    setIsSubmitting(false);
+      setFields({
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        email: '',
+        mobileNumber: '',
+        currentCompany: '',
+        monthlySalary: '',
+        netTakeHome: '',
+        bankingDetails: '',
+        location: '',
+      });
+    } catch (err) {
+      notification.error({
+        message: 'Submission Failed',
+        description:
+          'Something went wrong while submitting your application. Please try again or contact us directly.',
+        duration: 8,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

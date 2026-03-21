@@ -5,6 +5,9 @@ import { Button, Typography, Rate, Checkbox, Modal, Tabs, Badge } from 'antd';
 import { StarFilled, PercentageOutlined, SwapOutlined, CloseOutlined, SafetyCertificateOutlined, GiftOutlined, DollarOutlined, FieldTimeOutlined, FileProtectOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../../components/Footer/Footer';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import LoanComparisonModal from '../../components/LoanComparisionModel/LoandComparisionModel';
 
 // Bank logos from public directory
 const bankLogos = {
@@ -827,6 +830,33 @@ const GeneralInsurance: React.FC = () => {
     setSelectedLoan(null);
   };
 
+  const handleDownloadPDF = async (): Promise<void> => {
+    if (!compareContentRef.current) return;
+
+    try {
+      // Create canvas from the comparison content
+      const canvas = await html2canvas(compareContentRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+
+      // Calculate dimensions
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      // Create PDF
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgData = canvas.toDataURL('image/png');
+
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save('loan-comparison.pdf');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+
   const toggleLoanSelection = (loanName: string) => {
     console.log('Toggle loan selection:', loanName);
     setSelectedLoans(prev => {
@@ -1091,6 +1121,15 @@ const GeneralInsurance: React.FC = () => {
           ]} />
         </StyledModal>
       )}
+      <LoanComparisonModal
+        isVisible={isCompareModalVisible}
+        onClose={() => setIsCompareModalVisible(false)}
+        selectedLoans={selectedLoans}
+        loans={personalLoans}
+        onDownloadPDF={handleDownloadPDF}
+        compareContentRef={compareContentRef}
+        title="Compare Gold Loans - Banking Partners"
+      />
       <Footer />
     </PageContainer>
   );
