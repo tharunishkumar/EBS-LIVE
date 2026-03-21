@@ -8,8 +8,9 @@ import Footer from '../../components/Footer/Footer';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useProtectedAction } from '../../hooks/useProtectedAction';
+import LoanComparisonModal from '../../components/LoanComparisionModel/LoandComparisionModel';
 
-const nbfcLogos = {
+const bankLogos = {
   fedbank: "/images/nbfc partners/fedbank-financial-services-limited-arumbakkam-chennai-loan-against-gold-rwhd1d3chu.PNG",
   smfg: "/images/nbfc partners/SMFG_India_Credit_Logo.png",
   incred: "/images/nbfc partners/incred-logo.png",
@@ -36,10 +37,8 @@ const nbfcLogos = {
 interface Loan {
   id: number;
   name: string;
-  bankName?: string;
-  bankLogo?: string;
-  nbfcName?: string;
-  nbfcLogo?: string;
+  bankName: string;
+  bankLogo: string;
   interestRate: string;
   processingFee: string;
   maxAmount: string;
@@ -83,8 +82,8 @@ const personalLoans: Loan[] = [
   {
     id: 1,
     name: "Fedbank Financial Services Business Loan",
-    nbfcName: "Fedbank Financial Services",
-    nbfcLogo: nbfcLogos.fedbank,
+    bankName: "Fedbank Financial Services",
+    bankLogo: bankLogos.fedbank,
     interestRate: "14.00% - 22.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹30,00,000",
@@ -98,8 +97,8 @@ const personalLoans: Loan[] = [
   {
     id: 2,
     name: "SMFG India Credit Business Loan",
-    nbfcName: "SMFG India Credit",
-    nbfcLogo: nbfcLogos.smfg,
+    bankName: "SMFG India Credit",
+    bankLogo: bankLogos.smfg,
     interestRate: "15.00% - 23.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹35,00,000",
@@ -113,8 +112,8 @@ const personalLoans: Loan[] = [
   {
     id: 3,
     name: "InCred Business Loan",
-    nbfcName: "InCred",
-    nbfcLogo: nbfcLogos.incred,
+    bankName: "InCred",
+    bankLogo: bankLogos.incred,
     interestRate: "15.00% - 24.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹40,00,000",
@@ -128,8 +127,8 @@ const personalLoans: Loan[] = [
   {
     id: 4,
     name: "Lendingkart Business Loan",
-    nbfcName: "Lendingkart",
-    nbfcLogo: nbfcLogos.lendingkart,
+    bankName: "Lendingkart",
+    bankLogo: bankLogos.lendingkart,
     interestRate: "16.00% - 24.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹2,00,00,000",
@@ -143,8 +142,8 @@ const personalLoans: Loan[] = [
   {
     id: 5,
     name: "Sundaram Finance Business Loan",
-    nbfcName: "Sundaram Finance",
-    nbfcLogo: nbfcLogos.sundaram,
+    bankName: "Sundaram Finance",
+    bankLogo: bankLogos.sundaram,
     interestRate: "14.50% - 20.00%",
     processingFee: "Up to 2%",
     maxAmount: "₹50,00,000",
@@ -158,8 +157,8 @@ const personalLoans: Loan[] = [
   {
     id: 6,
     name: "Hinduja Housing Finance Business Loan",
-    nbfcName: "Hinduja Housing Finance",
-    nbfcLogo: nbfcLogos.hinduja,
+    bankName: "Hinduja Housing Finance",
+    bankLogo: bankLogos.hinduja,
     interestRate: "15.00% - 22.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹45,00,000",
@@ -173,8 +172,8 @@ const personalLoans: Loan[] = [
   {
     id: 7,
     name: "Tata Capital Business Loan",
-    nbfcName: "Tata Capital",
-    nbfcLogo: nbfcLogos.tata,
+    bankName: "Tata Capital",
+    bankLogo: bankLogos.tata,
     interestRate: "16.00% - 23.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹75,00,000",
@@ -188,8 +187,8 @@ const personalLoans: Loan[] = [
   {
     id: 8,
     name: "Manappuram Finance Business Loan",
-    nbfcName: "Manappuram Finance",
-    nbfcLogo: nbfcLogos.manappuram,
+    bankName: "Manappuram Finance",
+    bankLogo: bankLogos.manappuram,
     interestRate: "16.00% - 24.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹25,00,000",
@@ -203,8 +202,8 @@ const personalLoans: Loan[] = [
   {
     id: 9,
     name: "UGRO Capital Business Loan",
-    nbfcName: "UGRO Capital",
-    nbfcLogo: nbfcLogos.ugro,
+    bankName: "UGRO Capital",
+    bankLogo: bankLogos.ugro,
     interestRate: "15.00% - 22.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹50,00,000",
@@ -218,8 +217,8 @@ const personalLoans: Loan[] = [
   {
     id: 10,
     name: "Hero Fincorp Business Loan",
-    nbfcName: "Hero Fincorp",
-    nbfcLogo: nbfcLogos.hero,
+    bankName: "Hero Fincorp",
+    bankLogo: bankLogos.hero,
     interestRate: "15.50% - 22.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹40,00,000",
@@ -233,8 +232,8 @@ const personalLoans: Loan[] = [
   {
     id: 11,
     name: "IIFL Business Loan",
-    nbfcName: "IIFL",
-    nbfcLogo: nbfcLogos.iifl,
+    bankName: "IIFL",
+    bankLogo: bankLogos.iifl,
     interestRate: "15.50% - 23.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹50,00,000",
@@ -248,8 +247,8 @@ const personalLoans: Loan[] = [
   {
     id: 12,
     name: "Muthoot Fincorp Business Loan",
-    nbfcName: "Muthoot Fincorp",
-    nbfcLogo: nbfcLogos.muthoot,
+    bankName: "Muthoot Fincorp",
+    bankLogo: bankLogos.muthoot,
     interestRate: "16.00% - 24.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹30,00,000",
@@ -263,8 +262,8 @@ const personalLoans: Loan[] = [
   {
     id: 13,
     name: "PNB Housing Business Loan",
-    nbfcName: "PNB Housing",
-    nbfcLogo: nbfcLogos.pnb,
+    bankName: "PNB Housing",
+    bankLogo: bankLogos.pnb,
     interestRate: "14.50% - 20.00%",
     processingFee: "Up to 2%",
     maxAmount: "₹75,00,000",
@@ -278,8 +277,8 @@ const personalLoans: Loan[] = [
   {
     id: 14,
     name: "Indiabulls Housing Finance Business Loan",
-    nbfcName: "Indiabulls Housing Finance",
-    nbfcLogo: nbfcLogos.indiabulls,
+    bankName: "Indiabulls Housing Finance",
+    bankLogo: bankLogos.indiabulls,
     interestRate: "15.00% - 21.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹50,00,000",
@@ -293,8 +292,8 @@ const personalLoans: Loan[] = [
   {
     id: 15,
     name: "Bajaj Housing Finance Business Loan",
-    nbfcName: "Bajaj Housing Finance",
-    nbfcLogo: nbfcLogos.bajajhousing,
+    bankName: "Bajaj Housing Finance",
+    bankLogo: bankLogos.bajajhousing,
     interestRate: "14.00% - 20.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹45,00,000",
@@ -308,8 +307,8 @@ const personalLoans: Loan[] = [
   {
     id: 16,
     name: "Bajaj Finance Business Loan",
-    nbfcName: "Bajaj Finance",
-    nbfcLogo: nbfcLogos.bajaj,
+    bankName: "Bajaj Finance",
+    bankLogo: bankLogos.bajaj,
     interestRate: "16.00% - 24.00%",
     processingFee: "Up to 3.99%",
     maxAmount: "₹45,00,000",
@@ -323,8 +322,8 @@ const personalLoans: Loan[] = [
   {
     id: 17,
     name: "TVS Credit Business Loan",
-    nbfcName: "TVS Credit",
-    nbfcLogo: nbfcLogos.tvs,
+    bankName: "TVS Credit",
+    bankLogo: bankLogos.tvs,
     interestRate: "15.50% - 22.00%",
     processingFee: "Up to 2.5%",
     maxAmount: "₹35,00,000",
@@ -338,8 +337,8 @@ const personalLoans: Loan[] = [
   {
     id: 18,
     name: "Poonawalla Fincorp Business Loan",
-    nbfcName: "Poonawalla Fincorp",
-    nbfcLogo: nbfcLogos.poonawalla,
+    bankName: "Poonawalla Fincorp",
+    bankLogo: bankLogos.poonawalla,
     interestRate: "15.00% - 22.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹45,00,000",
@@ -353,8 +352,8 @@ const personalLoans: Loan[] = [
   {
     id: 19,
     name: "NeoGrowth Business Loan",
-    nbfcName: "NeoGrowth",
-    nbfcLogo: nbfcLogos.neogrowth,
+    bankName: "NeoGrowth",
+    bankLogo: bankLogos.neogrowth,
     interestRate: "16.00% - 23.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹40,00,000",
@@ -368,8 +367,8 @@ const personalLoans: Loan[] = [
   {
     id: 20,
     name: "Axis Finance Business Loan",
-    nbfcName: "Axis Finance",
-    nbfcLogo: nbfcLogos.axis,
+    bankName: "Axis Finance",
+    bankLogo: bankLogos.axis,
     interestRate: "15.00% - 21.00%",
     processingFee: "Up to 2%",
     maxAmount: "₹50,00,000",
@@ -383,8 +382,8 @@ const personalLoans: Loan[] = [
   {
     id: 21,
     name: "HDB Financial Services Business Loan",
-    nbfcName: "HDB Financial Services",
-    nbfcLogo: nbfcLogos.hdb,
+    bankName: "HDB Financial Services",
+    bankLogo: bankLogos.hdb,
     interestRate: "15.50% - 22.00%",
     processingFee: "Up to 3%",
     maxAmount: "₹30,00,000",
@@ -2130,62 +2129,6 @@ const CompareText = styled(Text)`
   }
 `;
 
-const CompareTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-
-  th, td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-    vertical-align: middle;
-  }
-
-  th {
-    background-color: #fafafa;
-    font-weight: 600;
-  }
-
-  tbody tr:hover {
-    background-color: #fafafa;
-  }
-
-  td:first-child {
-    font-weight: 500;
-    color: #262626;
-    text-align: left;
-  }
-
-  .ant-rate {
-    justify-content: center;
-  }
-`;
-
-const BankLogo = styled.img`
-  height: 40px;
-  object-fit: contain;
-  margin-bottom: 8px;
-`;
-
-const BankHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 200px;
-  padding: 8px;
-`;
-
-const DownloadButton = styled(Button)`
-  position: absolute;
-  top: -45px;
-  right: 48px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
 const BLNBFCPartners: React.FC = () => {
   const handleProtectedAction = useProtectedAction();
   const navigate = useNavigate();
@@ -2200,10 +2143,6 @@ const BLNBFCPartners: React.FC = () => {
 
   const handleCloseModal = () => {
     setSelectedLoan(null);
-  };
-
-  const handleCloseCompareModal = () => {
-    setIsCompareModalVisible(false);
   };
 
   const toggleLoanSelection = (loanName: string) => {
@@ -2322,7 +2261,7 @@ const BLNBFCPartners: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 * index }}
               whileHover={{ scale: 1.05, rotate: '0deg' }}
             >
-              <CardBank>{personalLoans[index].nbfcName}</CardBank>
+              <CardBank>{personalLoans[index].bankName}</CardBank>
               <CardDetails>
                 <CardRate>From {personalLoans[index].interestRate}</CardRate>
                 <CardAmount>Up to {personalLoans[index].maxAmount}</CardAmount>
@@ -2358,7 +2297,7 @@ const BLNBFCPartners: React.FC = () => {
             >
               <CardGrid>
                 <CardImageContainer>
-                  <img src={loan.nbfcLogo} alt={loan.name} />
+                  <img src={loan.bankLogo} alt={loan.name} />
                 </CardImageContainer>
 
                 <CardContent>
@@ -2510,108 +2449,15 @@ const BLNBFCPartners: React.FC = () => {
           ]} />
         </StyledModal>
       )}
-      <StyledModal
-        open={isCompareModalVisible}
-        onCancel={handleCloseCompareModal}
-        footer={null}
-        width={1000}
-        title="Compare Personal Loans"
-        closeIcon={<CloseOutlined />}
-      >
-        <DownloadButton type="primary" onClick={handleDownloadPDF} icon={<DownloadOutlined />}>
-          Download Comparison
-        </DownloadButton>
-        <div ref={compareContentRef}>
-          <CompareTable>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left' }}>Features</th>
-                {selectedLoans.map(loanName => {
-                  const loan = personalLoans.find(loan => loan.name === loanName);
-                  return (
-                    <th key={loanName}>
-                      <BankHeader>
-                        <BankLogo src={loan?.nbfcLogo} alt={loan?.nbfcName} />
-                        {loan?.nbfcName}
-                      </BankHeader>
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Interest Rate</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.interestRate}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Processing Fee</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.processingFee}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Maximum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.maxAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Minimum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.minAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Tenure</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.tenure}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Rating</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    <Rate
-                      disabled
-                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating}
-                      style={{ fontSize: '16px' }}
-                    />
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Key Benefit</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.benefit}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Suited For</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.suitedFor.join(", ")}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </CompareTable>
-        </div>
-      </StyledModal>
+      <LoanComparisonModal
+        isVisible={isCompareModalVisible}
+        onClose={() => setIsCompareModalVisible(false)}
+        selectedLoans={selectedLoans}
+        loans={personalLoans}
+        onDownloadPDF={handleDownloadPDF}
+        compareContentRef={compareContentRef}
+        title="Compare Business Loans - NBFC Partners"
+      />
       <Footer />
     </PageContainer>
   );

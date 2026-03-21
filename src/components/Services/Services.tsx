@@ -169,7 +169,7 @@ const ServiceCard = styled(motion.div)`
     }
 
     .card-image {
-      transform: scale(1.07);
+      transform: scale(1.09);
     }
 
     .card-sticky-title {
