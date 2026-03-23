@@ -897,6 +897,10 @@ const IDFCCreditCard: React.FC = () => {
     }
   };
 
+  const goToApply = () => {
+    navigate("/credit-cards#apply");
+  };
+
   return (
     <>
       <PageContainer>
@@ -930,7 +934,7 @@ const IDFCCreditCard: React.FC = () => {
                     type="default"
                     size="large"
                     style={{ marginRight: '16px' }}
-                    onClick={() => navigate('/apply', { state: { productType: 'Credit Cards' } })}
+                    onClick={goToApply}
                   >
                     Apply Now
                   </Button>
@@ -1002,9 +1006,7 @@ const IDFCCreditCard: React.FC = () => {
                     <Button onClick={() => handleViewDetails(card.name)}>View Details</Button>
                     <Button
                       type="primary"
-                      onClick={() => handleProtectedAction(() =>
-                        navigate('/apply', { state: { productType: 'Credit Cards' } })
-                      )}
+                      onClick={goToApply}
                     >
                       Apply
                     </Button>

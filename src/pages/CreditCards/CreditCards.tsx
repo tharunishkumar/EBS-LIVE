@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { CreditCardOutlined, CheckCircleFilled, StarFilled } from '@ant-design/icons';
 import { motion } from 'framer-motion';
@@ -176,70 +176,92 @@ const bankLogos = [
   { src: '/images/partners/federal.png', name: 'Federal Bank' },
 ];
 
-const CreditCards: React.FC = () => (
-  <PageContainer>
-    <HeroSection
-      title="Transform Your Spending with Premium Credit Cards"
-      description="Discover exclusive rewards, cashback, and privileges. Apply now and elevate your financial journey with EBS Groups."
-      image={creditCardHeroImg}
-      backgroundImage={creditCardImg}
-      featureTags={[
-        { icon: <StarFilled />, label: 'Instant Approval' },
-        { icon: <CheckCircleFilled />, label: 'Zero Annual Fee*' },
-        { icon: <CreditCardOutlined />, label: '5% Cashback' },
-        { icon: <StarFilled />, label: 'Lounge Access' },
-      ]}
-    />
+const CreditCards: React.FC = () => {
 
-    <BankGridComponent />
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
 
-    <PartnersWrapper>
-      <PartnersHeader>
-        <h3>Our Banking Partners</h3>
-        <p>We collaborate with India's leading banks to bring you exclusive credit card offers with unmatched benefits.</p>
-      </PartnersHeader>
-      <MarqueeTrack>
-        {[...bankLogos, ...bankLogos].map((logo, i) => (
-          <BankLogo key={i}>
-            <img src={logo.src} alt={logo.name} />
-          </BankLogo>
-        ))}
-      </MarqueeTrack>
-    </PartnersWrapper>
+      const scrollToElement = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      };
 
-    <div id="apply">
-      <ApplicationForm
-        formTitle="Credit Card Application"
-        formSubtitle="Fill in your details and our team will reach out to you within 24 hours."
-        productType="Credit Cards"
-        recipientEmail="info@ebsgroup.co.in"
-        leftPanel={{
-          heading: 'Why Choose Our Credit Cards?',
-          subtext: 'Experience a world of exclusive benefits and rewards with our premium credit card offerings.',
-          benefits: [
-            'Instant approval with minimal documentation',
-            'Up to 5% cashback on all purchases',
-            'Complimentary airport lounge access',
-            'Zero annual fee for the first year',
-            '24/7 concierge services',
-            'Comprehensive fraud protection',
-          ],
-        }}
+      // Try immediately
+      scrollToElement();
+
+      // Retry after render delay (important)
+      setTimeout(scrollToElement, 300);
+    }
+  }, [location]);
+
+  return (
+    <PageContainer>
+      <HeroSection
+        title="Transform Your Spending with Premium Credit Cards"
+        description="Discover exclusive rewards, cashback, and privileges. Apply now and elevate your financial journey with EBS Groups."
+        image={creditCardHeroImg}
+        backgroundImage={creditCardImg}
+        featureTags={[
+          { icon: <StarFilled />, label: 'Instant Approval' },
+          { icon: <CheckCircleFilled />, label: 'Zero Annual Fee*' },
+          { icon: <CreditCardOutlined />, label: '5% Cashback' },
+          { icon: <StarFilled />, label: 'Lounge Access' },
+        ]}
       />
-    </div>
 
-    <Section>
-      <CardScroller images={[
-        axisCard,
-        hdfcCard,
-        iciciCard,
-        idfcCard,
-        yesbankCard
-      ]} />
-    </Section>
+      <BankGridComponent />
 
-    <Footer />
-  </PageContainer>
-);
+      <PartnersWrapper>
+        <PartnersHeader>
+          <h3>Our Banking Partners</h3>
+          <p>We collaborate with India's leading banks to bring you exclusive credit card offers with unmatched benefits.</p>
+        </PartnersHeader>
+        <MarqueeTrack>
+          {[...bankLogos, ...bankLogos].map((logo, i) => (
+            <BankLogo key={i}>
+              <img src={logo.src} alt={logo.name} />
+            </BankLogo>
+          ))}
+        </MarqueeTrack>
+      </PartnersWrapper>
+
+      <div id="apply">
+        <ApplicationForm
+          formTitle="Credit Card Application"
+          formSubtitle="Fill in your details and our team will reach out to you within 24 hours."
+          productType="Credit Cards"
+          recipientEmail="info@ebsgroup.co.in"
+          leftPanel={{
+            heading: 'Why Choose Our Credit Cards?',
+            subtext: 'Experience a world of exclusive benefits and rewards with our premium credit card offerings.',
+            benefits: [
+              'Instant approval with minimal documentation',
+              'Up to 5% cashback on all purchases',
+              'Complimentary airport lounge access',
+              'Zero annual fee for the first year',
+              '24/7 concierge services',
+              'Comprehensive fraud protection',
+            ],
+          }}
+        />
+      </div>
+
+      <Section>
+        <CardScroller images={[
+          axisCard,
+          hdfcCard,
+          iciciCard,
+          idfcCard,
+          yesbankCard
+        ]} />
+      </Section>
+
+      <Footer />
+    </PageContainer>
+  );
+}
 
 export default CreditCards;
