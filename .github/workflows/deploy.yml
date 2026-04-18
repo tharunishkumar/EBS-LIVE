@@ -23,7 +23,7 @@ jobs:
       - name: Sync to Lightsail
         uses: burnett01/rsync-deployments@6.0.0
         with:
-          switches: -avz --delete
+          switches: -avz --delete --verbose
           path: .next/ public/ package.json next.config.js
           remote_path: /var/www/myapp/
           remote_host: ${{ secrets.LIGHTSAIL_HOST }}
