@@ -892,9 +892,8 @@ const HealthInsurance: React.FC = () => {
     });
   };
 
-
-  const handleCheckEligibility = () => {
-    navigate('/loans#loan-application');
+  const goToApply = () => {
+    navigate("/insurance#apply");
   };
 
   const renderHeroSection = () => (
@@ -921,7 +920,7 @@ const HealthInsurance: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
+            <StyledButton type="primary" size="large" onClick={goToApply}>
               Check Eligibility
             </StyledButton>
             <StyledButton type="default" ghost size="large">
@@ -1039,9 +1038,7 @@ const HealthInsurance: React.FC = () => {
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
                   <Button
                     type="primary"
-                    onClick={() => handleProtectedAction(() =>
-                      navigate('/apply', { state: { productType: 'Insurance' } })
-                    )}
+                    onClick={goToApply}
                   >
                     Apply
                   </Button>

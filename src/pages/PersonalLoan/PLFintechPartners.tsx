@@ -688,10 +688,6 @@ const PersonalLoanFintechPartners: React.FC = () => {
     setIsCompareModalVisible(true);
   };
 
-  const handleCheckEligibility = () => {
-    navigate('/loans#loan-application');
-  };
-
   const handleDownloadPDF = async (): Promise<void> => {
     if (!compareContentRef.current) return;
 
@@ -719,6 +715,10 @@ const PersonalLoanFintechPartners: React.FC = () => {
     }
   };
 
+  const goToApply = () => {
+    navigate("/loans#apply");
+  };
+
   const renderHeroSection = () => (
     <HeroSection>
       <HeroContent>
@@ -743,7 +743,7 @@ const PersonalLoanFintechPartners: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
+            <StyledButton type="primary" size="large" onClick={goToApply}>
               Check Eligibility
             </StyledButton>
             <StyledButton
@@ -861,9 +861,7 @@ const PersonalLoanFintechPartners: React.FC = () => {
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
                   <Button
                     type="primary"
-                    onClick={() => handleProtectedAction(() =>
-                      navigate('/apply', { state: { productType: 'Loans' } })
-                    )}
+                    onClick={goToApply}
                   >
                     Apply
                   </Button>

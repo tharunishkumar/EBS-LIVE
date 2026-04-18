@@ -1054,6 +1054,10 @@ const HLBankingPartners: React.FC = () => {
     }
   };
 
+  const goToApply = () => {
+    navigate("/loans#apply");
+  };
+
   const renderHeroSection = () => (
     <HeroSection>
       <HeroContent>
@@ -1078,7 +1082,7 @@ const HLBankingPartners: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
+            <StyledButton type="primary" size="large" onClick={goToApply}>
               Check Eligibility
             </StyledButton>
             <StyledButton
@@ -1203,9 +1207,7 @@ const HLBankingPartners: React.FC = () => {
 
                   <Button
                     type="primary"
-                    onClick={() => handleProtectedAction(() =>
-                      navigate('/apply', { state: { productType: 'Loans' } })
-                    )}
+                    onClick={goToApply}
                   >
                     Apply
                   </Button>

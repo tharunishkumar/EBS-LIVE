@@ -905,6 +905,10 @@ const ICICICreditCard: React.FC = () => {
     }
   };
 
+  const goToApply = () => {
+    navigate("/credit-cards#apply");
+  };
+
   return (
     <>
       <PageContainer>
@@ -938,9 +942,7 @@ const ICICICreditCard: React.FC = () => {
                     type="default"
                     size="large"
                     style={{ marginRight: '16px' }}
-                    onClick={() => handleProtectedAction(() =>
-                      navigate('/apply', { state: { productType: 'Credit Cards' } })
-                    )}
+                    onClick={goToApply}
 
                   >
                     Apply Now
@@ -1014,7 +1016,7 @@ const ICICICreditCard: React.FC = () => {
                     <Button onClick={() => handleViewDetails(card.name)}>View Details</Button>
                     <Button
                       type="primary"
-                      onClick={() => navigate('/apply', { state: { productType: 'Credit Cards' } })}
+                      onClick={goToApply}
                     >
                       Apply
                     </Button>

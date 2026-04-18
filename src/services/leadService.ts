@@ -17,7 +17,7 @@ export async function submitLead(payload: LeadPayload): Promise<void> {
   const key = import.meta.env.VITE_HRMS_KEY as string;
   const secret = import.meta.env.VITE_HRMS_SECRET as string;
 
-  const response = await fetch("https://cors-anywhere.herokuapp.com/" + apiUrl, {
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
