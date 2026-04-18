@@ -2,26 +2,27 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, Typography, Rate, Checkbox, Modal, Tabs, Badge } from 'antd';
-import { 
-    PercentageOutlined, 
-    SwapOutlined, 
-    CloseOutlined, 
-    SafetyCertificateOutlined, 
-    GiftOutlined, 
-    DollarOutlined, 
-    FileProtectOutlined, 
-    DownloadOutlined,
-    HomeOutlined,
-    LaptopOutlined,
-    UserOutlined,
-    ClockCircleOutlined,
-    FileOutlined
+import {
+  PercentageOutlined,
+  SwapOutlined,
+  CloseOutlined,
+  SafetyCertificateOutlined,
+  GiftOutlined,
+  DollarOutlined,
+  FileProtectOutlined,
+  DownloadOutlined,
+  HomeOutlined,
+  LaptopOutlined,
+  UserOutlined,
+  ClockCircleOutlined,
+  FileOutlined
 } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '../../components/Footer/Footer';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useProtectedAction } from '../../hooks/useProtectedAction';
+import LoanComparisonModal from '../../components/LoanComparisionModel/LoandComparisionModel';
 
 // Bank logos from public directory
 const bankLogos = {
@@ -36,26 +37,26 @@ const bankLogos = {
 };
 
 interface Loan {
-    id: number;
-    name: string;
-    bankName: string;
-    bankLogo: string;
-    interestRate: string;
-    processingFee: string;
-    maxAmount: string;
-    minAmount: string;
-    tenure: string;
-    rating: number;
-    suitedFor: string[];
-    benefit: string;
-    benefitIcon: any;
+  id: number;
+  name: string;
+  bankName: string;
+  bankLogo: string;
+  interestRate: string;
+  processingFee: string;
+  maxAmount: string;
+  minAmount: string;
+  tenure: string;
+  rating: number;
+  suitedFor: string[];
+  benefit: string;
+  benefitIcon: any;
 }
 
 interface LoanDetails {
-    overview: string;
-    eligibility: string[];
-    documents: string[];
-    features: string[];
+  overview: string;
+  eligibility: string[];
+  documents: string[];
+  features: string[];
 }
 
 interface LoanDetailsMap {
@@ -65,306 +66,306 @@ interface LoanDetailsMap {
 const { Title, Text } = Typography;
 
 const personalLoans: Loan[] = [
-    {
-        id: 1,
-        name: "Aditya Birla Home Finance",
-        bankName: "Aditya Birla Capital",
-        bankLogo: bankLogos.aditya,
-        interestRate: "8.75% - 11.50% p.a.",
-        processingFee: "Up to 1% + GST",
-        maxAmount: "₹5 Crore",
-        minAmount: "₹5,00,000",
-        tenure: "Up to 30 years",
-        rating: 4.5,
-        suitedFor: ["Salaried", "Self-Employed", "NRI"],
-        benefit: "Digital loan processing",
-        benefitIcon: LaptopOutlined
-    },
-    {
-        id: 2,
-        name: "ICICI Home Finance",
-        bankName: "ICICI HFC",
-        bankLogo: bankLogos.iciciHF,
-        interestRate: "8.70% - 11.25% p.a.",
-        processingFee: "0.50% - 1% + GST",
-        maxAmount: "₹5 Crore",
-        minAmount: "₹3,00,000",
-        tenure: "Up to 30 years",
-        rating: 4.6,
-        suitedFor: ["Salaried", "Self-Employed"],
-        benefit: "Quick approval process",
-        benefitIcon: ClockCircleOutlined
-    },
-    {
-        id: 3,
-        name: "Indiabulls Home Loan",
-        bankName: "Indiabulls HFC",
-        bankLogo: bankLogos.indiabulls,
-        interestRate: "8.65% - 11.00% p.a.",
-        processingFee: "Up to 1% + GST",
-        maxAmount: "₹5 Crore",
-        minAmount: "₹5,00,000",
-        tenure: "Up to 25 years",
-        rating: 4.4,
-        suitedFor: ["Salaried", "Self-Employed"],
-        benefit: "Doorstep service",
-        benefitIcon: HomeOutlined
-    },
-    {
-        id: 4,
-        name: "JM Financial Home Loan",
-        bankName: "JM Financial",
-        bankLogo: bankLogos.jmFinance,
-        interestRate: "8.95% - 11.75% p.a.",
-        processingFee: "Up to 1% + GST",
-        maxAmount: "₹3 Crore",
-        minAmount: "₹5,00,000",
-        tenure: "Up to 20 years",
-        rating: 4.2,
-        suitedFor: ["Salaried", "Self-Employed"],
-        benefit: "Minimal documentation",
-        benefitIcon: FileOutlined
-    },
-    {
-        id: 5,
-        name: "Mahindra Home Finance",
-        bankName: "Mahindra HF",
-        bankLogo: bankLogos.mahindra,
-        interestRate: "9.00% - 12.00% p.a.",
-        processingFee: "Up to 1% + GST",
-        maxAmount: "₹2 Crore",
-        minAmount: "₹3,00,000",
-        tenure: "Up to 20 years",
-        rating: 4.3,
-        suitedFor: ["Salaried", "Self-Employed"],
-        benefit: "Easy documentation",
-        benefitIcon: FileProtectOutlined
-    },
-    {
-        id: 6,
-        name: "Piramal Home Finance",
-        bankName: "Piramal Capital",
-        bankLogo: bankLogos.piramal,
-        interestRate: "8.85% - 11.50% p.a.",
-        processingFee: "Up to 1% + GST",
-        maxAmount: "₹4 Crore",
-        minAmount: "₹5,00,000",
-        tenure: "Up to 25 years",
-        rating: 4.4,
-        suitedFor: ["Salaried", "Self-Employed"],
-        benefit: "Flexible repayment options",
-        benefitIcon: DollarOutlined
-    },
-    {
-        id: 7,
-        name: "Vastu Housing Finance",
-        bankName: "Vastu HFC",
-        bankLogo: bankLogos.vastu,
-        interestRate: "9.25% - 12.50% p.a.",
-        processingFee: "Up to 1% + GST",
-        maxAmount: "₹2 Crore",
-        minAmount: "₹3,00,000",
-        tenure: "Up to 25 years",
-        rating: 4.2,
-        suitedFor: ["Salaried", "Self-Employed"],
-        benefit: "Special rural focus",
-        benefitIcon: HomeOutlined
-    },
-    {
-        id: 8,
-        name: "Axis Finance Home Loan",
-        bankName: "Axis Finance",
-        bankLogo: bankLogos.axisFinance,
-        interestRate: "8.80% - 11.25% p.a.",
-        processingFee: "Up to 1% + GST",
-        maxAmount: "₹4 Crore",
-        minAmount: "₹5,00,000",
-        tenure: "Up to 30 years",
-        rating: 4.5,
-        suitedFor: ["Salaried", "Self-Employed", "NRI"],
-        benefit: "Digital processing",
-        benefitIcon: LaptopOutlined
-    }
+  {
+    id: 1,
+    name: "Aditya Birla Home Finance",
+    bankName: "Aditya Birla Capital",
+    bankLogo: bankLogos.aditya,
+    interestRate: "8.75% - 11.50% p.a.",
+    processingFee: "Up to 1% + GST",
+    maxAmount: "₹5 Crore",
+    minAmount: "₹5,00,000",
+    tenure: "Up to 30 years",
+    rating: 4.5,
+    suitedFor: ["Salaried", "Self-Employed", "NRI"],
+    benefit: "Digital loan processing",
+    benefitIcon: LaptopOutlined
+  },
+  {
+    id: 2,
+    name: "ICICI Home Finance",
+    bankName: "ICICI HFC",
+    bankLogo: bankLogos.iciciHF,
+    interestRate: "8.70% - 11.25% p.a.",
+    processingFee: "0.50% - 1% + GST",
+    maxAmount: "₹5 Crore",
+    minAmount: "₹3,00,000",
+    tenure: "Up to 30 years",
+    rating: 4.6,
+    suitedFor: ["Salaried", "Self-Employed"],
+    benefit: "Quick approval process",
+    benefitIcon: ClockCircleOutlined
+  },
+  {
+    id: 3,
+    name: "Indiabulls Home Loan",
+    bankName: "Indiabulls HFC",
+    bankLogo: bankLogos.indiabulls,
+    interestRate: "8.65% - 11.00% p.a.",
+    processingFee: "Up to 1% + GST",
+    maxAmount: "₹5 Crore",
+    minAmount: "₹5,00,000",
+    tenure: "Up to 25 years",
+    rating: 4.4,
+    suitedFor: ["Salaried", "Self-Employed"],
+    benefit: "Doorstep service",
+    benefitIcon: HomeOutlined
+  },
+  {
+    id: 4,
+    name: "JM Financial Home Loan",
+    bankName: "JM Financial",
+    bankLogo: bankLogos.jmFinance,
+    interestRate: "8.95% - 11.75% p.a.",
+    processingFee: "Up to 1% + GST",
+    maxAmount: "₹3 Crore",
+    minAmount: "₹5,00,000",
+    tenure: "Up to 20 years",
+    rating: 4.2,
+    suitedFor: ["Salaried", "Self-Employed"],
+    benefit: "Minimal documentation",
+    benefitIcon: FileOutlined
+  },
+  {
+    id: 5,
+    name: "Mahindra Home Finance",
+    bankName: "Mahindra HF",
+    bankLogo: bankLogos.mahindra,
+    interestRate: "9.00% - 12.00% p.a.",
+    processingFee: "Up to 1% + GST",
+    maxAmount: "₹2 Crore",
+    minAmount: "₹3,00,000",
+    tenure: "Up to 20 years",
+    rating: 4.3,
+    suitedFor: ["Salaried", "Self-Employed"],
+    benefit: "Easy documentation",
+    benefitIcon: FileProtectOutlined
+  },
+  {
+    id: 6,
+    name: "Piramal Home Finance",
+    bankName: "Piramal Capital",
+    bankLogo: bankLogos.piramal,
+    interestRate: "8.85% - 11.50% p.a.",
+    processingFee: "Up to 1% + GST",
+    maxAmount: "₹4 Crore",
+    minAmount: "₹5,00,000",
+    tenure: "Up to 25 years",
+    rating: 4.4,
+    suitedFor: ["Salaried", "Self-Employed"],
+    benefit: "Flexible repayment options",
+    benefitIcon: DollarOutlined
+  },
+  {
+    id: 7,
+    name: "Vastu Housing Finance",
+    bankName: "Vastu HFC",
+    bankLogo: bankLogos.vastu,
+    interestRate: "9.25% - 12.50% p.a.",
+    processingFee: "Up to 1% + GST",
+    maxAmount: "₹2 Crore",
+    minAmount: "₹3,00,000",
+    tenure: "Up to 25 years",
+    rating: 4.2,
+    suitedFor: ["Salaried", "Self-Employed"],
+    benefit: "Special rural focus",
+    benefitIcon: HomeOutlined
+  },
+  {
+    id: 8,
+    name: "Axis Finance Home Loan",
+    bankName: "Axis Finance",
+    bankLogo: bankLogos.axisFinance,
+    interestRate: "8.80% - 11.25% p.a.",
+    processingFee: "Up to 1% + GST",
+    maxAmount: "₹4 Crore",
+    minAmount: "₹5,00,000",
+    tenure: "Up to 30 years",
+    rating: 4.5,
+    suitedFor: ["Salaried", "Self-Employed", "NRI"],
+    benefit: "Digital processing",
+    benefitIcon: LaptopOutlined
+  }
 ];
 
 const loanDetails: LoanDetailsMap = {
-    "Aditya Birla Home Finance": {
-        overview: "Aditya Birla Capital offers home loans with competitive interest rates starting from 8.75% p.a. and flexible repayment options.",
-        eligibility: [
-            "Age: 21-65 years",
-            "Minimum income: ₹30,000 per month",
-            "Employment: Salaried, Self-employed, NRI",
-            "CIBIL Score: 700+"
-        ],
-        documents: [
-            "KYC Documents",
-            "Income Documents",
-            "Property Documents",
-            "Bank Statements (6 months)",
-            "Employment Proof"
-        ],
-        features: [
-            "Digital loan processing",
-            "Flexible repayment options",
-            "Balance transfer facility",
-            "Top-up loan facility"
-        ]
-    },
-    "ICICI Home Finance": {
-        overview: "ICICI Home Finance provides home loans at attractive rates starting from 8.70% p.a. with quick processing and approval.",
-        eligibility: [
-            "Age: 21-65 years",
-            "Minimum income: ₹25,000 per month",
-            "Employment: Salaried & Self-employed",
-            "CIBIL Score: 675+"
-        ],
-        documents: [
-            "Identity & Address Proof",
-            "Income Documents",
-            "Property Papers",
-            "Bank Statements",
-            "Employment Proof"
-        ],
-        features: [
-            "Quick approval process",
-            "Doorstep service",
-            "Online loan management",
-            "Special schemes for women"
-        ]
-    },
-    "Indiabulls Home Loan": {
-        overview: "Indiabulls offers home loans starting at 8.65% p.a. with minimal documentation and quick processing.",
-        eligibility: [
-            "Age: 21-70 years",
-            "Minimum income: ₹25,000 per month",
-            "Employment: Salaried & Self-employed",
-            "CIBIL Score: 700+"
-        ],
-        documents: [
-            "KYC Documents",
-            "Income Proof",
-            "Property Documents",
-            "Bank Statements",
-            "Employment Proof"
-        ],
-        features: [
-            "Doorstep service",
-            "Quick disbursement",
-            "Flexible EMI options",
-            "Balance transfer facility"
-        ]
-    },
-    "JM Financial Home Loan": {
-        overview: "JM Financial provides customized home loan solutions with interest rates starting from 8.95% p.a.",
-        eligibility: [
-            "Age: 21-65 years",
-            "Minimum income: ₹30,000 per month",
-            "Employment: Salaried & Self-employed",
-            "CIBIL Score: 675+"
-        ],
-        documents: [
-            "Identity Proof",
-            "Address Proof",
-            "Income Documents",
-            "Property Papers",
-            "Bank Statements"
-        ],
-        features: [
-            "Minimal documentation",
-            "Flexible tenure options",
-            "Quick processing",
-            "Dedicated support"
-        ]
-    },
-    "Mahindra Home Finance": {
-        overview: "Mahindra Home Finance offers affordable housing finance solutions with rates starting from 9.00% p.a.",
-        eligibility: [
-            "Age: 21-65 years",
-            "Minimum income: ₹20,000 per month",
-            "Employment: Salaried & Self-employed",
-            "CIBIL Score: 650+"
-        ],
-        documents: [
-            "KYC Documents",
-            "Income Proof",
-            "Property Documents",
-            "Bank Statements",
-            "Employment Details"
-        ],
-        features: [
-            "Easy documentation",
-            "Flexible repayment",
-            "Rural focus",
-            "Quick processing"
-        ]
-    },
-    "Piramal Home Finance": {
-        overview: "Piramal Capital offers innovative home loan solutions with interest rates starting from 8.85% p.a.",
-        eligibility: [
-            "Age: 21-65 years",
-            "Minimum income: ₹30,000 per month",
-            "Employment: Salaried & Self-employed",
-            "CIBIL Score: 700+"
-        ],
-        documents: [
-            "Identity & Address Proof",
-            "Income Documents",
-            "Property Papers",
-            "Bank Statements",
-            "Business Proof (if applicable)"
-        ],
-        features: [
-            "Flexible repayment options",
-            "Quick approval",
-            "Digital process",
-            "Customized solutions"
-        ]
-    },
-    "Vastu Housing Finance": {
-        overview: "Vastu Housing Finance specializes in providing home loans to underserved segments with rates from 9.25% p.a.",
-        eligibility: [
-            "Age: 21-65 years",
-            "Minimum income: ₹15,000 per month",
-            "Employment: Salaried & Self-employed",
-            "CIBIL Score: 650+"
-        ],
-        documents: [
-            "KYC Documents",
-            "Income Proof",
-            "Property Documents",
-            "Bank Statements",
-            "Business Documents"
-        ],
-        features: [
-            "Special rural focus",
-            "Flexible documentation",
-            "Quick processing",
-            "Customized EMI options"
-        ]
-    },
-    "Axis Finance Home Loan": {
-        overview: "Axis Finance provides comprehensive home loan solutions with interest rates starting from 8.80% p.a.",
-        eligibility: [
-            "Age: 21-65 years",
-            "Minimum income: ₹25,000 per month",
-            "Employment: Salaried, Self-employed, NRI",
-            "CIBIL Score: 700+"
-        ],
-        documents: [
-            "KYC Documents",
-            "Income Documents",
-            "Property Papers",
-            "Bank Statements",
-            "Employment Proof"
-        ],
-        features: [
-            "Digital processing",
-            "Quick approval",
-            "Flexible tenure",
-            "Balance transfer option"
-        ]
-    }
-  };
+  "Aditya Birla Home Finance": {
+    overview: "Aditya Birla Capital offers home loans with competitive interest rates starting from 8.75% p.a. and flexible repayment options.",
+    eligibility: [
+      "Age: 21-65 years",
+      "Minimum income: ₹30,000 per month",
+      "Employment: Salaried, Self-employed, NRI",
+      "CIBIL Score: 700+"
+    ],
+    documents: [
+      "KYC Documents",
+      "Income Documents",
+      "Property Documents",
+      "Bank Statements (6 months)",
+      "Employment Proof"
+    ],
+    features: [
+      "Digital loan processing",
+      "Flexible repayment options",
+      "Balance transfer facility",
+      "Top-up loan facility"
+    ]
+  },
+  "ICICI Home Finance": {
+    overview: "ICICI Home Finance provides home loans at attractive rates starting from 8.70% p.a. with quick processing and approval.",
+    eligibility: [
+      "Age: 21-65 years",
+      "Minimum income: ₹25,000 per month",
+      "Employment: Salaried & Self-employed",
+      "CIBIL Score: 675+"
+    ],
+    documents: [
+      "Identity & Address Proof",
+      "Income Documents",
+      "Property Papers",
+      "Bank Statements",
+      "Employment Proof"
+    ],
+    features: [
+      "Quick approval process",
+      "Doorstep service",
+      "Online loan management",
+      "Special schemes for women"
+    ]
+  },
+  "Indiabulls Home Loan": {
+    overview: "Indiabulls offers home loans starting at 8.65% p.a. with minimal documentation and quick processing.",
+    eligibility: [
+      "Age: 21-70 years",
+      "Minimum income: ₹25,000 per month",
+      "Employment: Salaried & Self-employed",
+      "CIBIL Score: 700+"
+    ],
+    documents: [
+      "KYC Documents",
+      "Income Proof",
+      "Property Documents",
+      "Bank Statements",
+      "Employment Proof"
+    ],
+    features: [
+      "Doorstep service",
+      "Quick disbursement",
+      "Flexible EMI options",
+      "Balance transfer facility"
+    ]
+  },
+  "JM Financial Home Loan": {
+    overview: "JM Financial provides customized home loan solutions with interest rates starting from 8.95% p.a.",
+    eligibility: [
+      "Age: 21-65 years",
+      "Minimum income: ₹30,000 per month",
+      "Employment: Salaried & Self-employed",
+      "CIBIL Score: 675+"
+    ],
+    documents: [
+      "Identity Proof",
+      "Address Proof",
+      "Income Documents",
+      "Property Papers",
+      "Bank Statements"
+    ],
+    features: [
+      "Minimal documentation",
+      "Flexible tenure options",
+      "Quick processing",
+      "Dedicated support"
+    ]
+  },
+  "Mahindra Home Finance": {
+    overview: "Mahindra Home Finance offers affordable housing finance solutions with rates starting from 9.00% p.a.",
+    eligibility: [
+      "Age: 21-65 years",
+      "Minimum income: ₹20,000 per month",
+      "Employment: Salaried & Self-employed",
+      "CIBIL Score: 650+"
+    ],
+    documents: [
+      "KYC Documents",
+      "Income Proof",
+      "Property Documents",
+      "Bank Statements",
+      "Employment Details"
+    ],
+    features: [
+      "Easy documentation",
+      "Flexible repayment",
+      "Rural focus",
+      "Quick processing"
+    ]
+  },
+  "Piramal Home Finance": {
+    overview: "Piramal Capital offers innovative home loan solutions with interest rates starting from 8.85% p.a.",
+    eligibility: [
+      "Age: 21-65 years",
+      "Minimum income: ₹30,000 per month",
+      "Employment: Salaried & Self-employed",
+      "CIBIL Score: 700+"
+    ],
+    documents: [
+      "Identity & Address Proof",
+      "Income Documents",
+      "Property Papers",
+      "Bank Statements",
+      "Business Proof (if applicable)"
+    ],
+    features: [
+      "Flexible repayment options",
+      "Quick approval",
+      "Digital process",
+      "Customized solutions"
+    ]
+  },
+  "Vastu Housing Finance": {
+    overview: "Vastu Housing Finance specializes in providing home loans to underserved segments with rates from 9.25% p.a.",
+    eligibility: [
+      "Age: 21-65 years",
+      "Minimum income: ₹15,000 per month",
+      "Employment: Salaried & Self-employed",
+      "CIBIL Score: 650+"
+    ],
+    documents: [
+      "KYC Documents",
+      "Income Proof",
+      "Property Documents",
+      "Bank Statements",
+      "Business Documents"
+    ],
+    features: [
+      "Special rural focus",
+      "Flexible documentation",
+      "Quick processing",
+      "Customized EMI options"
+    ]
+  },
+  "Axis Finance Home Loan": {
+    overview: "Axis Finance provides comprehensive home loan solutions with interest rates starting from 8.80% p.a.",
+    eligibility: [
+      "Age: 21-65 years",
+      "Minimum income: ₹25,000 per month",
+      "Employment: Salaried, Self-employed, NRI",
+      "CIBIL Score: 700+"
+    ],
+    documents: [
+      "KYC Documents",
+      "Income Documents",
+      "Property Papers",
+      "Bank Statements",
+      "Employment Proof"
+    ],
+    features: [
+      "Digital processing",
+      "Quick approval",
+      "Flexible tenure",
+      "Balance transfer option"
+    ]
+  }
+};
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -534,7 +535,7 @@ const HeroVisual = styled(motion.div)`
   justify-content: center;
 `;
 
-const FloatingCard = styled(motion.div)<{ index: number }>`
+const FloatingCard = styled(motion.div) <{ index: number }>`
   position: absolute;
   width: 280px;
   height: 160px;
@@ -783,7 +784,7 @@ const StyledModal = styled(Modal)`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -975,7 +976,7 @@ const HLNBFCPartners: React.FC = () => {
 
   const handleDownloadPDF = async (): Promise<void> => {
     if (!compareContentRef.current) return;
-    
+
     try {
       // Create canvas from the comparison content
       const canvas = await html2canvas(compareContentRef.current, {
@@ -988,11 +989,11 @@ const HLNBFCPartners: React.FC = () => {
       // Calculate dimensions
       const imgWidth = 210; // A4 width in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('loan-comparison.pdf');
     } catch (error) {
@@ -1016,7 +1017,7 @@ const HLNBFCPartners: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Compare and choose from India's leading banks. Get instant approvals, 
+            Compare and choose from India's leading banks. Get instant approvals,
             lowest interest rates, and zero prepayment charges.
           </HeroSubtitle>
           <HeroButtons
@@ -1027,10 +1028,10 @@ const HLNBFCPartners: React.FC = () => {
             <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
               Check Eligibility
             </StyledButton>
-            <StyledButton 
-              type="default" 
-              ghost 
-              size="large" 
+            <StyledButton
+              type="default"
+              ghost
+              size="large"
               onClick={handleCompare}
               disabled={selectedLoans.length < 2}
             >
@@ -1146,15 +1147,15 @@ const HLNBFCPartners: React.FC = () => {
                     </Text>
                   </RatingContainer>
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
-                  
-<Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Loans' } })
-  )}
->
-  Apply
-</Button>
+
+                  <Button
+                    type="primary"
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Loans' } })
+                    )}
+                  >
+                    Apply
+                  </Button>
                   <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                     On bank website
                   </Text>
@@ -1162,7 +1163,7 @@ const HLNBFCPartners: React.FC = () => {
               </CardGrid>
             </motion.div>
           ))}
-            
+
           <AnimatePresence>
             {selectedLoans.length > 0 && (
               <CompareFloatingButton
@@ -1185,186 +1186,93 @@ const HLNBFCPartners: React.FC = () => {
       </Container>
 
       {selectedLoan && (
-  <StyledModal
-    open={!!selectedLoan}
-    onCancel={handleCloseModal}
-    footer={null}
-    width={800}
-    title={selectedLoan}
-    closeIcon={<CloseOutlined />}
-  >
-    <Tabs defaultActiveKey="1" items={[
-      {
-        key: '1',
-        label: 'Overview',
-        children: (
-          <div>
-            <Text>{loanDetails[selectedLoan]?.overview}</Text>
-          </div>
-        ),
-      },
-      {
-        key: '2',
-        label: 'Eligibility',
-        children: (
-          <FeatureList>
-            {loanDetails[selectedLoan]?.eligibility.map((criterion: string, index: number) => (
-              <motion.li
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <UserOutlined />
-                {criterion}
-              </motion.li>
-            ))}
-          </FeatureList>
-        ),
-      },
-      {
-        key: '3',
-        label: 'Documents Required',
-        children: (
-          <FeatureList>
-            {loanDetails[selectedLoan]?.documents.map((doc: string, index: number) => (
-              <motion.li
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <FileProtectOutlined />
-                {doc}
-              </motion.li>
-            ))}
-          </FeatureList>
-        ),
-      },
-      {
-        key: '4',
-        label: 'Features',
-        children: (
-          <FeatureList>
-            {loanDetails[selectedLoan]?.features.map((feature: string, index: number) => (
-              <motion.li
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <SafetyCertificateOutlined />
-                {feature}
-              </motion.li>
-            ))}
-          </FeatureList>
-        ),
-      },
-    ]} />
-  </StyledModal>
-)}
-      <StyledModal
-        open={isCompareModalVisible}
-        onCancel={handleCloseCompareModal}
-        footer={null}
-        width={1000}
-        title="Compare Personal Loans"
-        closeIcon={<CloseOutlined />}
-      >
-        <DownloadButton type="primary" onClick={handleDownloadPDF} icon={<DownloadOutlined />}>
-          Download Comparison
-        </DownloadButton>
-        <div ref={compareContentRef}>
-          <CompareTable>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left' }}>Features</th>
-                {selectedLoans.map(loanName => {
-                  const loan = personalLoans.find(loan => loan.name === loanName);
-                  return (
-                    <th key={loanName}>
-                      <BankHeader>
-                        <BankLogo src={loan?.bankLogo} alt={loan?.bankName} />
-                        {loan?.bankName}
-                      </BankHeader>
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Interest Rate</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.interestRate}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Processing Fee</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.processingFee}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Maximum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.maxAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Minimum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.minAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Tenure</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.tenure}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Rating</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    <Rate 
-                      disabled 
-                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating} 
-                      style={{ fontSize: '16px' }} 
-                    />
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Key Benefit</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.benefit}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Suited For</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.suitedFor.join(", ")}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </CompareTable>
-        </div>
-      </StyledModal>
+        <StyledModal
+          open={!!selectedLoan}
+          onCancel={handleCloseModal}
+          footer={null}
+          width={800}
+          title={selectedLoan}
+          closeIcon={<CloseOutlined />}
+        >
+          <Tabs defaultActiveKey="1" items={[
+            {
+              key: '1',
+              label: 'Overview',
+              children: (
+                <div>
+                  <Text>{loanDetails[selectedLoan]?.overview}</Text>
+                </div>
+              ),
+            },
+            {
+              key: '2',
+              label: 'Eligibility',
+              children: (
+                <FeatureList>
+                  {loanDetails[selectedLoan]?.eligibility.map((criterion: string, index: number) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <UserOutlined />
+                      {criterion}
+                    </motion.li>
+                  ))}
+                </FeatureList>
+              ),
+            },
+            {
+              key: '3',
+              label: 'Documents Required',
+              children: (
+                <FeatureList>
+                  {loanDetails[selectedLoan]?.documents.map((doc: string, index: number) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <FileProtectOutlined />
+                      {doc}
+                    </motion.li>
+                  ))}
+                </FeatureList>
+              ),
+            },
+            {
+              key: '4',
+              label: 'Features',
+              children: (
+                <FeatureList>
+                  {loanDetails[selectedLoan]?.features.map((feature: string, index: number) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <SafetyCertificateOutlined />
+                      {feature}
+                    </motion.li>
+                  ))}
+                </FeatureList>
+              ),
+            },
+          ]} />
+        </StyledModal>
+      )}
+      <LoanComparisonModal
+        isVisible={isCompareModalVisible}
+        onClose={() => setIsCompareModalVisible(false)}
+        selectedLoans={selectedLoans}
+        loans={personalLoans}
+        onDownloadPDF={handleDownloadPDF}
+        compareContentRef={compareContentRef}
+        title="Compare Home Loan - NBFC Partners"
+      />
       <Footer />
     </PageContainer>
   );

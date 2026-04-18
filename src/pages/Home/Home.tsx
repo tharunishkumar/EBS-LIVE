@@ -5,6 +5,7 @@ import Services from '../../components/Services/Services';
 import Awards from '../../components/Awards/Awards';
 import Partners from '../../components/Partners/Partners';
 import Metrics from '../../components/Metrics/Metrics';
+import Footer from '../../components/Footer/Footer';
 
 
 const HomeContainer = styled.div`
@@ -30,12 +31,12 @@ const Home: React.FC = () => {
   return (
     <HomeContainer>
       <Hero />
-      <MetricsWrapper>
+      {/* <MetricsWrapper>
         <Metrics />
-      </MetricsWrapper>
+      </MetricsWrapper> */}
       <Services />
       <Awards />
-      <Partners />
+      <Footer />
 
     </HomeContainer>
   );

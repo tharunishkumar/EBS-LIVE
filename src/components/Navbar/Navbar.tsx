@@ -1,512 +1,660 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, Button, Dropdown, Avatar, Divider } from 'antd';
-import type { MenuProps } from 'antd';
-import styled from 'styled-components';
+import React, { useState, useEffect, useCallback } from 'react';
+import styled, { keyframes, css } from 'styled-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { DownOutlined, CloseOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { ChevronDown, Menu, X, CreditCard, Building2, Home, Shield, Landmark, Gem, Users, ArrowRight, ShieldCheck } from 'lucide-react';
 import ebsLogo from './EBS logo.png';
-import { supabase } from '@/lib/supabase';
 import { useUser } from '@/contexts/UserContext';
 
-interface UserProfile {
-  id: string;
-  full_name: string;
-  email: string;
-}
+/* ================= ANIMATIONS ================= */
 
-const StyledHeader = styled.header`
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const slideDown = keyframes`
+  from { opacity: 0; transform: translateY(-12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+`;
+
+const mobileSlideIn = keyframes`
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+`;
+
+const expandDown = keyframes`
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 600px; }
+`;
+
+/* ================= HEADER ================= */
+
+const StyledHeader = styled.header<{ $scrolled: boolean }>`
   width: 100%;
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  background-color: white;
-  padding: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: ${p => p.$scrolled
+    ? 'rgba(255, 255, 255, 0.92)'
+    : 'rgba(255, 255, 255, 0.6)'};
+  backdrop-filter: blur(${p => p.$scrolled ? '24px' : '12px'});
+  -webkit-backdrop-filter: blur(${p => p.$scrolled ? '24px' : '12px'});
+  border-bottom: 1px solid ${p => p.$scrolled
+    ? 'rgba(0, 119, 255, 0.08)'
+    : 'rgba(255, 255, 255, 0.2)'};
+  box-shadow: ${p => p.$scrolled
+    ? '0 4px 32px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.03)'
+    : 'none'};
 `;
 
 const NavbarContainer = styled.div`
-  max-width: 1400px;
+  max-width: 1360px;
   margin: 0 auto;
-  height: 70px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 clamp(16px, 3vw, 40px);
+  gap: 24px;
 `;
 
-const LogoSection = styled.div`
+/* ================= LOGO ================= */
+
+const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
-  min-width: 280px;
-
-  @media (max-width: 768px) {
-    min-width: auto;
-  }
-`;
-
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 100%;
-  gap: 16px;
+  gap: 14px;
+  text-decoration: none;
+  flex-shrink: 0;
 
   img {
-    height: 40px;
+    height: 38px;
     width: auto;
     object-fit: contain;
+    transition: transform 0.3s ease;
   }
 
-  span {
-    font-size: 16px;
-    font-weight: 500;
-    color: #111;
-    white-space: nowrap;
-    transition: all 0.2s ease;
-    letter-spacing: -0.2px;
+  &:hover img {
+    transform: scale(1.05);
   }
 `;
 
-const NavLinks = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  justify-content: center;
-  flex: 1;
+const LogoText = styled.span`
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
 
-  @media (max-width: 768px) {
+  @media (max-width: 250px) {
     display: none;
   }
 `;
 
-const NavLink = styled(Link)<{ $active?: boolean }>`
-  color: ${props => props.$active ? '#111' : '#666'};
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.2s ease;
+/* ================= DESKTOP NAV ================= */
+
+const NavLinks = styled.nav`
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 8px 0;
+
+  @media (max-width: 968px) {
+    display: none;
+  }
+`;
+
+const NavItem = styled.div`
+  position: relative;
+`;
+
+const NavLinkStyled = styled(Link) <{ $active?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  font-size: 14.5px;
+  font-weight: 550;
+  letter-spacing: -0.1px;
+  color: ${p => p.$active ? '#0066ee' : '#334155'};
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 
   &:hover {
-    color: #111;
+    color: #0066ee;
+    background: rgba(0, 119, 255, 0.06);
   }
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #111;
-    transform: scaleX(0);
-    transition: transform 0.2s ease;
-  }
+  ${p => p.$active && css`
+    background: rgba(0, 119, 255, 0.08);
 
-  .anticon-down {
-    font-size: 20px;
-    transition: transform 0.2s ease;
-    alignment: center;
-    padding-top: 2.5px;
-  }
-
-  &:hover .anticon-down {
-    transform: rotate(180deg);
-  }
-
-  &:hover::after,
-  ${props => props.$active && `
     &::after {
-      transform: scaleX(1);
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 2.5px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #0077ff, #0047ff);
     }
   `}
+
+  svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
+  }
 `;
+
+const NavButtonWrapper = styled.div<{ $active?: boolean }>`
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+
+  &:hover {
+    background: rgba(0, 119, 255, 0.06);
+  }
+
+  ${p => p.$active && css`
+    background: rgba(0, 119, 255, 0.08);
+  `}
+`;
+
+const NavButtonLabel = styled(Link) <{ $active?: boolean }>`
+  display: flex;
+  align-items: center;
+  padding: 8px 4px 8px 16px;
+  font-size: 14.5px;
+  font-weight: 550;
+  letter-spacing: -0.1px;
+  color: ${p => p.$active ? '#0066ee' : '#334155'};
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    color: #0066ee;
+  }
+`;
+
+const ChevronToggle = styled.button<{ $open?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px 8px 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  border-radius: 0 10px 10px 0;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    will-change: transform;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: rotate(${p => p.$open ? '180deg' : '0deg'});
+  }
+`;
+
+/* ================= DROPDOWN ================= */
+
+const DropdownPortal = styled.div<{ $visible: boolean }>`
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 250px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 119, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 8px;
+  opacity: ${p => p.$visible ? 1 : 0};
+  visibility: ${p => p.$visible ? 'visible' : 'hidden'};
+  transform: translateX(-50%) ${p => p.$visible ? 'translateY(0) scale(1)' : 'translateY(-8px) scale(0.97)'};
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+`;
+
+const DropdownItem = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 119, 255, 0.06);
+    color: #0066ee;
+    transform: translateX(4px);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  &:hover svg {
+    opacity: 1;
+  }
+`;
+
+const DropdownSubTitle = styled.div`
+  padding: 10px 14px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #1e78f5ff;
+
+  &:not(:first-child) {
+    margin-top: 4px;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    padding-top: 12px;
+  }
+`;
+
+const MegaDropdownPortal = styled.div<{ $visible: boolean }>`
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 520px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 119, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 12px;
+  opacity: ${p => p.$visible ? 1 : 0};
+  visibility: ${p => p.$visible ? 'visible' : 'hidden'};
+  transform: translateX(-50%) ${p => p.$visible ? 'translateY(0) scale(1)' : 'translateY(-8px) scale(0.97)'};
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+`;
+
+/* ================= RIGHT ACTIONS ================= */
 
 const ActionButtons = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
-  min-width: 280px;
-  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 968px) {
     display: none;
   }
 `;
 
-const ProfileSection = styled.div`
-  display: flex;
+const AboutUsBtn = styled(Link)`
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-`;
-
-const AvatarButton = styled(Button)`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  height: 32px;
-  border: none;
-  background: none;
-  cursor: pointer;
-
-  .ant-avatar {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  span {
-    font-size: 14px;
-  }
-
-  &:hover {
-    background: #f8f9fa;
-  }
-`;
-
-const AboutUsButton = styled(Button)`
-  background: #000;
-  color: white;
-  border: none;
-  height: 38px;
+  height: 40px;
   padding: 0 24px;
-  border-radius: 6px;
-  font-weight: 500;
-
-  &:hover {
-    background: #333 !important;
-    color: white !important;
-  }
-`;
-
-const LoginButton = styled(Button)`
-  background: white;
-  color: #333;
-  border: 1px solid #ddd;
-  height: 38px;
-  padding: 0 24px;
-  border-radius: 6px;
-  font-weight: 500;
-  box-shadow: none;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: white !important;
-    color: #333 !important;
-    border-color: #bbb !important;
-  }
-`;
-
-const CreateAccountButton = styled(Button)`
-  background: #0077b6;
-  color: white;
-  border: none;
-  height: 38px;
-  padding: 0 24px;
-  border-radius: 6px;
-  font-weight: 500;
-
-  &:hover {
-    background: #006ba6 !important;
-    color: white !important;
-  }
-`;
-
-const DropdownMenu = styled(Menu)`
-  background: white;
-  padding: 8px;
-  border-radius: 8px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-  border: 1px solid #eee;
-  min-width: 200px;
-
-  .ant-dropdown-menu-item,
-  .ant-menu-item {
-    margin: 4px 0;
-    padding: 8px 16px;
-    border-radius: 6px;
-    white-space: nowrap;
-    font-size: 14px;
-    color: #666;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: #f8f9fa;
-      color: #111;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-      display: block;
-      width: 100%;
-    }
-  }
-
-  .ant-menu-submenu-title {
-    padding: 8px 16px;
-    font-weight: 500;
-  }
-
-  .ant-menu-sub {
-    padding: 4px;
-    background: white;
-    border-radius: 6px;
-    min-width: 100%;
-  }
-`;
-
-const MobileMenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  width: 32px;
-  height: 32px;
-  position: relative;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 8px;
-
-  @media (max-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const MenuLine = styled.span<{ $isOpen: boolean }>`
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: #333;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: ${props => props.$isOpen ? 'rotate(45deg)' : 'rotate(0)'};
-
-  &::before,
-  &::after {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 2px;
-    background: #333;
-    position: absolute;
-    left: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  &::before {
-    top: ${props => props.$isOpen ? '0' : '-8px'};
-    transform: ${props => props.$isOpen ? 'rotate(90deg)' : 'rotate(0)'};
-    opacity: ${props => props.$isOpen ? '1' : '1'};
-  }
-
-  &::after {
-    bottom: ${props => props.$isOpen ? '0' : '-8px'};
-    transform: ${props => props.$isOpen ? 'rotate(90deg)' : 'rotate(0)'};
-    opacity: ${props => props.$isOpen ? '0' : '1'};
-  }
-
-  @media (hover: hover) {
-    ${MobileMenuButton}:hover & {
-      background: #666;
-      &::before,
-      &::after {
-        background: #666;
-      }
-    }
-  }
-`;
-
-const MobileMenu = styled.div<{ isOpen: boolean }>`
-  display: none;
-  position: fixed;
-  top: 70px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: white;
-  padding: 20px;
-  transform: translateX(${props => props.isOpen ? '0' : '100%'});
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow-y: auto;
-  z-index: 999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
-const MobileNavLinks = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const MobileNavLink = styled(Link)<{ $active?: boolean }>`
-  color: ${props => props.$active ? '#111' : '#666'};
-  font-size: 15px;
-  font-weight: 500;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #0077ff 0%, #0047ff 100%);
   text-decoration: none;
-  padding: 12px 16px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  background: ${props => props.$active ? '#f8f9fa' : 'transparent'};
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 119, 255, 0.25);
+  letter-spacing: -0.1px;
 
   &:hover {
-    color: #111;
-    background: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(0, 119, 255, 0.35);
+    background: linear-gradient(135deg, #0066ee 0%, #003fd6 100%);
+    color: #fff;
   }
 
   &:active {
-    background: #f0f1f2;
+    transform: translateY(0);
+  }
+
+  svg {
+    width: 15px;
+    height: 15px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(3px);
   }
 `;
 
-const MobileMenuSection = styled.div`
-  border-bottom: 1px solid #eee;
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-  
-  &:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
+/* ================= MOBILE ================= */
+
+const MobileMenuBtn = styled.button`
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #0f172a;
+  flex-shrink: 0;
+
+  &:hover {
+    background: rgba(0, 119, 255, 0.06);
+    border-color: rgba(0, 119, 255, 0.15);
+  }
+
+  @media (max-width: 968px) {
+    display: flex;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
   }
 `;
 
-const MobileMenuHeader = styled.div<{ $active?: boolean }>`
+const MobileOverlay = styled.div<{ $open: boolean }>`
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 998;
+  opacity: ${p => p.$open ? 1 : 0};
+  visibility: ${p => p.$open ? 'visible' : 'hidden'};
+  transition: all 0.3s ease;
+
+  @media (max-width: 968px) {
+    display: block;
+  }
+`;
+
+const MobileDrawer = styled.div<{ $open: boolean }>`
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  z-index: 9999;
+  transform: translateX(${p => p.$open ? '0' : '100%'});
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  box-shadow: ${p => p.$open ? '-24px 0 80px rgba(0, 0, 0, 0.1)' : 'none'};
+
+  @media (max-width: 968px) {
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+const MobileDrawerHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  color: ${props => props.$active ? '#111' : '#666'};
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 8px;
-  background: ${props => props.$active ? '#f8f9fa' : 'transparent'};
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: #111;
-    background: #f8f9fa;
-  }
-
-  &:active {
-    background: #f0f1f2;
-  }
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 `;
 
-const MobileSubMenu = styled.div<{ isOpen?: boolean }>`
-  margin: 4px 0 4px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow: hidden;
-  max-height: ${props => props.isOpen ? '1000px' : '0'};
-  opacity: ${props => props.isOpen ? '1' : '0'};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-`;
-
-const MobileActionButtons = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 24px;
-  padding: 0 16px;
-`;
-
-const RotatingIcon = styled(DownOutlined)<{ $isOpen?: boolean }>`
-  font-size: 12px;
-  transition: transform 0.3s ease;
-  transform: rotate(${props => props.$isOpen ? '180deg' : '0'});
-`;
-
-const UserAvatar = styled(Avatar)`
-  cursor: pointer;
-  background: #0077b6;
-  
-  &:hover {
-    opacity: 0.9;
-  }
-`;
-
-const UserPreview = styled.div`
-  padding: 12px 16px;
-  margin-bottom: 4px;
-
-  .name {
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 2px;
-  }
-
-  .id {
-    color: #1890ff;
-    font-size: 13px;
-    margin-bottom: 2px;
-  }
-
-  .email {
-    color: #666;
-    font-size: 13px;
-  }
-`;
-
-const MenuItem = styled.div`
-  padding: 8px 16px;
-  cursor: pointer;
+const MobileCloseBtn = styled.button`
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #666;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  color: #475569;
   transition: all 0.2s ease;
 
   &:hover {
-    background: #f5f5f5;
-    color: #1890ff;
+    background: rgba(0, 119, 255, 0.06);
+    border-color: rgba(0, 119, 255, 0.15);
   }
 
-  .anticon {
-    font-size: 16px;
+  svg {
+    width: 18px;
+    height: 18px;
   }
 `;
+
+const MobileNavContent = styled.div`
+  flex: 1;
+  padding: 12px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+
+const MobileNavItem = styled(Link) <{ $active?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 550;
+  color: ${p => p.$active ? '#0066ee' : '#334155'};
+  background: ${p => p.$active ? 'rgba(0, 119, 255, 0.07)' : 'transparent'};
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-bottom: 6px;
+
+  &:hover, &:active {
+    background: rgba(0, 119, 255, 0.06);
+    color: #0066ee;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+  }
+`;
+
+const MobileNavButtonWrapper = styled.div<{ $active?: boolean; $open?: boolean }>`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 12px;
+  background: ${p => p.$active || p.$open ? 'rgba(0, 119, 255, 0.07)' : 'rgba(0, 0, 0, 0.02)'};
+  transition: all 0.2s ease;
+  overflow: hidden;
+  border: 1px solid ${p => p.$active || p.$open ? 'rgba(0, 119, 255, 0.12)' : 'rgba(0, 0, 0, 0.04)'};
+  margin-bottom: 6px;
+`;
+
+const MobileNavButtonLabel = styled(Link) <{ $active?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  padding: 14px 8px 14px 16px;
+  font-size: 15px;
+  font-weight: 550;
+  color: ${p => p.$active ? '#0066ee' : '#334155'};
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.2s ease;
+
+  &:hover, &:active {
+    color: #0066ee;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+  }
+`;
+
+const MobileChevronToggle = styled.button<{ $open?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  margin: 6px 8px 6px 0;
+  border: none;
+  border-radius: 8px;
+  background: ${p => p.$open ? 'rgba(0, 119, 255, 0.12)' : 'rgba(0, 0, 0, 0.04)'};
+  cursor: pointer;
+  color: ${p => p.$open ? '#0066ee' : '#64748b'};
+  font-family: inherit;
+  transition: all 0.2s ease;
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+
+  &:active {
+    background: rgba(0, 119, 255, 0.15);
+    color: #0066ee;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    will-change: transform;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.7;
+    transform: rotate(${p => p.$open ? '180deg' : '0deg'});
+  }
+`;
+
+const MobileSubItems = styled.div<{ $open: boolean }>`
+  overflow: hidden;
+  max-height: ${p => p.$open ? '800px' : '0'};
+  opacity: ${p => p.$open ? 1 : 0};
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-left: 20px;
+`;
+
+const MobileSubLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+
+  &:hover, &:active {
+    color: #0066ee;
+    background: rgba(0, 119, 255, 0.04);
+    border-left-color: #0077ff;
+  }
+`;
+
+const MobileSubHeader = styled.div`
+  padding: 10px 16px 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #1e78f5ff;
+
+  &:not(:first-child) {
+    margin-top: 4px;
+  }
+`;
+
+const MobileFooter = styled.div`
+  padding: 16px 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+`;
+
+const MobileAboutBtn = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #0077ff 0%, #0047ff 100%);
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 119, 255, 0.25);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 6px 24px rgba(0, 119, 255, 0.35);
+    color: #fff;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+`;
+
+const Divider = styled.div`
+  height: 1px;
+  background: rgba(0, 0, 0, 0.04);
+  margin: 6px 16px;
+`;
+
+/* ================= COMPONENT ================= */
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState<string[]>([]);
-  const { user, loading, signOut, isEmployee } = useUser();
-  const [userProfile, setUserProfile] = useState<{ customer_id: string; full_name: string; email: string } | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const { loading } = useUser();
+  let dropdownTimeout: ReturnType<typeof setTimeout>;
 
   useEffect(() => {
-    async function fetchUserProfile() {
-      if (user && !isEmployee) {
-        const { data, error } = await supabase
-          .from('customers')
-          .select('customer_id, full_name, email')
-          .eq('id', user.id)
-          .single();
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-        if (!error && data) {
-          setUserProfile(data);
-        }
-      }
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
-
-    fetchUserProfile();
-  }, [user, isEmployee]);
+    return () => { document.body.style.overflow = ''; };
+  }, [isMobileMenuOpen]);
 
   const handleHomeClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -516,456 +664,315 @@ const Navbar: React.FC = () => {
       navigate('/');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    setIsMobileMenuOpen(false);
   };
 
-  const toggleMobileMenu = () => {
-    if (isMobileMenuOpen) {
-      // Reset all open submenus when closing the mobile menu
-      setOpenSubMenus([]);
-    }
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    setOpenSubMenus([]);
   };
 
   const toggleSubMenu = (key: string) => {
-    setOpenSubMenus(prev => 
-      prev.includes(key) 
+    setOpenSubMenus(prev =>
+      prev.includes(key)
         ? prev.filter(item => item !== key)
         : [...prev, key]
     );
   };
 
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      navigate('/');
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
+  const openDropdown = (key: string) => {
+    clearTimeout(dropdownTimeout);
+    setActiveDropdown(key);
   };
 
-  const cardItems: MenuProps['items'] = [
-    {
-      key: 'axis-bank',
-      label: <Link to="/cards/axis-bank">Axis Bank Credit Cards</Link>,
-    },
-    {
-      key: 'hdfc-bank',
-      label: <Link to="/cards/hdfc-bank">HDFC Bank Credit Cards</Link>,
-    },
-    {
-      key: 'icici-bank',
-      label: <Link to="/cards/icici-bank">ICICI Bank Credit Cards</Link>,
-    },
-    {
-      key: 'idfc-bank',
-      label: <Link to="/cards/idfc-bank">IDFC Bank Credit Cards</Link>,
-    },
-    {
-      key: 'indusind-bank',
-      label: <Link to="/cards/indusind-bank">IndusInd Bank Credit Cards</Link>,
-    },
+  const closeDropdown = () => {
+    dropdownTimeout = setTimeout(() => setActiveDropdown(null), 150);
+  };
+
+  /* ---------- DATA ---------- */
+
+  const cardItems = [
+    { key: 'axis-bank', label: 'Axis Bank Credit Cards', path: '/cards/axis-bank' },
+    { key: 'hdfc-bank', label: 'HDFC Bank Credit Cards', path: '/cards/hdfc-bank' },
+    { key: 'icici-bank', label: 'ICICI Bank Credit Cards', path: '/cards/icici-bank' },
+    { key: 'idfc-bank', label: 'IDFC Bank Credit Cards', path: '/cards/idfc-bank' },
+    { key: 'indusind-bank', label: 'IndusInd Bank Credit Cards', path: '/cards/indusind-bank' },
   ];
 
-  const loansMenu = {
+  const loansData = {
     personal: [
-      {
-        key: 'personal-banking',
-        label: <Link to="/personal-loan/banking-partners">Banking Partners</Link>,
-      },
-      {
-        key: 'personal-nbfc',
-        label: <Link to="/personal-loan/nbfc-partners">Non-Banking Financial Company Partners</Link>,
-      },
-      {
-        key: 'personal-fintech',
-        label: <Link to="/personal-loan/fintech-partners">Fintech Partners</Link>,
-      },
+      { key: 'personal-banking', label: 'Banking Partners', path: '/personal-loan/banking-partners' },
+      { key: 'personal-nbfc', label: 'NBFC Partners', path: '/personal-loan/nbfc-partners' },
+      { key: 'personal-fintech', label: 'Fintech Partners', path: '/personal-loan/fintech-partners' },
     ],
     business: [
-      {
-        key: 'business-banking',
-        label: <Link to="/business-loan/banking-partners">Banking Partners</Link>,
-      },
-      {
-        key: 'business-nbfc',
-        label: <Link to="/business-loan/nbfc-partners">Non-Banking Financial Company Partners</Link>,
-      },
-      {
-        key: 'business-fintech',
-        label: <Link to="/business-loan/fintech-partners">Fintech Partners</Link>,
-      },
+      { key: 'business-banking', label: 'Banking Partners', path: '/business-loan/banking-partners' },
+      { key: 'business-nbfc', label: 'NBFC Partners', path: '/business-loan/nbfc-partners' },
+      { key: 'business-fintech', label: 'Fintech Partners', path: '/business-loan/fintech-partners' },
     ],
     lap: [
-      {
-        key: 'lap-banking',
-        label: <Link to="/loan-against-property/banking-partners">Banking Partners</Link>,
-      },
-      {
-        key: 'lap-nbfc',
-        label: <Link to="/loan-against-property/nbfc-partners">Non-Banking Financial Company Partners</Link>,
-      },
-      {
-        key: 'lap-fintech',
-        label: <Link to="/loan-against-property/fintech-partners">Fintech Partners</Link>,
-      },
+      { key: 'lap-banking', label: 'Banking Partners', path: '/loan-against-property/banking-partners' },
+      { key: 'lap-nbfc', label: 'NBFC Partners', path: '/loan-against-property/nbfc-partners' },
+      { key: 'lap-fintech', label: 'Fintech Partners', path: '/loan-against-property/fintech-partners' },
     ],
     homeLoan: [
-      {
-        key: 'home-loan-banking',
-        label: <Link to="/home-loan/banking-partners">Banking Partners</Link>,
-      },
-      {
-        key: 'home-loan-nbfc',
-        label: <Link to="/home-loan/nbfc-partners">Non-Banking Financial Company Partners</Link>,
-      },
+      { key: 'home-loan-banking', label: 'Banking Partners', path: '/home-loan/banking-partners' },
+      { key: 'home-loan-nbfc', label: 'NBFC Partners', path: '/home-loan/nbfc-partners' },
     ],
     goldLoan: [
-      {
-        key: 'gold-loan-banking',
-        label: <Link to="/gold-loan/banking-partners">Banking Partners</Link>,
-      },
+      { key: 'gold-loan-banking', label: 'Banking Partners', path: '/gold-loan/banking-partners' },
     ],
   };
 
-  const loansDropdownMenu = (
-    <DropdownMenu>
-      <Menu.SubMenu key="personal" title="Personal Loans">
-        {loansMenu.personal.map(item => (
-          <Menu.Item key={item.key}>{item.label}</Menu.Item>
-        ))}
-      </Menu.SubMenu>
-      <Menu.SubMenu key="business" title="Business Loan">
-        {loansMenu.business.map(item => (
-          <Menu.Item key={item.key}>{item.label}</Menu.Item>
-        ))}
-      </Menu.SubMenu>
-      <Menu.SubMenu key="lap" title="Loan Against Property">
-        {loansMenu.lap.map(item => (
-          <Menu.Item key={item.key}>{item.label}</Menu.Item>
-        ))}
-      </Menu.SubMenu>
-      <Menu.SubMenu key="home-loan" title="Home Loan">
-        {loansMenu.homeLoan.map(item => (
-          <Menu.Item key={item.key}>{item.label}</Menu.Item>
-        ))}
-      </Menu.SubMenu>
-      <Menu.SubMenu key="gold-loan" title="Gold Loan">
-        {loansMenu.goldLoan.map(item => (
-          <Menu.Item key={item.key}>{item.label}</Menu.Item>
-        ))}
-      </Menu.SubMenu>
-    </DropdownMenu>
-  );
-
   const insuranceItems = [
-    {
-      key: 'health',
-      label: <Link to="/health-insurance">Health Insurance</Link>,
-    },
-    {
-      key: 'life',
-      label: <Link to="/life-insurance">Life Insurance</Link>,
-    },
-    {
-      key: 'general',
-      label: <Link to="/general-insurance">General Insurance</Link>,
-    },
-  ];
-
-  const insuranceMenu = (
-    <DropdownMenu>
-      {insuranceItems.map(item => (
-        <Menu.Item key={item.key}>{item.label}</Menu.Item>
-      ))}
-    </DropdownMenu>
-  );
-
-  const profileMenuItems = [
-    // Add Dashboard option for employees
-    ...(isEmployee ? [{
-      key: '1',
-      label: 'Dashboard',
-      icon: <UserOutlined />,
-      onClick: () => navigate('/EmployeeDashboard/EmployeeDashboard')
-    }] : []),
-    // Profile option for customers
-    ...(!isEmployee ? [{
-      key: '2', 
-      label: 'Profile',
-      icon: <UserOutlined />,
-      onClick: () => navigate('/profile')
-    }] : []),
-    {
-      key: '3',
-      label: 'Sign Out',
-      icon: <LogoutOutlined />,
-      onClick: handleSignOut
-    }
+    { key: 'health', label: 'Health Insurance', path: '/health-insurance' },
+    { key: 'life', label: 'Life Insurance', path: '/life-insurance' },
+    { key: 'general', label: 'General Insurance', path: '/general-insurance' },
   ];
 
   return (
-    <StyledHeader>
-      <NavbarContainer>
-        <LogoSection>
-          <Link to="/" onClick={handleHomeClick}>
-            <LogoContainer>
-              <img src={ebsLogo} alt="EBS Finance" />
-              <span>Everyday Banking Solutions</span>
-            </LogoContainer>
-          </Link>
-        </LogoSection>
+    <>
+      <StyledHeader $scrolled={scrolled}>
+        <NavbarContainer>
+          {/* Logo */}
+          <LogoLink to="/" onClick={handleHomeClick}>
+            <img src={ebsLogo} alt="EBS Finance" />
+            <LogoText>Everyday Banking Solutions</LogoText>
+          </LogoLink>
 
-        <NavLinks>
-          <NavLink to="/" onClick={handleHomeClick} $active={location.pathname === '/'}>Home</NavLink>
-          <Dropdown overlay={<Menu items={cardItems} />} placement="bottom" trigger={['hover']}>
-            <NavLink to="/credit-cards" $active={location.pathname.includes('credit-cards')}>Cards <DownOutlined style={{ fontSize: 8 }} /></NavLink>
-          </Dropdown>
-          <Dropdown overlay={loansDropdownMenu} trigger={['hover']} placement="bottom">
-            <NavLink to="/loans" $active={location.pathname.includes('loan')}>Loans <DownOutlined style={{ fontSize: 8 }} /></NavLink>
-          </Dropdown>
-          <Dropdown overlay={insuranceMenu} trigger={['hover']} placement="bottom">
-            <NavLink to="/insurance" $active={location.pathname.includes('insurance')}>Insurance <DownOutlined style={{ fontSize: 8 }} /></NavLink>
-          </Dropdown>
-          <NavLink to="/about-us" $active={location.pathname.includes('about-us')}>About Us</NavLink>
-        </NavLinks>
-        <ActionButtons>
-          {!loading && (
-            <>
-              {user || isEmployee ? (
-                <ProfileSection>
-                  <Dropdown menu={{ items: profileMenuItems }} placement="bottomRight">
-                    <AvatarButton>
-                      <Avatar size="small" icon={<UserOutlined />} />
-                      <span>{isEmployee ? 'Employee' : userProfile?.full_name || 'User'}</span>
-                      <DownOutlined style={{ fontSize: '12px' }} />
-                    </AvatarButton>
-                  </Dropdown>
-                </ProfileSection>
-              ) : (
-                <>
-                  <Link to="/login">
-                    <LoginButton>Login</LoginButton>
-                  </Link>
-                  <Link to="/login?signup=true">
-                    <CreateAccountButton>Create Account</CreateAccountButton>
-                  </Link>
-                </>
-              )}
-            </>
-          )}
-        </ActionButtons>
-
-        <MobileMenuButton 
-          onClick={toggleMobileMenu}
-          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-        >
-          <MenuLine $isOpen={isMobileMenuOpen} />
-        </MobileMenuButton>
-
-        <MobileMenu isOpen={isMobileMenuOpen}>
-          <MobileNavLinks>
-            <MobileNavLink 
-              to="/" 
-              onClick={(e) => {
-                handleHomeClick(e);
-                setIsMobileMenuOpen(false);
-              }} 
-              $active={location.pathname === '/'}
-            >
+          {/* Desktop Navigation */}
+          <NavLinks>
+            <NavLinkStyled to="/" onClick={handleHomeClick} $active={location.pathname === '/'}>
               Home
-            </MobileNavLink>
-            
-            <MobileMenuSection>
-              <MobileMenuHeader 
-                onClick={() => toggleSubMenu('cards')} 
-                $active={location.pathname.includes('credit-cards')}
-              >
-                <span>Cards</span>
-                <RotatingIcon $isOpen={openSubMenus.includes('cards')} />
-              </MobileMenuHeader>
-              <MobileSubMenu isOpen={openSubMenus.includes('cards')}>
+            </NavLinkStyled>
+
+            {/* Cards Dropdown */}
+            <NavItem
+              onMouseEnter={() => openDropdown('cards')}
+              onMouseLeave={closeDropdown}
+            >
+              <NavButtonWrapper $active={location.pathname.includes('cards')}>
+                <NavButtonLabel to="/credit-cards" $active={location.pathname.includes('cards')} onClick={() => setActiveDropdown(null)}>
+                  Cards
+                </NavButtonLabel>
+                <ChevronToggle $open={activeDropdown === 'cards'}>
+                  <ChevronDown />
+                </ChevronToggle>
+              </NavButtonWrapper>
+              <DropdownPortal $visible={activeDropdown === 'cards'}>
                 {cardItems.map(item => (
-                  <MobileNavLink 
-                    key={item.key} 
-                    to={`/cards/${item.key}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
+                  <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>
+                    <CreditCard />
                     {item.label}
-                  </MobileNavLink>
+                  </DropdownItem>
                 ))}
-              </MobileSubMenu>
-            </MobileMenuSection>
+              </DropdownPortal>
+            </NavItem>
 
-            <MobileMenuSection>
-              <MobileMenuHeader 
-                onClick={() => toggleSubMenu('loans')} 
-                $active={location.pathname.includes('loan')}
-              >
-                <span>Loans</span>
-                <RotatingIcon $isOpen={openSubMenus.includes('loans')} />
-              </MobileMenuHeader>
-              <MobileSubMenu isOpen={openSubMenus.includes('loans')}>
-                <MobileMenuSection>
-                  <MobileMenuHeader onClick={() => toggleSubMenu('personal')}>
-                    <span>Personal Loans</span>
-                    <RotatingIcon $isOpen={openSubMenus.includes('personal')} />
-                  </MobileMenuHeader>
-                  <MobileSubMenu isOpen={openSubMenus.includes('personal')}>
-                    {loansMenu.personal.map(item => (
-                      <MobileNavLink 
-                        key={item.key} 
-                        to={item.key}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </MobileNavLink>
-                    ))}
-                  </MobileSubMenu>
-                </MobileMenuSection>
+            {/* Loans Mega Dropdown */}
+            <NavItem
+              onMouseEnter={() => openDropdown('loans')}
+              onMouseLeave={closeDropdown}
+            >
+              <NavButtonWrapper $active={location.pathname.includes('loan')}>
+                <NavButtonLabel to="/loans" $active={location.pathname.includes('loan')} onClick={() => setActiveDropdown(null)}>
+                  Loans
+                </NavButtonLabel>
+                <ChevronToggle $open={activeDropdown === 'loans'}>
+                  <ChevronDown />
+                </ChevronToggle>
+              </NavButtonWrapper>
+              <MegaDropdownPortal $visible={activeDropdown === 'loans'}>
+                <div>
+                  <DropdownSubTitle>Personal Loans</DropdownSubTitle>
+                  {loansData.personal.map(item => (
+                    <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>{item.label}</DropdownItem>
+                  ))}
+                  <DropdownSubTitle>Business Loan</DropdownSubTitle>
+                  {loansData.business.map(item => (
+                    <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>{item.label}</DropdownItem>
+                  ))}
+                  <DropdownSubTitle>Gold Loan</DropdownSubTitle>
+                  {loansData.goldLoan.map(item => (
+                    <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>{item.label}</DropdownItem>
+                  ))}
+                </div>
+                <div>
+                  <DropdownSubTitle>Loan Against Property</DropdownSubTitle>
+                  {loansData.lap.map(item => (
+                    <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>{item.label}</DropdownItem>
+                  ))}
+                  <DropdownSubTitle>Home Loan</DropdownSubTitle>
+                  {loansData.homeLoan.map(item => (
+                    <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>{item.label}</DropdownItem>
+                  ))}
+                </div>
+              </MegaDropdownPortal>
+            </NavItem>
 
-                <MobileMenuSection>
-                  <MobileMenuHeader onClick={() => toggleSubMenu('business')}>
-                    <span>Business Loan</span>
-                    <RotatingIcon $isOpen={openSubMenus.includes('business')} />
-                  </MobileMenuHeader>
-                  <MobileSubMenu isOpen={openSubMenus.includes('business')}>
-                    {loansMenu.business.map(item => (
-                      <MobileNavLink 
-                        key={item.key} 
-                        to={item.key}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </MobileNavLink>
-                    ))}
-                  </MobileSubMenu>
-                </MobileMenuSection>
+            {/* Insurance Dropdown */}
+            <NavItem
+              onMouseEnter={() => openDropdown('insurance')}
+              onMouseLeave={closeDropdown}
+            >
+              <NavButtonWrapper $active={location.pathname.includes('insurance')}>
+                <NavButtonLabel to="/insurance" $active={location.pathname.includes('insurance')} onClick={() => setActiveDropdown(null)}>
+                  Insurance
+                </NavButtonLabel>
+                <ChevronToggle $open={activeDropdown === 'insurance'}>
+                  <ChevronDown />
+                </ChevronToggle>
+              </NavButtonWrapper>
+              <DropdownPortal $visible={activeDropdown === 'insurance'}>
+                {insuranceItems.map(item => (
+                  <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>
+                    <ShieldCheck />
+                    {item.label}
+                  </DropdownItem>
+                ))}
+              </DropdownPortal>
+            </NavItem>
+          </NavLinks>
 
-                <MobileMenuSection>
-                  <MobileMenuHeader onClick={() => toggleSubMenu('lap')}>
-                    <span>Loan Against Property</span>
-                    <RotatingIcon $isOpen={openSubMenus.includes('lap')} />
-                  </MobileMenuHeader>
-                  <MobileSubMenu isOpen={openSubMenus.includes('lap')}>
-                    {loansMenu.lap.map(item => (
-                      <MobileNavLink 
-                        key={item.key} 
-                        to={item.key}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </MobileNavLink>
-                    ))}
-                  </MobileSubMenu>
-                </MobileMenuSection>
+          {/* Desktop Actions */}
+          <ActionButtons>
+            {/* <Link to="/login"><button>Login</button></Link> */}
+            {/* <Link to="/login?signup=true"><button>Create Account</button></Link> */}
+            <AboutUsBtn to="/about-us">
+              About Us <ArrowRight />
+            </AboutUsBtn>
+          </ActionButtons>
 
-                <MobileMenuSection>
-                  <MobileMenuHeader onClick={() => toggleSubMenu('home-loan')}>
-                    <span>Home Loan</span>
-                    <RotatingIcon $isOpen={openSubMenus.includes('home-loan')} />
-                  </MobileMenuHeader>
-                  <MobileSubMenu isOpen={openSubMenus.includes('home-loan')}>
-                    {loansMenu.homeLoan.map(item => (
-                      <MobileNavLink 
-                        key={item.key} 
-                        to={item.key}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </MobileNavLink>
-                    ))}
-                  </MobileSubMenu>
-                </MobileMenuSection>
+          {/* Mobile Menu Button */}
+          <MobileMenuBtn
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          >
+            {isMobileMenuOpen ? <X /> : <Menu />}
+          </MobileMenuBtn>
+        </NavbarContainer>
+      </StyledHeader>
 
-                <MobileMenuSection>
-                  <MobileMenuHeader onClick={() => toggleSubMenu('gold-loan')}>
-                    <span>Gold Loan</span>
-                    <RotatingIcon $isOpen={openSubMenus.includes('gold-loan')} />
-                  </MobileMenuHeader>
-                  <MobileSubMenu isOpen={openSubMenus.includes('gold-loan')}>
-                    {loansMenu.goldLoan.map(item => (
-                      <MobileNavLink 
-                        key={item.key} 
-                        to={item.key}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {item.label}
-                      </MobileNavLink>
-                    ))}
-                  </MobileSubMenu>
-                </MobileMenuSection>
-              </MobileSubMenu>
-            </MobileMenuSection>
+      {/* Mobile Overlay */}
+      <MobileOverlay $open={isMobileMenuOpen} onClick={closeMobileMenu} />
 
-            <MobileMenuSection>
-              <MobileMenuHeader 
-                onClick={() => toggleSubMenu('insurance')} 
-                $active={location.pathname.includes('insurance')}
-              >
-                <span>Insurance</span>
-                <RotatingIcon $isOpen={openSubMenus.includes('insurance')} />
-              </MobileMenuHeader>
-              <MobileSubMenu isOpen={openSubMenus.includes('insurance')}>
-                <MobileNavLink 
-                  to="/health-insurance"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Health Insurance
-                </MobileNavLink>
-                <MobileNavLink 
-                  to="/life-insurance"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Life Insurance
-                </MobileNavLink>
-                <MobileNavLink 
-                  to="/general-insurance"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  General Insurance
-                </MobileNavLink>
-              </MobileSubMenu>
-            </MobileMenuSection>
+      {/* Mobile Drawer */}
+      <MobileDrawer $open={isMobileMenuOpen}>
+        <MobileDrawerHeader>
+          <LogoLink to="/" onClick={handleHomeClick}>
+            <img src={ebsLogo} alt="EBS Finance" style={{ height: 32 }} />
+            <LogoText>Everyday Banking Solutions</LogoText>
+          </LogoLink>
+          <MobileCloseBtn onClick={closeMobileMenu}>
+            <X />
+          </MobileCloseBtn>
+        </MobileDrawerHeader>
 
-            <MobileMenuSection>
-              <MobileNavLink 
-                to="/about-us"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                About Us
-              </MobileNavLink>
-            </MobileMenuSection>
-          </MobileNavLinks>
-          <MobileActionButtons>
-            {!loading && (
-              <>
-                {user || isEmployee ? (
-                  <>
-                    <Button onClick={handleSignOut} style={{ width: '100%' }}>
-                      <UserOutlined />
-                      <span style={{ marginLeft: '8px' }}>Sign Out</span>
-                    </Button>
-                    <Link 
-                      to={isEmployee ? '/EmployeeDashboard/EmployeeDashboard' : '/profile'} 
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <Button style={{ width: '100%' }}>Profile</Button>
-                    </Link>
-                  </>
-                ) : (
-                  <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                    <LoginButton style={{ width: '100%' }}>Login</LoginButton>
-                  </Link>
-                )}
-                <Link to="/about-us" onClick={() => setIsMobileMenuOpen(false)}>
-                  <AboutUsButton style={{ width: '100%' }}>About Us</AboutUsButton>
-                </Link>
-              </>
-            )}
-          </MobileActionButtons>
-        </MobileMenu>
-      </NavbarContainer>
-    </StyledHeader>
+        <MobileNavContent>
+          {/* Home */}
+          <MobileNavItem
+            to="/"
+            onClick={handleHomeClick}
+            $active={location.pathname === '/'}
+          >
+            <Home />
+            Home
+          </MobileNavItem>
+
+          {/* Cards */}
+          <MobileNavButtonWrapper
+            $active={location.pathname.includes('cards')}
+            $open={openSubMenus.includes('cards')}
+          >
+            <MobileNavButtonLabel to="/credit-cards" onClick={closeMobileMenu} $active={location.pathname.includes('cards')}>
+              <CreditCard /> Cards
+            </MobileNavButtonLabel>
+            <MobileChevronToggle $open={openSubMenus.includes('cards')} onClick={() => toggleSubMenu('cards')}>
+              <ChevronDown />
+            </MobileChevronToggle>
+          </MobileNavButtonWrapper>
+          <MobileSubItems $open={openSubMenus.includes('cards')}>
+            {cardItems.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+          </MobileSubItems>
+
+          {/* Loans */}
+          <MobileNavButtonWrapper
+            $active={location.pathname.includes('loan')}
+            $open={openSubMenus.includes('loans')}
+          >
+            <MobileNavButtonLabel to="/loans" onClick={closeMobileMenu} $active={location.pathname.includes('loan')}>
+              <Landmark /> Loans
+            </MobileNavButtonLabel>
+            <MobileChevronToggle $open={openSubMenus.includes('loans')} onClick={() => toggleSubMenu('loans')}>
+              <ChevronDown />
+            </MobileChevronToggle>
+          </MobileNavButtonWrapper>
+          <MobileSubItems $open={openSubMenus.includes('loans')}>
+            <MobileSubHeader>Personal Loans</MobileSubHeader>
+            {loansData.personal.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+            <MobileSubHeader>Business Loan</MobileSubHeader>
+            {loansData.business.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+            <MobileSubHeader>Loan Against Property</MobileSubHeader>
+            {loansData.lap.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+            <MobileSubHeader>Home Loan</MobileSubHeader>
+            {loansData.homeLoan.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+            <MobileSubHeader>Gold Loan</MobileSubHeader>
+            {loansData.goldLoan.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+          </MobileSubItems>
+
+          {/* Insurance */}
+          <MobileNavButtonWrapper
+            $active={location.pathname.includes('insurance')}
+            $open={openSubMenus.includes('insurance')}
+          >
+            <MobileNavButtonLabel to="/insurance" onClick={closeMobileMenu} $active={location.pathname.includes('insurance')}>
+              <ShieldCheck /> Insurance
+            </MobileNavButtonLabel>
+            <MobileChevronToggle $open={openSubMenus.includes('insurance')} onClick={() => toggleSubMenu('insurance')}>
+              <ChevronDown />
+            </MobileChevronToggle>
+          </MobileNavButtonWrapper>
+          <MobileSubItems $open={openSubMenus.includes('insurance')}>
+            {insuranceItems.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+          </MobileSubItems>
+        </MobileNavContent>
+
+        <MobileFooter>
+          <MobileAboutBtn to="/about-us" onClick={closeMobileMenu}>
+            <Users />
+            About Us
+          </MobileAboutBtn>
+        </MobileFooter>
+      </MobileDrawer>
+    </>
   );
 };
 

@@ -8,6 +8,7 @@ import Footer from '../../components/Footer/Footer';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useProtectedAction } from '../../hooks/useProtectedAction';
+import LoanComparisonModal from '../../components/LoanComparisionModel/LoandComparisionModel';
 
 // Bank logos from public directory
 const bankLogos = {
@@ -316,7 +317,7 @@ const HeroVisual = styled(motion.div)`
   }
 `;
 
-const FloatingCard = styled(motion.div)<{ index: number }>`
+const FloatingCard = styled(motion.div) <{ index: number }>`
   position: absolute;
   width: 280px;
   height: 160px;
@@ -562,7 +563,7 @@ const StyledModal = styled(Modal)`
 
 const CompareFloatingButton = styled(motion.div)`
   position: fixed;
-  bottom: 24px;
+  bottom: 100px;
   right: 24px;
   z-index: 1000;
 `;
@@ -657,62 +658,6 @@ const CompareText = styled(Text)`
   }
 `;
 
-const CompareTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-
-  th, td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #f0f0f0;
-    vertical-align: middle;
-  }
-
-  th {
-    background-color: #fafafa;
-    font-weight: 600;
-  }
-
-  tbody tr:hover {
-    background-color: #fafafa;
-  }
-
-  td:first-child {
-    font-weight: 500;
-    color: #262626;
-    text-align: left;
-  }
-
-  .ant-rate {
-    justify-content: center;
-  }
-`;
-
-const BankLogo = styled.img`
-  height: 40px;
-  object-fit: contain;
-  margin-bottom: 8px;
-`;
-
-const BankHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 200px;
-  padding: 8px;
-`;
-
-const DownloadButton = styled(Button)`
-  position: absolute;
-  top: -45px;
-  right: 48px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
 const BLFintechPartners: React.FC = () => {
   const handleProtectedAction = useProtectedAction();
   const navigate = useNavigate();
@@ -727,10 +672,6 @@ const BLFintechPartners: React.FC = () => {
 
   const handleCloseModal = () => {
     setSelectedLoan(null);
-  };
-
-  const handleCloseCompareModal = () => {
-    setIsCompareModalVisible(false);
   };
 
   const toggleLoanSelection = (loanName: string) => {
@@ -754,7 +695,7 @@ const BLFintechPartners: React.FC = () => {
 
   const handleDownloadPDF = async (): Promise<void> => {
     if (!compareContentRef.current) return;
-    
+
     try {
       // Create canvas from the comparison content
       const canvas = await html2canvas(compareContentRef.current, {
@@ -767,11 +708,11 @@ const BLFintechPartners: React.FC = () => {
       // Calculate dimensions
       const imgWidth = 210; // A4 width in mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
-      
+
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('loan-comparison.pdf');
     } catch (error) {
@@ -788,7 +729,7 @@ const BLFintechPartners: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-             Business Loans Made Simple
+            Business Loans Made Simple
           </HeroTitle>
           <HeroSubtitle
             initial={{ opacity: 0, y: 20 }}
@@ -806,10 +747,10 @@ const BLFintechPartners: React.FC = () => {
             <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
               Check Eligibility
             </StyledButton>
-            <StyledButton 
-              type="default" 
-              ghost 
-              size="large" 
+            <StyledButton
+              type="default"
+              ghost
+              size="large"
               onClick={handleCompare}
               disabled={selectedLoans.length < 2}
             >
@@ -836,23 +777,23 @@ const BLFintechPartners: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
         >
-       <FloatingCard
-          key={personalLoans[0].id}
-          index={0}
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-           whileHover={{ scale: 1.05, rotate: '0deg' }}
-        >
-          <CardBank>{personalLoans[0].bankName}</CardBank>
-          <CardDetails>
-            <CardRate>From {personalLoans[0].interestRate}</CardRate>
-            <CardAmount>Up to {personalLoans[0].maxAmount}</CardAmount>
-          </CardDetails>
-        </FloatingCard>
-      </HeroVisual>
-    </HeroContent>
-  </HeroSection>      
+          <FloatingCard
+            key={personalLoans[0].id}
+            index={0}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.05, rotate: '0deg' }}
+          >
+            <CardBank>{personalLoans[0].bankName}</CardBank>
+            <CardDetails>
+              <CardRate>From {personalLoans[0].interestRate}</CardRate>
+              <CardAmount>Up to {personalLoans[0].maxAmount}</CardAmount>
+            </CardDetails>
+          </FloatingCard>
+        </HeroVisual>
+      </HeroContent>
+    </HeroSection>
   );
 
   return (
@@ -863,7 +804,7 @@ const BLFintechPartners: React.FC = () => {
           <b></b>
           <b></b>
           <SectionTitle>
-          Business Loans - Fintech Partners
+            Business Loans - Fintech Partners
           </SectionTitle>
 
           {personalLoans.map((loan: Loan) => (
@@ -919,14 +860,14 @@ const BLFintechPartners: React.FC = () => {
                     </Text>
                   </RatingContainer>
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
-                  <Button 
-  type="primary" 
-  onClick={() => handleProtectedAction(() => 
-    navigate('/apply', { state: { productType: 'Loans' } })
-  )}
->
-  Apply
-</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => handleProtectedAction(() =>
+                      navigate('/apply', { state: { productType: 'Loans' } })
+                    )}
+                  >
+                    Apply
+                  </Button>
                   <Text type="secondary" style={{ fontSize: '12px', textAlign: 'center' }}>
                     On bank website
                   </Text>
@@ -934,7 +875,7 @@ const BLFintechPartners: React.FC = () => {
               </CardGrid>
             </motion.div>
           ))}
-            
+
           <AnimatePresence>
             {selectedLoans.length > 0 && (
               <CompareFloatingButton
@@ -1027,108 +968,15 @@ const BLFintechPartners: React.FC = () => {
           ]} />
         </StyledModal>
       )}
-      <StyledModal
-        open={isCompareModalVisible}
-        onCancel={handleCloseCompareModal}
-        footer={null}
-        width={1000}
-        title="Compare Personal Loans"
-        closeIcon={<CloseOutlined />}
-      >
-        <DownloadButton type="primary" onClick={handleDownloadPDF} icon={<DownloadOutlined />}>
-          Download Comparison
-        </DownloadButton>
-        <div ref={compareContentRef}>
-          <CompareTable>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left' }}>Features</th>
-                {selectedLoans.map(loanName => {
-                  const loan = personalLoans.find(loan => loan.name === loanName);
-                  return (
-                    <th key={loanName}>
-                      <BankHeader>
-                        <BankLogo src={loan?.bankLogo} alt={loan?.bankName} />
-                        {loan?.bankName}
-                      </BankHeader>
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Interest Rate</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.interestRate}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Processing Fee</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.processingFee}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Maximum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.maxAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Minimum Amount</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.minAmount}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Tenure</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.tenure}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Rating</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    <Rate 
-                      disabled 
-                      defaultValue={personalLoans.find(loan => loan.name === loanName)?.rating} 
-                      style={{ fontSize: '16px' }} 
-                    />
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Key Benefit</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.benefit}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td>Suited For</td>
-                {selectedLoans.map(loanName => (
-                  <td key={loanName}>
-                    {personalLoans.find(loan => loan.name === loanName)?.suitedFor.join(", ")}
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </CompareTable>
-        </div>
-      </StyledModal>
+      <LoanComparisonModal
+        isVisible={isCompareModalVisible}
+        onClose={() => setIsCompareModalVisible(false)}
+        selectedLoans={selectedLoans}
+        loans={personalLoans}
+        onDownloadPDF={handleDownloadPDF}
+        compareContentRef={compareContentRef}
+        title="Compare Business Loans - Fintech Partners"
+      />
       <Footer />
     </PageContainer>
   );
