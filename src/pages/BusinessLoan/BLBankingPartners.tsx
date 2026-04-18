@@ -1675,6 +1675,10 @@ const BLBankingPartners: React.FC = () => {
     }
   };
 
+  const goToApply = () => {
+    navigate("/loans#apply");
+  };
+
   const renderHeroSection = () => (
     <HeroSection>
       <HeroContent>
@@ -1699,7 +1703,7 @@ const BLBankingPartners: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <StyledButton type="primary" size="large" onClick={handleCheckEligibility}>
+            <StyledButton type="primary" size="large" onClick={goToApply}>
               Check Eligibility
             </StyledButton>
             <StyledButton
@@ -1822,9 +1826,7 @@ const BLBankingPartners: React.FC = () => {
                   <Button onClick={() => handleViewDetails(loan.name)}>View Details</Button>
                   <Button
                     type="primary"
-                    onClick={() => handleProtectedAction(() =>
-                      navigate('/apply', { state: { productType: 'Loans' } })
-                    )}
+                    onClick={goToApply}
                   >
                     Apply
                   </Button>

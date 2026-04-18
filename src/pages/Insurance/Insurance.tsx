@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { StarFilled, CheckCircleFilled } from '@ant-design/icons';
 import { motion } from 'framer-motion';
@@ -270,97 +270,121 @@ const WhyCardContent = styled.div`
 
 /* ─── Component ─── */
 
-const Insurance: React.FC = () => (
-  <PageContainer>
-    <HeroSection
-      title="Protect Your Future with Comprehensive Insurance Plans"
-      description="Get access to exclusive benefits, coverage, and peace of mind. Apply now and secure your family's future with EBS Finance."
-      image={insuranceHeroImg}
-      backgroundImage={insuranceHeroImg}
-      featureTags={[
-        { icon: <StarFilled />, label: 'Comprehensive Coverage' },
-        { icon: <CheckCircleFilled />, label: 'Flexible Plans' },
-        { icon: <CheckCircleFilled />, label: 'Exclusive Benefits' },
-      ]}
-    />
+const Insurance: React.FC = () => {
 
-    <InsuranceGridSection>
-      <SectionHeader
-        title="Insurance Products"
-        subtitle="Choose from our range of insurance products designed to protect you, your family, and your assets against life's uncertainties."
-        align="center"
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+
+      const scrollToElement = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      };
+
+      // Try immediately
+      scrollToElement();
+
+      // Retry after render delay (important)
+      setTimeout(scrollToElement, 300);
+    }
+  }, [location]);
+
+  return (
+    <PageContainer>
+      <HeroSection
+        title="Protect Your Future with Comprehensive Insurance Plans"
+        description="Get access to exclusive benefits, coverage, and peace of mind. Apply now and secure your family's future with EBS Finance."
+        image={insuranceHeroImg}
+        backgroundImage={insuranceHeroImg}
+        featureTags={[
+          { icon: <StarFilled />, label: 'Comprehensive Coverage' },
+          { icon: <CheckCircleFilled />, label: 'Flexible Plans' },
+          { icon: <CheckCircleFilled />, label: 'Exclusive Benefits' },
+        ]}
       />
-      <InsuranceGrid>
-        {insuranceCategories.map((ins) => (
-          <InsuranceCard
-            key={ins.title}
-            image={ins.image}
-            title={ins.title}
-            description={ins.description}
-            benefits={ins.benefits}
-            exploreLink={ins.exploreLink}
-          />
-        ))}
-      </InsuranceGrid>
-    </InsuranceGridSection>
 
-    <ApplicationForm
-      formTitle="Insurance Application"
-      formSubtitle="Fill in your details and our advisors will help find the best plan for you."
-      productType="Insurance"
-      recipientEmail="info@ebsgroup.co.in"
-      accentGradient="linear-gradient(150deg, #0e7490 0%, #0a5c73 60%, #064e63 100%)"
-      leftPanel={{
-        heading: 'Why Choose Our Insurance Plans?',
-        subtext: 'Experience comprehensive protection and peace of mind with our tailored insurance solutions.',
-        benefits: [
-          'Customized coverage options',
-          'Quick and hassle-free claims',
-          '24/7 customer support',
-          'Competitive premiums',
-          'Digital policy management',
-          'Expert insurance advisors',
-        ],
-      }}
-    />
-
-    {/* ─── Why Be Insured ─── */}
-    <WhySection>
-      <WhyInner>
-        <WhySectionLabel>Why Insurance Matters</WhySectionLabel>
-        <WhySectionTitle>Be Insured. <span>Be Unstoppable.</span></WhySectionTitle>
-        <WhySectionSub>
-          Insurance isn't just a financial product — it's a promise to your future self. Here's why being insured is one of the smartest decisions you'll make.
-        </WhySectionSub>
-
-        <WhyGrid>
-          {whyBeInsuredCards.map((card, i) => (
-            <WhyCard
-              key={card.title}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5, ease: 'easeOut' }}
-            >
-              <WhyCardImg src={card.image} alt={card.title} />
-              <WhyOverlay className="why-overlay" />
-              <WhyCardInner>
-                <WhyCardNumber>0{i + 1}</WhyCardNumber>
-                <WhyCardTitle className="why-title">{card.title}</WhyCardTitle>
-                <WhyCardContent className="why-content">
-                  <p>{card.subtitle}</p>
-                  <span className="chip"><CheckCircleFilled /> Learn More</span>
-                </WhyCardContent>
-              </WhyCardInner>
-            </WhyCard>
+      <InsuranceGridSection>
+        <SectionHeader
+          title="Insurance Products"
+          subtitle="Choose from our range of insurance products designed to protect you, your family, and your assets against life's uncertainties."
+          align="center"
+        />
+        <InsuranceGrid>
+          {insuranceCategories.map((ins) => (
+            <InsuranceCard
+              key={ins.title}
+              image={ins.image}
+              title={ins.title}
+              description={ins.description}
+              benefits={ins.benefits}
+              exploreLink={ins.exploreLink}
+            />
           ))}
-        </WhyGrid>
-      </WhyInner>
-    </WhySection>
+        </InsuranceGrid>
+      </InsuranceGridSection>
 
-    <Footer />
-  </PageContainer>
-);
+      <div id="apply">
+        <ApplicationForm
+          formTitle="Insurance Application"
+          formSubtitle="Fill in your details and our advisors will help find the best plan for you."
+          productType="Insurance"
+          recipientEmail="info@ebsgroup.co.in"
+          accentGradient="linear-gradient(150deg, #0e7490 0%, #0a5c73 60%, #064e63 100%)"
+          leftPanel={{
+            heading: 'Why Choose Our Insurance Plans?',
+            subtext: 'Experience comprehensive protection and peace of mind with our tailored insurance solutions.',
+            benefits: [
+              'Customized coverage options',
+              'Quick and hassle-free claims',
+              '24/7 customer support',
+              'Competitive premiums',
+              'Digital policy management',
+              'Expert insurance advisors',
+            ],
+          }}
+        />
+      </div>
+
+      {/* ─── Why Be Insured ─── */}
+      <WhySection>
+        <WhyInner>
+          <WhySectionLabel>Why Insurance Matters</WhySectionLabel>
+          <WhySectionTitle>Be Insured. <span>Be Unstoppable.</span></WhySectionTitle>
+          <WhySectionSub>
+            Insurance isn't just a financial product — it's a promise to your future self. Here's why being insured is one of the smartest decisions you'll make.
+          </WhySectionSub>
+
+          <WhyGrid>
+            {whyBeInsuredCards.map((card, i) => (
+              <WhyCard
+                key={card.title}
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5, ease: 'easeOut' }}
+              >
+                <WhyCardImg src={card.image} alt={card.title} />
+                <WhyOverlay className="why-overlay" />
+                <WhyCardInner>
+                  <WhyCardNumber>0{i + 1}</WhyCardNumber>
+                  <WhyCardTitle className="why-title">{card.title}</WhyCardTitle>
+                  <WhyCardContent className="why-content">
+                    <p>{card.subtitle}</p>
+                    <span className="chip"><CheckCircleFilled /> Learn More</span>
+                  </WhyCardContent>
+                </WhyCardInner>
+              </WhyCard>
+            ))}
+          </WhyGrid>
+        </WhyInner>
+      </WhySection>
+
+      <Footer />
+    </PageContainer>
+  )
+};
 
 export default Insurance;
 
