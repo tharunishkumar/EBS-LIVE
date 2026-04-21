@@ -62,6 +62,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import OauthLogin from './pages/oauthLogin';
 import OauthRegister from './pages/oauth/Register';
+import NotFound from './components/NotFound';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -150,6 +151,8 @@ const App: React.FC = () => {
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/profile" element={<Profile />} />
 
+                <Route path="/not-found" element={<NotFound />} />
+
                 {/* Employee Dashboard Routes */}
                 {/* <Route path="/employee-login" element={<EmployeeLogin />} />
                 <Route path="/EmployeeDashboard/EmployeeDashboard" element={<EmployeeDashboard />} />
@@ -171,7 +174,7 @@ const App: React.FC = () => {
                   }
                 /> */}
                 {/* Default redirect */}
-                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                <Route path="*" element={<Navigate to="/not-found" replace />} />
               </Routes>
             </MainContent>
           </AppContainer>

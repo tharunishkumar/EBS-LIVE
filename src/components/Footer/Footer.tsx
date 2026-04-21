@@ -471,7 +471,7 @@ const Footer = (): React.ReactElement => {
           <FooterSection>
             <h4>Quick Links</h4>
             <ul>
-              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/about-us">About Us</Link></li>
               <li><Link to="/apply">Apply Now</Link></li>
             </ul>
           </FooterSection>
