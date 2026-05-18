@@ -531,14 +531,25 @@ const Footer = (): React.ReactElement => {
 
         {/* Bottom Bar */}
         <BottomBar>
-          <Copyright>
+          <Copyright className="order-1 md:order-1">
             <span>© {new Date().getFullYear()} EBS Group. All rights reserved.</span>
-            <Divider>|</Divider>
-            <DeveloperCredit>
-              Website by <a href="https://ticktix.com" target="_blank" rel="noopener noreferrer">Ticktix Pvt Ltd</a>
-            </DeveloperCredit>
           </Copyright>
-          <BottomLinks>
+
+          <div className="flex items-center justify-center gap-2 text-[12px] text-foreground/50 order-3 md:order-2">
+            <span>
+              Powered by{" "}
+              <a
+                href="https://ticktix.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-foreground/85 hover:text-primary transition-colors duration-300"
+              >
+                Ticktix Solutions Pvt. Ltd.
+              </a>
+            </span>
+          </div>
+
+          <BottomLinks className="order-2 md:order-3">
             <Link to="/privacy-policy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>
           </BottomLinks>
