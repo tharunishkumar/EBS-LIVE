@@ -161,7 +161,7 @@ const App: React.FC = () => {
                 <Route path="/EmployeeDashboard/EmployeeCreditCards" element={<EmployeeCreditCards />} />
                 <Route path="/EmployeeDashboard/EmployeeDM" element={<EmployeeDM />} /> */}
 
-                {/* <Route path="/oauth/login" element={<OauthLogin />} />
+                <Route path="/oauth/login" element={<OauthLogin />} />
                 <Route path="/oauth/register" element={<OauthRegister />} />
                 <Route path="/oauth/callback" element={<OAuthCallback />} />
                 <Route path="/silent-callback" element={<SilentCallback />} />
@@ -172,7 +172,7 @@ const App: React.FC = () => {
                       <Dashboard />
                     </ProtectedRoute>
                   }
-                /> */}
+                />
                 {/* Default redirect */}
                 <Route path="*" element={<Navigate to="/not-found" replace />} />
               </Routes>

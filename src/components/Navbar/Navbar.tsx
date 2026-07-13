@@ -65,15 +65,28 @@ const NavbarContainer = styled.div`
 const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 14px;
   text-decoration: none;
   flex-shrink: 0;
 
   img {
-    height: 38px;
+    height: 72px;
     width: auto;
     object-fit: contain;
     transition: transform 0.3s ease;
+  }
+
+  @media (max-width: 968px) {
+    img {
+      height: 56px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    gap: 0;
+
+    img {
+      height: 50px;
+    }
   }
 
   &:hover img {
@@ -87,6 +100,10 @@ const LogoText = styled.span`
   color: #0f172a;
   letter-spacing: -0.3px;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 
   @media (max-width: 250px) {
     display: none;
@@ -860,7 +877,7 @@ const Navbar: React.FC = () => {
       <MobileDrawer $open={isMobileMenuOpen}>
         <MobileDrawerHeader>
           <LogoLink to="/" onClick={handleHomeClick}>
-            <img src={ebsLogo} alt="EBS Finance" style={{ height: 32 }} />
+            <img src={ebsLogo} alt="EBS Finance" style={{ height: 50 }} />
             <LogoText>Everyday Banking Solutions</LogoText>
           </LogoLink>
           <MobileCloseBtn onClick={closeMobileMenu}>
