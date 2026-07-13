@@ -110,9 +110,15 @@ const LogoRow = styled(Link)`
   }
 
   img {
-    height: 36px;
+    height: 68px;
     width: auto;
     object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    img {
+      height: 42px;
+    }
   }
 `;
 
