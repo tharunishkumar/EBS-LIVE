@@ -534,7 +534,7 @@ const AboutUs: React.FC = () => {
 
           <StatsGrid variants={fadeUp}>
             <StatItem>
-              <div className="number">19+</div>
+              <div className="number">22+</div>
               <div className="label">Years of Excellence</div>
             </StatItem>
             <StatItem>

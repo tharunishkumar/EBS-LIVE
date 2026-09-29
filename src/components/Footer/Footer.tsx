@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
-import ebsLogo from '../Navbar/EBS logo.png';
+import ebsLogo from '../Navbar/ebs_new.png';
 import { colors } from '../../styles/theme';
 
 const fadeInUp = keyframes`
@@ -117,7 +117,7 @@ const LogoRow = styled(Link)`
 
   @media (max-width: 768px) {
     img {
-      height: 42px;
+      height: 62px;
     }
   }
 `;
@@ -455,15 +455,6 @@ const Footer = (): React.ReactElement => {
           </FooterSection>
 
           <FooterSection>
-            <h4>Insurance</h4>
-            <ul>
-              <li><Link to="/life-insurance">Life Insurance</Link></li>
-              <li><Link to="/health-insurance">Health Insurance</Link></li>
-              <li><Link to="/general-insurance">General Insurance</Link></li>
-            </ul>
-          </FooterSection>
-
-          <FooterSection>
             <h4>Credit Cards</h4>
             <ul>
               <li><Link to="/cards/axis-bank">Axis Bank Cards</Link></li>
@@ -471,6 +462,15 @@ const Footer = (): React.ReactElement => {
               <li><Link to="/cards/icici-bank">ICICI Bank Cards</Link></li>
               <li><Link to="/cards/idfc-bank">IDFC First Cards</Link></li>
               <li><Link to="/cards/indusind-bank">IndusInd Cards</Link></li>
+            </ul>
+          </FooterSection>
+
+          <FooterSection>
+            <h4>Insurance</h4>
+            <ul>
+              <li><Link to="/life-insurance">Life Insurance</Link></li>
+              <li><Link to="/health-insurance">Health Insurance</Link></li>
+              <li><Link to="/general-insurance">General Insurance</Link></li>
             </ul>
           </FooterSection>
 

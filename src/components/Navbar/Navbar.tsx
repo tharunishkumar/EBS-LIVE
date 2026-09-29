@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X, CreditCard, Building2, Home, Shield, Landmark, Gem, Users, ArrowRight, ShieldCheck } from 'lucide-react';
-import ebsLogo from './EBS logo.png';
+import ebsLogo from './ebs_new.png';
 import { useUser } from '@/contexts/UserContext';
 
 /* ================= ANIMATIONS ================= */
@@ -65,28 +65,16 @@ const NavbarContainer = styled.div`
 const LogoLink = styled(Link)`
   display: flex;
   align-items: center;
+  gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
 
   img {
-    height: 72px;
-    width: auto;
+    width: clamp(52px, 7vw, 60px);
+    height: clamp(52px, 7vw, 60px);
     object-fit: contain;
-    transition: transform 0.3s ease;
-  }
-
-  @media (max-width: 968px) {
-    img {
-      height: 56px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    gap: 0;
-
-    img {
-      height: 50px;
-    }
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &:hover img {
@@ -96,17 +84,18 @@ const LogoLink = styled(Link)`
 
 const LogoText = styled.span`
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.3px;
   white-space: nowrap;
 
   @media (max-width: 768px) {
-    display: none;
+    font-size: 12px;
+    line-height: 1.2;
   }
 
-  @media (max-width: 250px) {
-    display: none;
+  @media (max-width: 360px) {
+    font-size: 10px;
   }
 `;
 
@@ -753,7 +742,7 @@ const Navbar: React.FC = () => {
         <NavbarContainer>
           {/* Logo */}
           <LogoLink to="/" onClick={handleHomeClick}>
-            <img src={ebsLogo} alt="EBS Finance" />
+            <img src={ebsLogo} alt="EBS" />
             <LogoText>Everyday Banking Solutions</LogoText>
           </LogoLink>
 
@@ -763,30 +752,7 @@ const Navbar: React.FC = () => {
               Home
             </NavLinkStyled>
 
-            {/* Cards Dropdown */}
-            <NavItem
-              onMouseEnter={() => openDropdown('cards')}
-              onMouseLeave={closeDropdown}
-            >
-              <NavButtonWrapper $active={location.pathname.includes('cards')}>
-                <NavButtonLabel to="/credit-cards" $active={location.pathname.includes('cards')} onClick={() => setActiveDropdown(null)}>
-                  Cards
-                </NavButtonLabel>
-                <ChevronToggle $open={activeDropdown === 'cards'}>
-                  <ChevronDown />
-                </ChevronToggle>
-              </NavButtonWrapper>
-              <DropdownPortal $visible={activeDropdown === 'cards'}>
-                {cardItems.map(item => (
-                  <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>
-                    <CreditCard />
-                    {item.label}
-                  </DropdownItem>
-                ))}
-              </DropdownPortal>
-            </NavItem>
-
-            {/* Loans Mega Dropdown */}
+                        {/* Loans Mega Dropdown */}
             <NavItem
               onMouseEnter={() => openDropdown('loans')}
               onMouseLeave={closeDropdown}
@@ -825,6 +791,29 @@ const Navbar: React.FC = () => {
                   ))}
                 </div>
               </MegaDropdownPortal>
+            </NavItem>
+
+            {/* Cards Dropdown */}
+            <NavItem
+              onMouseEnter={() => openDropdown('cards')}
+              onMouseLeave={closeDropdown}
+            >
+              <NavButtonWrapper $active={location.pathname.includes('cards')}>
+                <NavButtonLabel to="/credit-cards" $active={location.pathname.includes('cards')} onClick={() => setActiveDropdown(null)}>
+                  Cards
+                </NavButtonLabel>
+                <ChevronToggle $open={activeDropdown === 'cards'}>
+                  <ChevronDown />
+                </ChevronToggle>
+              </NavButtonWrapper>
+              <DropdownPortal $visible={activeDropdown === 'cards'}>
+                {cardItems.map(item => (
+                  <DropdownItem key={item.key} to={item.path} onClick={() => setActiveDropdown(null)}>
+                    <CreditCard />
+                    {item.label}
+                  </DropdownItem>
+                ))}
+              </DropdownPortal>
             </NavItem>
 
             {/* Insurance Dropdown */}
@@ -877,7 +866,7 @@ const Navbar: React.FC = () => {
       <MobileDrawer $open={isMobileMenuOpen}>
         <MobileDrawerHeader>
           <LogoLink to="/" onClick={handleHomeClick}>
-            <img src={ebsLogo} alt="EBS Finance" style={{ height: 50 }} />
+            <img src={ebsLogo} alt="EBS" />
             <LogoText>Everyday Banking Solutions</LogoText>
           </LogoLink>
           <MobileCloseBtn onClick={closeMobileMenu}>
@@ -896,27 +885,7 @@ const Navbar: React.FC = () => {
             Home
           </MobileNavItem>
 
-          {/* Cards */}
-          <MobileNavButtonWrapper
-            $active={location.pathname.includes('cards')}
-            $open={openSubMenus.includes('cards')}
-          >
-            <MobileNavButtonLabel to="/credit-cards" onClick={closeMobileMenu} $active={location.pathname.includes('cards')}>
-              <CreditCard /> Cards
-            </MobileNavButtonLabel>
-            <MobileChevronToggle $open={openSubMenus.includes('cards')} onClick={() => toggleSubMenu('cards')}>
-              <ChevronDown />
-            </MobileChevronToggle>
-          </MobileNavButtonWrapper>
-          <MobileSubItems $open={openSubMenus.includes('cards')}>
-            {cardItems.map(item => (
-              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
-                {item.label}
-              </MobileSubLink>
-            ))}
-          </MobileSubItems>
-
-          {/* Loans */}
+                    {/* Loans */}
           <MobileNavButtonWrapper
             $active={location.pathname.includes('loan')}
             $open={openSubMenus.includes('loans')}
@@ -955,6 +924,26 @@ const Navbar: React.FC = () => {
             ))}
             <MobileSubHeader>Gold Loan</MobileSubHeader>
             {loansData.goldLoan.map(item => (
+              <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
+                {item.label}
+              </MobileSubLink>
+            ))}
+          </MobileSubItems>
+
+          {/* Cards */}
+          <MobileNavButtonWrapper
+            $active={location.pathname.includes('cards')}
+            $open={openSubMenus.includes('cards')}
+          >
+            <MobileNavButtonLabel to="/credit-cards" onClick={closeMobileMenu} $active={location.pathname.includes('cards')}>
+              <CreditCard /> Cards
+            </MobileNavButtonLabel>
+            <MobileChevronToggle $open={openSubMenus.includes('cards')} onClick={() => toggleSubMenu('cards')}>
+              <ChevronDown />
+            </MobileChevronToggle>
+          </MobileNavButtonWrapper>
+          <MobileSubItems $open={openSubMenus.includes('cards')}>
+            {cardItems.map(item => (
               <MobileSubLink key={item.key} to={item.path} onClick={closeMobileMenu}>
                 {item.label}
               </MobileSubLink>
