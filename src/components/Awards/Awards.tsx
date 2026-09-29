@@ -624,7 +624,7 @@ const Awards: React.FC = () => {
 
   const stats = [
     { icon: <TrophyOutlined />, value: '23+', label: 'Awards Won', color: '#f59e0b' },
-    { icon: <StarOutlined />, value: '10+', label: 'Years of Excellence', color: '#6366f1' },
+    { icon: <StarOutlined />, value: '22+', label: 'Years of Excellence', color: '#6366f1' },
   ];
 
   // Responsive items per page
